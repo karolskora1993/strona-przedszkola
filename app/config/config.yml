@@ -7,6 +7,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    app.path.achievement_images: web/images/achievement
 
 framework:
     #esi:             ~
@@ -103,3 +104,46 @@ easy_admin:
                                    - { name: 'show', label: 'pokaż ogłoszenie' }
                                    - { name: 'search', label: 'wyszukaj' }
                                    - { name: 'delete', label: 'usuń' }
+
+      Achievement:
+              label: 'Osiągnięcia'
+              class: AppBundle\Entity\Achievement
+              form:
+                fields:
+                  - { property: 'imageFile', label:'obrazek', type: 'file' }
+                  - { property: 'year', label:'rok szkolny'}
+              list:
+                title: 'osiągnięcia'
+                fields:
+                 - { property: 'image', type: 'image', label:'obrazek',base_path: %app.path.achievement_images% }
+                actions:
+                                         - { name: 'new', label: 'nowe osiągnięcie' }
+                                         - { name: 'edit', label: 'modyfikuj osiągnięcie' }
+                                         - { name: 'show', label: 'pokaż osiągnięcie' }
+                                         - { name: 'search', label: 'wyszukaj' }
+                                         - { name: 'delete', label: 'usuń' }
+
+      Year:
+                    label: 'rok szkolny'
+                    class: AppBundle\Entity\Year
+                    form:
+                      fields:
+                        - { property: 'year', label:'rok szkolny'}
+                    list:
+                      title: 'rok szkolny'
+                      fields:
+                       - { property: 'year', label:'rok szkolny'}
+                      actions:
+                                               - { name: 'new', label: 'nowy rok szkolny ' }
+                                               - { name: 'edit', label: 'modyfikuj rok' }
+                                               - { name: 'show', label: 'pokaż rok' }
+                                               - { name: 'search', label: 'wyszukaj' }
+                                               - { name: 'delete', label: 'usuń' }
+
+
+vich_uploader:
+    db_driver: orm
+    mappings:
+        product_images:
+            uri_prefix:         %app.path.achievement_images%
+            upload_destination: %kernel.root_dir%/../web/images/achievements

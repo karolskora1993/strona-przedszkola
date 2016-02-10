@@ -229,6 +229,11 @@ the Team.
     'form.label.empty_value' => 'None',
     'modal.action.delete' => 'Delete',
   ),
+  'VichUploaderBundle' => 
+  array (
+    'download' => 'Download',
+    'form.label.delete' => 'Delete?',
+  ),
 ));
 
 

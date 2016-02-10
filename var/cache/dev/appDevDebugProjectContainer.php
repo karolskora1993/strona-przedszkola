@@ -274,6 +274,17 @@ class appDevDebugProjectContainer extends Container
             'validator.expression' => 'getValidator_ExpressionService',
             'var_dumper.cli_dumper' => 'getVarDumper_CliDumperService',
             'var_dumper.cloner' => 'getVarDumper_ClonerService',
+            'vich_uploader.file_injector' => 'getVichUploader_FileInjectorService',
+            'vich_uploader.form.type.file' => 'getVichUploader_Form_Type_FileService',
+            'vich_uploader.form.type.image' => 'getVichUploader_Form_Type_ImageService',
+            'vich_uploader.metadata_reader' => 'getVichUploader_MetadataReaderService',
+            'vich_uploader.namer_origname' => 'getVichUploader_NamerOrignameService',
+            'vich_uploader.namer_uniqid' => 'getVichUploader_NamerUniqidService',
+            'vich_uploader.property_mapping_factory' => 'getVichUploader_PropertyMappingFactoryService',
+            'vich_uploader.storage.file_system' => 'getVichUploader_Storage_FileSystemService',
+            'vich_uploader.storage_factory' => 'getVichUploader_StorageFactoryService',
+            'vich_uploader.templating.helper.uploader_helper' => 'getVichUploader_Templating_Helper_UploaderHelperService',
+            'vich_uploader.upload_handler' => 'getVichUploader_UploadHandlerService',
             'web_profiler.controller.exception' => 'getWebProfiler_Controller_ExceptionService',
             'web_profiler.controller.profiler' => 'getWebProfiler_Controller_ProfilerService',
             'web_profiler.controller.router' => 'getWebProfiler_Controller_RouterService',
@@ -296,6 +307,7 @@ class appDevDebugProjectContainer extends Container
             'swiftmailer.spool' => 'swiftmailer.mailer.default.spool',
             'swiftmailer.transport' => 'swiftmailer.mailer.default.transport',
             'swiftmailer.transport.real' => 'swiftmailer.mailer.default.transport.real',
+            'vich_uploader.storage' => 'vich_uploader.storage.file_system',
         );
     }
 
@@ -601,17 +613,25 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getDoctrine_Dbal_DefaultConnectionService()
     {
-        $a = new \Doctrine\DBAL\Logging\LoggerChain();
-        $a->addLogger(new \Symfony\Bridge\Doctrine\Logger\DbalLogger($this->get('monolog.logger.doctrine', ContainerInterface::NULL_ON_INVALID_REFERENCE), $this->get('debug.stopwatch', ContainerInterface::NULL_ON_INVALID_REFERENCE)));
-        $a->addLogger($this->get('doctrine.dbal.logger.profiling.default'));
+        $a = $this->get('vich_uploader.metadata_reader');
+        $b = $this->get('vich_uploader.upload_handler');
 
-        $b = new \Doctrine\DBAL\Configuration();
-        $b->setSQLLogger($a);
+        $c = new \Doctrine\DBAL\Logging\LoggerChain();
+        $c->addLogger(new \Symfony\Bridge\Doctrine\Logger\DbalLogger($this->get('monolog.logger.doctrine', ContainerInterface::NULL_ON_INVALID_REFERENCE), $this->get('debug.stopwatch', ContainerInterface::NULL_ON_INVALID_REFERENCE)));
+        $c->addLogger($this->get('doctrine.dbal.logger.profiling.default'));
 
-        $c = new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this);
-        $c->addEventSubscriber(new \FOS\UserBundle\Doctrine\UserListener($this));
+        $d = new \Doctrine\DBAL\Configuration();
+        $d->setSQLLogger($c);
 
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => 8889, 'dbname' => 'przedszkole', 'user' => 'root', 'password' => 'root', 'charset' => 'UTF8', 'driverOptions' => array(), 'defaultTableOptions' => array()), $b, $c, array());
+        $e = new \Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter();
+
+        $f = new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this);
+        $f->addEventSubscriber(new \Vich\UploaderBundle\EventListener\Doctrine\CleanListener('product_images', $e, $a, $b));
+        $f->addEventSubscriber(new \FOS\UserBundle\Doctrine\UserListener($this));
+        $f->addEventSubscriber(new \Vich\UploaderBundle\EventListener\Doctrine\RemoveListener('product_images', $e, $a, $b));
+        $f->addEventSubscriber(new \Vich\UploaderBundle\EventListener\Doctrine\UploadListener('product_images', $e, $a, $b));
+
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => 8889, 'dbname' => 'przedszkole', 'user' => 'root', 'password' => 'root', 'charset' => 'UTF8', 'driverOptions' => array(), 'defaultTableOptions' => array()), $d, $f, array());
     }
 
     /**
@@ -763,7 +783,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getEasyadmin_ConfiguratorService()
     {
-        return $this->services['easyadmin.configurator'] = new \JavierEguiluz\Bundle\EasyAdminBundle\Configuration\Configurator(array('site_name' => 'Panel administratora', 'design' => array('color_scheme' => 'light', 'brand_color' => '#73a839', 'theme' => 'default', 'form_theme' => array(0 => '@EasyAdmin/form/bootstrap_3_horizontal_layout.html.twig'), 'assets' => array('css' => array(), 'js' => array(), 'favicon' => array('path' => 'favicon.ico', 'mime_type' => 'image/x-icon')), 'menu' => array(0 => array('entity' => 'Advertisement', 'label' => 'Ogłoszenia', 'icon' => 'fa-chevron-circle-right', 'children' => array(), 'default' => false, 'menu_index' => 0, 'submenu_index' => -1, 'type' => 'entity', 'params' => array())), 'templates' => array('layout' => '@EasyAdmin/default/layout.html.twig', 'menu' => '@EasyAdmin/default/menu.html.twig', 'edit' => '@EasyAdmin/default/edit.html.twig', 'list' => '@EasyAdmin/default/list.html.twig', 'new' => '@EasyAdmin/default/new.html.twig', 'show' => '@EasyAdmin/default/show.html.twig', 'exception' => '@EasyAdmin/default/exception.html.twig', 'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig', 'paginator' => '@EasyAdmin/default/paginator.html.twig', 'field_array' => '@EasyAdmin/default/field_array.html.twig', 'field_association' => '@EasyAdmin/default/field_association.html.twig', 'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig', 'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig', 'field_date' => '@EasyAdmin/default/field_date.html.twig', 'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig', 'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig', 'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig', 'field_float' => '@EasyAdmin/default/field_float.html.twig', 'field_guid' => '@EasyAdmin/default/field_guid.html.twig', 'field_id' => '@EasyAdmin/default/field_id.html.twig', 'field_image' => '@EasyAdmin/default/field_image.html.twig', 'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig', 'field_integer' => '@EasyAdmin/default/field_integer.html.twig', 'field_object' => '@EasyAdmin/default/field_object.html.twig', 'field_raw' => '@EasyAdmin/default/field_raw.html.twig', 'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig', 'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig', 'field_string' => '@EasyAdmin/default/field_string.html.twig', 'field_text' => '@EasyAdmin/default/field_text.html.twig', 'field_time' => '@EasyAdmin/default/field_time.html.twig', 'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig', 'label_empty' => '@EasyAdmin/default/label_empty.html.twig', 'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig', 'label_null' => '@EasyAdmin/default/label_null.html.twig', 'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig')), 'entities' => array('Advertisement' => array('label' => 'Ogłoszenia', 'class' => 'AppBundle\\Entity\\Advertisement', 'form' => array('fields' => array(0 => array('property' => 'text', 'label' => 'treść ogłoszenia', 'type' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType'), 1 => array('property' => 'author', 'label' => 'autor ogłoszenia'), 2 => array('property' => 'date', 'label' => 'data ogłoszenia'))), 'list' => array('title' => 'ogłoszenia', 'fields' => array('text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'treść ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'autor ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => 'data ogłoszenia', 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_date.html.twig', 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'actions' => array('new' => array('name' => 'new', 'type' => 'method', 'label' => 'nowe ogłoszenie', 'css_class' => ' action-new', 'icon' => NULL), 'edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'modyfikuj ogłoszenie', 'css_class' => 'text-primary action-edit', 'icon' => NULL), 'show' => array('name' => 'show', 'type' => 'method', 'label' => 'pokaż ogłoszenie', 'css_class' => ' action-show', 'icon' => NULL), 'search' => array('name' => 'search', 'type' => 'method', 'label' => 'wyszukaj', 'css_class' => ' action-search', 'icon' => NULL), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'usuń', 'css_class' => 'text-danger action-delete', 'icon' => NULL))), 'name' => 'Advertisement', 'new' => array('fields' => array('text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'treść ogłoszenia', 'type' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'fieldType' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'autor ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => 'data ogłoszenia', 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'form_options' => array(), 'actions' => array('list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'edit' => array('fields' => array('text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'treść ogłoszenia', 'type' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'fieldType' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'autor ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => 'data ogłoszenia', 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'form_options' => array(), 'actions' => array('delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'search' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'))), 'show' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_id.html.twig', 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => NULL, 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_date.html.twig', 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'actions' => array('edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'action.edit', 'css_class' => 'btn btn-primary action-edit', 'icon' => 'edit'), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'disabled_actions' => array(), 'primary_key_field_name' => 'id', 'properties' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => NULL, 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'templates' => array('layout' => '@EasyAdmin/default/layout.html.twig', 'menu' => '@EasyAdmin/default/menu.html.twig', 'edit' => '@EasyAdmin/default/edit.html.twig', 'list' => '@EasyAdmin/default/list.html.twig', 'new' => '@EasyAdmin/default/new.html.twig', 'show' => '@EasyAdmin/default/show.html.twig', 'exception' => '@EasyAdmin/default/exception.html.twig', 'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig', 'paginator' => '@EasyAdmin/default/paginator.html.twig', 'field_array' => '@EasyAdmin/default/field_array.html.twig', 'field_association' => '@EasyAdmin/default/field_association.html.twig', 'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig', 'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig', 'field_date' => '@EasyAdmin/default/field_date.html.twig', 'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig', 'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig', 'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig', 'field_float' => '@EasyAdmin/default/field_float.html.twig', 'field_guid' => '@EasyAdmin/default/field_guid.html.twig', 'field_id' => '@EasyAdmin/default/field_id.html.twig', 'field_image' => '@EasyAdmin/default/field_image.html.twig', 'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig', 'field_integer' => '@EasyAdmin/default/field_integer.html.twig', 'field_object' => '@EasyAdmin/default/field_object.html.twig', 'field_raw' => '@EasyAdmin/default/field_raw.html.twig', 'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig', 'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig', 'field_string' => '@EasyAdmin/default/field_string.html.twig', 'field_text' => '@EasyAdmin/default/field_text.html.twig', 'field_time' => '@EasyAdmin/default/field_time.html.twig', 'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig', 'label_empty' => '@EasyAdmin/default/label_empty.html.twig', 'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig', 'label_null' => '@EasyAdmin/default/label_null.html.twig', 'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig'))), 'formats' => array('date' => 'Y-m-d', 'time' => 'H:i:s', 'datetime' => 'F j, Y H:i'), 'disabled_actions' => array(), 'list' => array('actions' => array(), 'max_results' => '15'), 'edit' => array('actions' => array()), 'new' => array('actions' => array()), 'show' => array('actions' => array()), 'default_entity_name' => 'Advertisement', 'default_menu_item' => NULL, 'homepage' => array('route' => 'easyadmin', 'params' => array('action' => 'list', 'entity' => 'Advertisement'))));
+        return $this->services['easyadmin.configurator'] = new \JavierEguiluz\Bundle\EasyAdminBundle\Configuration\Configurator(array('site_name' => 'Panel administratora', 'design' => array('color_scheme' => 'light', 'brand_color' => '#73a839', 'theme' => 'default', 'form_theme' => array(0 => '@EasyAdmin/form/bootstrap_3_horizontal_layout.html.twig'), 'assets' => array('css' => array(), 'js' => array(), 'favicon' => array('path' => 'favicon.ico', 'mime_type' => 'image/x-icon')), 'menu' => array(0 => array('entity' => 'Advertisement', 'label' => 'Ogłoszenia', 'icon' => 'fa-chevron-circle-right', 'children' => array(), 'default' => false, 'menu_index' => 0, 'submenu_index' => -1, 'type' => 'entity', 'params' => array()), 1 => array('entity' => 'Achievement', 'label' => 'Osiągnięcia', 'icon' => 'fa-chevron-circle-right', 'children' => array(), 'default' => false, 'menu_index' => 1, 'submenu_index' => -1, 'type' => 'entity', 'params' => array()), 2 => array('entity' => 'Year', 'label' => 'rok szkolny', 'icon' => 'fa-chevron-circle-right', 'children' => array(), 'default' => false, 'menu_index' => 2, 'submenu_index' => -1, 'type' => 'entity', 'params' => array())), 'templates' => array('layout' => '@EasyAdmin/default/layout.html.twig', 'menu' => '@EasyAdmin/default/menu.html.twig', 'edit' => '@EasyAdmin/default/edit.html.twig', 'list' => '@EasyAdmin/default/list.html.twig', 'new' => '@EasyAdmin/default/new.html.twig', 'show' => '@EasyAdmin/default/show.html.twig', 'exception' => '@EasyAdmin/default/exception.html.twig', 'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig', 'paginator' => '@EasyAdmin/default/paginator.html.twig', 'field_array' => '@EasyAdmin/default/field_array.html.twig', 'field_association' => '@EasyAdmin/default/field_association.html.twig', 'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig', 'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig', 'field_date' => '@EasyAdmin/default/field_date.html.twig', 'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig', 'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig', 'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig', 'field_float' => '@EasyAdmin/default/field_float.html.twig', 'field_guid' => '@EasyAdmin/default/field_guid.html.twig', 'field_id' => '@EasyAdmin/default/field_id.html.twig', 'field_image' => '@EasyAdmin/default/field_image.html.twig', 'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig', 'field_integer' => '@EasyAdmin/default/field_integer.html.twig', 'field_object' => '@EasyAdmin/default/field_object.html.twig', 'field_raw' => '@EasyAdmin/default/field_raw.html.twig', 'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig', 'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig', 'field_string' => '@EasyAdmin/default/field_string.html.twig', 'field_text' => '@EasyAdmin/default/field_text.html.twig', 'field_time' => '@EasyAdmin/default/field_time.html.twig', 'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig', 'label_empty' => '@EasyAdmin/default/label_empty.html.twig', 'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig', 'label_null' => '@EasyAdmin/default/label_null.html.twig', 'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig')), 'entities' => array('Advertisement' => array('label' => 'Ogłoszenia', 'class' => 'AppBundle\\Entity\\Advertisement', 'form' => array('fields' => array(0 => array('property' => 'text', 'label' => 'treść ogłoszenia', 'type' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType'), 1 => array('property' => 'author', 'label' => 'autor ogłoszenia'), 2 => array('property' => 'date', 'label' => 'data ogłoszenia'))), 'list' => array('title' => 'ogłoszenia', 'fields' => array('text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'treść ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'autor ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => 'data ogłoszenia', 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_date.html.twig', 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'actions' => array('new' => array('name' => 'new', 'type' => 'method', 'label' => 'nowe ogłoszenie', 'css_class' => ' action-new', 'icon' => NULL), 'edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'modyfikuj ogłoszenie', 'css_class' => 'text-primary action-edit', 'icon' => NULL), 'show' => array('name' => 'show', 'type' => 'method', 'label' => 'pokaż ogłoszenie', 'css_class' => ' action-show', 'icon' => NULL), 'search' => array('name' => 'search', 'type' => 'method', 'label' => 'wyszukaj', 'css_class' => ' action-search', 'icon' => NULL), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'usuń', 'css_class' => 'text-danger action-delete', 'icon' => NULL))), 'name' => 'Advertisement', 'new' => array('fields' => array('text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'treść ogłoszenia', 'type' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'fieldType' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'autor ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => 'data ogłoszenia', 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'form_options' => array(), 'actions' => array('list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'edit' => array('fields' => array('text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'treść ogłoszenia', 'type' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'fieldType' => 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'autor ogłoszenia', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => 'data ogłoszenia', 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'form_options' => array(), 'actions' => array('delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'search' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'))), 'show' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_id.html.twig', 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => NULL, 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_date.html.twig', 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'actions' => array('edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'action.edit', 'css_class' => 'btn btn-primary action-edit', 'icon' => 'edit'), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'disabled_actions' => array(), 'primary_key_field_name' => 'id', 'properties' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'text' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'text', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'text', 'property' => 'text'), 'author' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'author', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'author', 'property' => 'author'), 'date' => array('css_class' => '', 'format' => 'Y-m-d', 'help' => NULL, 'label' => NULL, 'type' => 'date', 'fieldType' => 'date', 'dataType' => 'date', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'date', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'date', 'property' => 'date')), 'templates' => array('layout' => '@EasyAdmin/default/layout.html.twig', 'menu' => '@EasyAdmin/default/menu.html.twig', 'edit' => '@EasyAdmin/default/edit.html.twig', 'list' => '@EasyAdmin/default/list.html.twig', 'new' => '@EasyAdmin/default/new.html.twig', 'show' => '@EasyAdmin/default/show.html.twig', 'exception' => '@EasyAdmin/default/exception.html.twig', 'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig', 'paginator' => '@EasyAdmin/default/paginator.html.twig', 'field_array' => '@EasyAdmin/default/field_array.html.twig', 'field_association' => '@EasyAdmin/default/field_association.html.twig', 'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig', 'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig', 'field_date' => '@EasyAdmin/default/field_date.html.twig', 'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig', 'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig', 'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig', 'field_float' => '@EasyAdmin/default/field_float.html.twig', 'field_guid' => '@EasyAdmin/default/field_guid.html.twig', 'field_id' => '@EasyAdmin/default/field_id.html.twig', 'field_image' => '@EasyAdmin/default/field_image.html.twig', 'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig', 'field_integer' => '@EasyAdmin/default/field_integer.html.twig', 'field_object' => '@EasyAdmin/default/field_object.html.twig', 'field_raw' => '@EasyAdmin/default/field_raw.html.twig', 'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig', 'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig', 'field_string' => '@EasyAdmin/default/field_string.html.twig', 'field_text' => '@EasyAdmin/default/field_text.html.twig', 'field_time' => '@EasyAdmin/default/field_time.html.twig', 'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig', 'label_empty' => '@EasyAdmin/default/label_empty.html.twig', 'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig', 'label_null' => '@EasyAdmin/default/label_null.html.twig', 'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig')), 'Achievement' => array('label' => 'Osiągnięcia', 'class' => 'AppBundle\\Entity\\Achievement', 'form' => array('fields' => array(0 => array('property' => 'imageFile', 'label' => 'obrazek', 'type' => 'file'), 1 => array('property' => 'year', 'label' => 'rok szkolny'))), 'list' => array('title' => 'osiągnięcia', 'fields' => array('image' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'obrazek', 'type' => 'image', 'fieldType' => 'text', 'dataType' => 'image', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_image.html.twig', 'type_options' => array(), 'fieldName' => 'image', 'scale' => 0, 'length' => 255, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'image', 'property' => 'image', 'base_path' => 'web/images/achievement')), 'actions' => array('new' => array('name' => 'new', 'type' => 'method', 'label' => 'nowe osiągnięcie', 'css_class' => ' action-new', 'icon' => NULL), 'edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'modyfikuj osiągnięcie', 'css_class' => 'text-primary action-edit', 'icon' => NULL), 'show' => array('name' => 'show', 'type' => 'method', 'label' => 'pokaż osiągnięcie', 'css_class' => ' action-show', 'icon' => NULL), 'search' => array('name' => 'search', 'type' => 'method', 'label' => 'wyszukaj', 'css_class' => ' action-search', 'icon' => NULL), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'usuń', 'css_class' => 'text-danger action-delete', 'icon' => NULL))), 'name' => 'Achievement', 'new' => array('fields' => array('imageFile' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'obrazek', 'type' => 'file', 'fieldType' => 'file', 'dataType' => NULL, 'virtual' => true, 'sortable' => false, 'template' => NULL, 'type_options' => array(), 'columnName' => 'imageFile', 'fieldName' => 'imageFile', 'id' => false, 'length' => NULL, 'nullable' => false, 'precision' => 0, 'scale' => 0, 'unique' => false, 'property' => 'imageFile'), 'year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'rok szkolny', 'type' => 'association', 'fieldType' => 'entity', 'dataType' => 'association', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'year', 'joinColumns' => array(0 => array('name' => 'year_id', 'unique' => false, 'nullable' => true, 'onDelete' => NULL, 'columnDefinition' => NULL, 'referencedColumnName' => 'id')), 'cascade' => array(), 'inversedBy' => 'achievements', 'targetEntity' => 'AppBundle\\Entity\\Year', 'fetch' => 2, 'mappedBy' => NULL, 'isOwningSide' => true, 'sourceEntity' => 'AppBundle\\Entity\\Achievement', 'isCascadeRemove' => false, 'isCascadePersist' => false, 'isCascadeRefresh' => false, 'isCascadeMerge' => false, 'isCascadeDetach' => false, 'sourceToTargetKeyColumns' => array('year_id' => 'id'), 'joinColumnFieldNames' => array('year_id' => 'year_id'), 'targetToSourceKeyColumns' => array('id' => 'year_id'), 'orphanRemoval' => false, 'associationType' => 2, 'property' => 'year')), 'form_options' => array(), 'actions' => array('list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'edit' => array('fields' => array('imageFile' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'obrazek', 'type' => 'file', 'fieldType' => 'file', 'dataType' => NULL, 'virtual' => true, 'sortable' => false, 'template' => NULL, 'type_options' => array(), 'columnName' => 'imageFile', 'fieldName' => 'imageFile', 'id' => false, 'length' => NULL, 'nullable' => false, 'precision' => 0, 'scale' => 0, 'unique' => false, 'property' => 'imageFile'), 'year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'rok szkolny', 'type' => 'association', 'fieldType' => 'entity', 'dataType' => 'association', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'year', 'joinColumns' => array(0 => array('name' => 'year_id', 'unique' => false, 'nullable' => true, 'onDelete' => NULL, 'columnDefinition' => NULL, 'referencedColumnName' => 'id')), 'cascade' => array(), 'inversedBy' => 'achievements', 'targetEntity' => 'AppBundle\\Entity\\Year', 'fetch' => 2, 'mappedBy' => NULL, 'isOwningSide' => true, 'sourceEntity' => 'AppBundle\\Entity\\Achievement', 'isCascadeRemove' => false, 'isCascadePersist' => false, 'isCascadeRefresh' => false, 'isCascadeMerge' => false, 'isCascadeDetach' => false, 'sourceToTargetKeyColumns' => array('year_id' => 'id'), 'joinColumnFieldNames' => array('year_id' => 'year_id'), 'targetToSourceKeyColumns' => array('id' => 'year_id'), 'orphanRemoval' => false, 'associationType' => 2, 'property' => 'year')), 'form_options' => array(), 'actions' => array('delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'search' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'image' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'image', 'scale' => 0, 'length' => 255, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'image', 'property' => 'image'))), 'show' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_id.html.twig', 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'image' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'image', 'scale' => 0, 'length' => 255, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'image', 'property' => 'image'), 'year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'association', 'fieldType' => 'entity', 'dataType' => 'association', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_association.html.twig', 'type_options' => array(), 'fieldName' => 'year', 'joinColumns' => array(0 => array('name' => 'year_id', 'unique' => false, 'nullable' => true, 'onDelete' => NULL, 'columnDefinition' => NULL, 'referencedColumnName' => 'id')), 'cascade' => array(), 'inversedBy' => 'achievements', 'targetEntity' => 'AppBundle\\Entity\\Year', 'fetch' => 2, 'mappedBy' => NULL, 'isOwningSide' => true, 'sourceEntity' => 'AppBundle\\Entity\\Achievement', 'isCascadeRemove' => false, 'isCascadePersist' => false, 'isCascadeRefresh' => false, 'isCascadeMerge' => false, 'isCascadeDetach' => false, 'sourceToTargetKeyColumns' => array('year_id' => 'id'), 'joinColumnFieldNames' => array('year_id' => 'year_id'), 'targetToSourceKeyColumns' => array('id' => 'year_id'), 'orphanRemoval' => false, 'associationType' => 2, 'property' => 'year')), 'actions' => array('edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'action.edit', 'css_class' => 'btn btn-primary action-edit', 'icon' => 'edit'), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'disabled_actions' => array(), 'primary_key_field_name' => 'id', 'properties' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'image' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'image', 'scale' => 0, 'length' => 255, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'image', 'property' => 'image'), 'year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'association', 'fieldType' => 'entity', 'dataType' => 'association', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'year', 'joinColumns' => array(0 => array('name' => 'year_id', 'unique' => false, 'nullable' => true, 'onDelete' => NULL, 'columnDefinition' => NULL, 'referencedColumnName' => 'id')), 'cascade' => array(), 'inversedBy' => 'achievements', 'targetEntity' => 'AppBundle\\Entity\\Year', 'fetch' => 2, 'mappedBy' => NULL, 'isOwningSide' => true, 'sourceEntity' => 'AppBundle\\Entity\\Achievement', 'isCascadeRemove' => false, 'isCascadePersist' => false, 'isCascadeRefresh' => false, 'isCascadeMerge' => false, 'isCascadeDetach' => false, 'sourceToTargetKeyColumns' => array('year_id' => 'id'), 'joinColumnFieldNames' => array('year_id' => 'year_id'), 'targetToSourceKeyColumns' => array('id' => 'year_id'), 'orphanRemoval' => false, 'associationType' => 2, 'property' => 'year')), 'templates' => array('layout' => '@EasyAdmin/default/layout.html.twig', 'menu' => '@EasyAdmin/default/menu.html.twig', 'edit' => '@EasyAdmin/default/edit.html.twig', 'list' => '@EasyAdmin/default/list.html.twig', 'new' => '@EasyAdmin/default/new.html.twig', 'show' => '@EasyAdmin/default/show.html.twig', 'exception' => '@EasyAdmin/default/exception.html.twig', 'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig', 'paginator' => '@EasyAdmin/default/paginator.html.twig', 'field_array' => '@EasyAdmin/default/field_array.html.twig', 'field_association' => '@EasyAdmin/default/field_association.html.twig', 'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig', 'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig', 'field_date' => '@EasyAdmin/default/field_date.html.twig', 'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig', 'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig', 'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig', 'field_float' => '@EasyAdmin/default/field_float.html.twig', 'field_guid' => '@EasyAdmin/default/field_guid.html.twig', 'field_id' => '@EasyAdmin/default/field_id.html.twig', 'field_image' => '@EasyAdmin/default/field_image.html.twig', 'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig', 'field_integer' => '@EasyAdmin/default/field_integer.html.twig', 'field_object' => '@EasyAdmin/default/field_object.html.twig', 'field_raw' => '@EasyAdmin/default/field_raw.html.twig', 'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig', 'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig', 'field_string' => '@EasyAdmin/default/field_string.html.twig', 'field_text' => '@EasyAdmin/default/field_text.html.twig', 'field_time' => '@EasyAdmin/default/field_time.html.twig', 'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig', 'label_empty' => '@EasyAdmin/default/label_empty.html.twig', 'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig', 'label_null' => '@EasyAdmin/default/label_null.html.twig', 'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig')), 'Year' => array('label' => 'rok szkolny', 'class' => 'AppBundle\\Entity\\Year', 'form' => array('fields' => array(0 => array('property' => 'year', 'label' => 'rok szkolny'))), 'list' => array('title' => 'rok szkolny', 'fields' => array('year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'rok szkolny', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'year', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'year', 'property' => 'year')), 'actions' => array('new' => array('name' => 'new', 'type' => 'method', 'label' => 'nowy rok szkolny ', 'css_class' => ' action-new', 'icon' => NULL), 'edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'modyfikuj rok', 'css_class' => 'text-primary action-edit', 'icon' => NULL), 'show' => array('name' => 'show', 'type' => 'method', 'label' => 'pokaż rok', 'css_class' => ' action-show', 'icon' => NULL), 'search' => array('name' => 'search', 'type' => 'method', 'label' => 'wyszukaj', 'css_class' => ' action-search', 'icon' => NULL), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'usuń', 'css_class' => 'text-danger action-delete', 'icon' => NULL))), 'name' => 'Year', 'new' => array('fields' => array('year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'rok szkolny', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'year', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'year', 'property' => 'year')), 'form_options' => array(), 'actions' => array('list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'edit' => array('fields' => array('year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'rok szkolny', 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'year', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'year', 'property' => 'year')), 'form_options' => array(), 'actions' => array('delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'search' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'year', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'year', 'property' => 'year'))), 'show' => array('fields' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => 'ID', 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_id.html.twig', 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => '@EasyAdmin/default/field_string.html.twig', 'type_options' => array(), 'fieldName' => 'year', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'year', 'property' => 'year'), 'achievements' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'association', 'fieldType' => 'entity', 'dataType' => 'association', 'virtual' => false, 'sortable' => false, 'template' => '@EasyAdmin/default/field_association.html.twig', 'type_options' => array(), 'fieldName' => 'achievements', 'mappedBy' => 'year', 'targetEntity' => 'AppBundle\\Entity\\Achievement', 'cascade' => array(), 'orphanRemoval' => false, 'fetch' => 2, 'inversedBy' => NULL, 'isOwningSide' => false, 'sourceEntity' => 'AppBundle\\Entity\\Year', 'isCascadeRemove' => false, 'isCascadePersist' => false, 'isCascadeRefresh' => false, 'isCascadeMerge' => false, 'isCascadeDetach' => false, 'associationType' => 4, 'property' => 'achievements')), 'actions' => array('edit' => array('name' => 'edit', 'type' => 'method', 'label' => 'action.edit', 'css_class' => 'btn btn-primary action-edit', 'icon' => 'edit'), 'delete' => array('name' => 'delete', 'type' => 'method', 'label' => 'action.delete', 'css_class' => 'btn btn-default action-delete', 'icon' => 'trash-o'), 'list' => array('name' => 'list', 'type' => 'method', 'label' => 'action.list', 'css_class' => 'btn btn-secondary action-list', 'icon' => NULL))), 'disabled_actions' => array(), 'primary_key_field_name' => 'id', 'properties' => array('id' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'integer', 'fieldType' => 'integer', 'dataType' => 'integer', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'id', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'id' => true, 'columnName' => 'id', 'property' => 'id'), 'year' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'string', 'fieldType' => 'text', 'dataType' => 'string', 'virtual' => false, 'sortable' => true, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'year', 'scale' => 0, 'length' => NULL, 'unique' => false, 'nullable' => false, 'precision' => 0, 'columnName' => 'year', 'property' => 'year'), 'achievements' => array('css_class' => '', 'format' => NULL, 'help' => NULL, 'label' => NULL, 'type' => 'association', 'fieldType' => 'entity', 'dataType' => 'association', 'virtual' => false, 'sortable' => false, 'template' => NULL, 'type_options' => array(), 'fieldName' => 'achievements', 'mappedBy' => 'year', 'targetEntity' => 'AppBundle\\Entity\\Achievement', 'cascade' => array(), 'orphanRemoval' => false, 'fetch' => 2, 'inversedBy' => NULL, 'isOwningSide' => false, 'sourceEntity' => 'AppBundle\\Entity\\Year', 'isCascadeRemove' => false, 'isCascadePersist' => false, 'isCascadeRefresh' => false, 'isCascadeMerge' => false, 'isCascadeDetach' => false, 'associationType' => 4, 'property' => 'achievements')), 'templates' => array('layout' => '@EasyAdmin/default/layout.html.twig', 'menu' => '@EasyAdmin/default/menu.html.twig', 'edit' => '@EasyAdmin/default/edit.html.twig', 'list' => '@EasyAdmin/default/list.html.twig', 'new' => '@EasyAdmin/default/new.html.twig', 'show' => '@EasyAdmin/default/show.html.twig', 'exception' => '@EasyAdmin/default/exception.html.twig', 'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig', 'paginator' => '@EasyAdmin/default/paginator.html.twig', 'field_array' => '@EasyAdmin/default/field_array.html.twig', 'field_association' => '@EasyAdmin/default/field_association.html.twig', 'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig', 'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig', 'field_date' => '@EasyAdmin/default/field_date.html.twig', 'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig', 'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig', 'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig', 'field_float' => '@EasyAdmin/default/field_float.html.twig', 'field_guid' => '@EasyAdmin/default/field_guid.html.twig', 'field_id' => '@EasyAdmin/default/field_id.html.twig', 'field_image' => '@EasyAdmin/default/field_image.html.twig', 'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig', 'field_integer' => '@EasyAdmin/default/field_integer.html.twig', 'field_object' => '@EasyAdmin/default/field_object.html.twig', 'field_raw' => '@EasyAdmin/default/field_raw.html.twig', 'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig', 'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig', 'field_string' => '@EasyAdmin/default/field_string.html.twig', 'field_text' => '@EasyAdmin/default/field_text.html.twig', 'field_time' => '@EasyAdmin/default/field_time.html.twig', 'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig', 'label_empty' => '@EasyAdmin/default/label_empty.html.twig', 'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig', 'label_null' => '@EasyAdmin/default/label_null.html.twig', 'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig'))), 'formats' => array('date' => 'Y-m-d', 'time' => 'H:i:s', 'datetime' => 'F j, Y H:i'), 'disabled_actions' => array(), 'list' => array('actions' => array(), 'max_results' => '15'), 'edit' => array('actions' => array()), 'new' => array('actions' => array()), 'show' => array('actions' => array()), 'default_entity_name' => 'Advertisement', 'default_menu_item' => NULL, 'homepage' => array('route' => 'easyadmin', 'params' => array('action' => 'list', 'entity' => 'Advertisement'))));
     }
 
     /**
@@ -876,7 +896,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_RegistryService()
     {
-        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\FormType' => 'form.type.form', 'birthday' => 'form.type.birthday', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\BirthdayType' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CheckboxType' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType' => 'form.type.choice', 'collection' => 'form.type.collection', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CollectionType' => 'form.type.collection', 'country' => 'form.type.country', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CountryType' => 'form.type.country', 'date' => 'form.type.date', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\DateType' => 'form.type.date', 'datetime' => 'form.type.datetime', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType' => 'form.type.datetime', 'email' => 'form.type.email', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\EmailType' => 'form.type.email', 'file' => 'form.type.file', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\FileType' => 'form.type.file', 'hidden' => 'form.type.hidden', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\HiddenType' => 'form.type.hidden', 'integer' => 'form.type.integer', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\IntegerType' => 'form.type.integer', 'language' => 'form.type.language', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\LanguageType' => 'form.type.language', 'locale' => 'form.type.locale', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\LocaleType' => 'form.type.locale', 'money' => 'form.type.money', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\MoneyType' => 'form.type.money', 'number' => 'form.type.number', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\NumberType' => 'form.type.number', 'password' => 'form.type.password', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\PasswordType' => 'form.type.password', 'percent' => 'form.type.percent', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\PercentType' => 'form.type.percent', 'radio' => 'form.type.radio', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RadioType' => 'form.type.radio', 'range' => 'form.type.range', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RangeType' => 'form.type.range', 'repeated' => 'form.type.repeated', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RepeatedType' => 'form.type.repeated', 'search' => 'form.type.search', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\SearchType' => 'form.type.search', 'textarea' => 'form.type.textarea', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType' => 'form.type.textarea', 'text' => 'form.type.text', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType' => 'form.type.text', 'time' => 'form.type.time', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TimeType' => 'form.type.time', 'timezone' => 'form.type.timezone', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TimezoneType' => 'form.type.timezone', 'url' => 'form.type.url', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\UrlType' => 'form.type.url', 'button' => 'form.type.button', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\ButtonType' => 'form.type.button', 'submit' => 'form.type.submit', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\SubmitType' => 'form.type.submit', 'reset' => 'form.type.reset', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\ResetType' => 'form.type.reset', 'currency' => 'form.type.currency', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CurrencyType' => 'form.type.currency', 'entity' => 'form.type.entity', 'Symfony\\Bridge\\Doctrine\\Form\\Type\\EntityType' => 'form.type.entity', 'fos_user_username' => 'fos_user.username_form_type', 'FOS\\UserBundle\\Form\\Type\\UsernameFormType' => 'fos_user.username_form_type', 'fos_user_profile' => 'fos_user.profile.form.type', 'FOS\\UserBundle\\Form\\Type\\ProfileFormType' => 'fos_user.profile.form.type', 'fos_user_registration' => 'fos_user.registration.form.type', 'FOS\\UserBundle\\Form\\Type\\RegistrationFormType' => 'fos_user.registration.form.type', 'fos_user_change_password' => 'fos_user.change_password.form.type', 'FOS\\UserBundle\\Form\\Type\\ChangePasswordFormType' => 'fos_user.change_password.form.type', 'fos_user_resetting' => 'fos_user.resetting.form.type', 'FOS\\UserBundle\\Form\\Type\\ResettingFormType' => 'fos_user.resetting.form.type', 'easyadmin.form.type' => 'easyadmin.form.type', 'JavierEguiluz\\Bundle\\EasyAdminBundle\\Form\\Type\\EasyAdminFormType' => 'easyadmin.form.type', 'ckeditor' => 'ivory_ck_editor.form.type', 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType' => 'ivory_ck_editor.form.type'), array('Symfony\\Component\\Form\\Extension\\Core\\Type\\FormType' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf', 3 => 'form.type_extension.form.data_collector', 4 => 'easyadmin.form.type.extension'), 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RepeatedType' => array(0 => 'form.type_extension.repeated.validator'), 'Symfony\\Component\\Form\\Extension\\Core\\Type\\SubmitType' => array(0 => 'form.type_extension.submit.validator')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))), $this->get('form.resolved_type_factory'));
+        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\FormType' => 'form.type.form', 'birthday' => 'form.type.birthday', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\BirthdayType' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CheckboxType' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType' => 'form.type.choice', 'collection' => 'form.type.collection', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CollectionType' => 'form.type.collection', 'country' => 'form.type.country', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CountryType' => 'form.type.country', 'date' => 'form.type.date', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\DateType' => 'form.type.date', 'datetime' => 'form.type.datetime', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType' => 'form.type.datetime', 'email' => 'form.type.email', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\EmailType' => 'form.type.email', 'file' => 'form.type.file', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\FileType' => 'form.type.file', 'hidden' => 'form.type.hidden', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\HiddenType' => 'form.type.hidden', 'integer' => 'form.type.integer', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\IntegerType' => 'form.type.integer', 'language' => 'form.type.language', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\LanguageType' => 'form.type.language', 'locale' => 'form.type.locale', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\LocaleType' => 'form.type.locale', 'money' => 'form.type.money', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\MoneyType' => 'form.type.money', 'number' => 'form.type.number', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\NumberType' => 'form.type.number', 'password' => 'form.type.password', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\PasswordType' => 'form.type.password', 'percent' => 'form.type.percent', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\PercentType' => 'form.type.percent', 'radio' => 'form.type.radio', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RadioType' => 'form.type.radio', 'range' => 'form.type.range', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RangeType' => 'form.type.range', 'repeated' => 'form.type.repeated', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RepeatedType' => 'form.type.repeated', 'search' => 'form.type.search', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\SearchType' => 'form.type.search', 'textarea' => 'form.type.textarea', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType' => 'form.type.textarea', 'text' => 'form.type.text', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType' => 'form.type.text', 'time' => 'form.type.time', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TimeType' => 'form.type.time', 'timezone' => 'form.type.timezone', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TimezoneType' => 'form.type.timezone', 'url' => 'form.type.url', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\UrlType' => 'form.type.url', 'button' => 'form.type.button', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\ButtonType' => 'form.type.button', 'submit' => 'form.type.submit', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\SubmitType' => 'form.type.submit', 'reset' => 'form.type.reset', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\ResetType' => 'form.type.reset', 'currency' => 'form.type.currency', 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CurrencyType' => 'form.type.currency', 'entity' => 'form.type.entity', 'Symfony\\Bridge\\Doctrine\\Form\\Type\\EntityType' => 'form.type.entity', 'fos_user_username' => 'fos_user.username_form_type', 'FOS\\UserBundle\\Form\\Type\\UsernameFormType' => 'fos_user.username_form_type', 'fos_user_profile' => 'fos_user.profile.form.type', 'FOS\\UserBundle\\Form\\Type\\ProfileFormType' => 'fos_user.profile.form.type', 'fos_user_registration' => 'fos_user.registration.form.type', 'FOS\\UserBundle\\Form\\Type\\RegistrationFormType' => 'fos_user.registration.form.type', 'fos_user_change_password' => 'fos_user.change_password.form.type', 'FOS\\UserBundle\\Form\\Type\\ChangePasswordFormType' => 'fos_user.change_password.form.type', 'fos_user_resetting' => 'fos_user.resetting.form.type', 'FOS\\UserBundle\\Form\\Type\\ResettingFormType' => 'fos_user.resetting.form.type', 'easyadmin.form.type' => 'easyadmin.form.type', 'JavierEguiluz\\Bundle\\EasyAdminBundle\\Form\\Type\\EasyAdminFormType' => 'easyadmin.form.type', 'ckeditor' => 'ivory_ck_editor.form.type', 'Ivory\\CKEditorBundle\\Form\\Type\\CKEditorType' => 'ivory_ck_editor.form.type', 'vich_file' => 'vich_uploader.form.type.file', 'Vich\\UploaderBundle\\Form\\Type\\VichFileType' => 'vich_uploader.form.type.file', 'vich_image' => 'vich_uploader.form.type.image', 'Vich\\UploaderBundle\\Form\\Type\\VichImageType' => 'vich_uploader.form.type.image'), array('Symfony\\Component\\Form\\Extension\\Core\\Type\\FormType' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf', 3 => 'form.type_extension.form.data_collector', 4 => 'easyadmin.form.type.extension'), 'Symfony\\Component\\Form\\Extension\\Core\\Type\\RepeatedType' => array(0 => 'form.type_extension.repeated.validator'), 'Symfony\\Component\\Form\\Extension\\Core\\Type\\SubmitType' => array(0 => 'form.type_extension.submit.validator')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))), $this->get('form.resolved_type_factory'));
     }
 
     /**
@@ -2443,7 +2463,7 @@ class appDevDebugProjectContainer extends Container
         $o = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $l, array(), $a);
         $o->setOptions(array('login_path' => '/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'));
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($k, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('fos_user.user_provider.username')), 'main', $a, $c), 2 => $m, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, $this->get('security.authentication.session_strategy'), $l, 'main', $n, $o, array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'csrf_token_id' => 'authenticate', 'post_only' => true), $a, $c, $this->get('security.csrf.token_manager')), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '56bb8744c35063.23955588', $a, $f), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $k, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $l, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $l, '/login', false), NULL, NULL, $a, false));
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($k, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('fos_user.user_provider.username')), 'main', $a, $c), 2 => $m, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, $this->get('security.authentication.session_strategy'), $l, 'main', $n, $o, array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'csrf_token_id' => 'authenticate', 'post_only' => true), $a, $c, $this->get('security.csrf.token_manager')), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '56bb918dde01c8.76400667', $a, $f), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $k, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $l, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $l, '/login', false), NULL, NULL, $a, false));
     }
 
     /**
@@ -3362,7 +3382,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTranslator_DefaultService()
     {
-        $this->services['translator.default'] = $instance = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, new \Symfony\Component\Translation\MessageSelector(), array('translation.loader.php' => array(0 => 'php'), 'translation.loader.yml' => array(0 => 'yml'), 'translation.loader.xliff' => array(0 => 'xlf', 1 => 'xliff'), 'translation.loader.po' => array(0 => 'po'), 'translation.loader.mo' => array(0 => 'mo'), 'translation.loader.qt' => array(0 => 'ts'), 'translation.loader.csv' => array(0 => 'csv'), 'translation.loader.res' => array(0 => 'res'), 'translation.loader.dat' => array(0 => 'dat'), 'translation.loader.ini' => array(0 => 'ini'), 'translation.loader.json' => array(0 => 'json')), array('cache_dir' => (__DIR__.'/translations'), 'debug' => true, 'resource_files' => array('af' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.af.xlf')), 'ar' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ar.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ar.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ar.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ar.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ar.yml')), 'az' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.az.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.az.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.az.xlf')), 'bg' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.bg.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.bg.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.bg.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.bg.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.bg.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.bg.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.bg.xlf')), 'ca' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ca.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ca.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ca.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ca.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ca.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.ca.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.ca.xlf')), 'cs' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.cs.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.cs.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.cs.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.cs.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.cs.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.cs.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.cs.xlf')), 'cy' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.cy.xlf')), 'da' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.da.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.da.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.da.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.da.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.da.yml')), 'de' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.de.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.de.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.de.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.de.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.de.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.de.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.de.xlf')), 'el' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.el.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.el.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.el.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.el.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.el.yml')), 'en' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.en.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.en.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.en.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.en.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.en.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.en.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.en.xlf')), 'es' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.es.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.es.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.es.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.es.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.es.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.es.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.es.xlf')), 'et' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.et.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.et.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.et.yml')), 'eu' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.eu.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.eu.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.eu.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.eu.yml'), 4 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.eu.xlf'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.eu.xlf')), 'fa' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fa.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fa.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.fa.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.fa.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.fa.yml')), 'fi' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fi.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fi.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.fi.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.fi.yml')), 'fr' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fr.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fr.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.fr.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.fr.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.fr.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.fr.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.fr.xlf')), 'gl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.gl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.gl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.gl.xlf')), 'he' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.he.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.he.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.he.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.he.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.he.yml')), 'hr' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hr.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hr.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.hr.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.hr.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.hr.yml')), 'hu' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hu.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hu.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.hu.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.hu.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.hu.yml')), 'hy' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hy.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hy.xlf')), 'id' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.id.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.id.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.id.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.id.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.id.yml')), 'it' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.it.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.it.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.it.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.it.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.it.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.it.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.it.xlf')), 'ja' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ja.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ja.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ja.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ja.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ja.yml')), 'lb' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lb.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lb.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.lb.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.lb.yml')), 'lt' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lt.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lt.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.lt.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.lt.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.lt.yml')), 'mn' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.mn.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.mn.xlf')), 'nb' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.nb.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.nb.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.nb.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.nb.yml')), 'nl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.nl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.nl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.nl.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.nl.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.nl.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.nl.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.nl.xlf')), 'no' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.no.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.no.xlf')), 'pl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pl.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.pl.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.pl.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.pl.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.pl.xlf')), 'pt' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pt.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pt.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.pt.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.pt.yml'), 4 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.pt.xlf'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.pt.xlf')), 'pt_BR' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pt_BR.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pt_BR.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pt_BR.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.pt_BR.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.pt_BR.yml')), 'ro' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ro.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ro.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ro.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ro.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ro.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.ro.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.ro.xlf')), 'ru' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ru.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ru.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ru.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ru.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ru.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.ru.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.ru.xlf')), 'sk' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sk.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sk.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sk.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sk.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sk.yml')), 'sl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sl.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sl.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sl.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.sl.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.sl.xlf')), 'sq' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sq.xlf')), 'sr_Cyrl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sr_Cyrl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sr_Cyrl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sr_Cyrl.xlf')), 'sr_Latn' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sr_Latn.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sr_Latn.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sr_Latn.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sr_Latn.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sr_Latn.yml')), 'sv' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sv.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sv.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sv.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sv.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sv.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.sv.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.sv.xlf')), 'th' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.th.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.th.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.th.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.th.yml')), 'tr' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.tr.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.tr.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.tr.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.tr.yml'), 4 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.tr.xlf'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.tr.xlf')), 'uk' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.uk.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.uk.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.uk.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.uk.yml')), 'vi' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.vi.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.vi.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.vi.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.vi.yml')), 'zh_CN' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.zh_CN.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.zh_CN.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.zh_CN.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.zh_CN.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.zh_CN.yml')), 'zh_TW' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.zh_TW.xlf')), 'lv' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lv.xlf'), 1 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.lv.yml'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.lv.yml')), 'pt_PT' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pt_PT.xlf')), 'ua' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ua.xlf')))), array());
+        $this->services['translator.default'] = $instance = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, new \Symfony\Component\Translation\MessageSelector(), array('translation.loader.php' => array(0 => 'php'), 'translation.loader.yml' => array(0 => 'yml'), 'translation.loader.xliff' => array(0 => 'xlf', 1 => 'xliff'), 'translation.loader.po' => array(0 => 'po'), 'translation.loader.mo' => array(0 => 'mo'), 'translation.loader.qt' => array(0 => 'ts'), 'translation.loader.csv' => array(0 => 'csv'), 'translation.loader.res' => array(0 => 'res'), 'translation.loader.dat' => array(0 => 'dat'), 'translation.loader.ini' => array(0 => 'ini'), 'translation.loader.json' => array(0 => 'json')), array('cache_dir' => (__DIR__.'/translations'), 'debug' => true, 'resource_files' => array('af' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.af.xlf')), 'ar' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ar.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ar.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ar.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ar.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ar.yml')), 'az' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.az.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.az.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.az.xlf')), 'bg' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.bg.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.bg.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.bg.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.bg.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.bg.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.bg.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.bg.xlf')), 'ca' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ca.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ca.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ca.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ca.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ca.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.ca.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.ca.xlf')), 'cs' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.cs.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.cs.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.cs.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.cs.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.cs.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.cs.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.cs.xlf')), 'cy' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.cy.xlf')), 'da' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.da.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.da.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.da.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.da.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.da.yml')), 'de' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.de.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.de.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.de.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.de.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.de.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.de.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.de.xlf')), 'el' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.el.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.el.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.el.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.el.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.el.yml')), 'en' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.en.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.en.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.en.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.en.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.en.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.en.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.en.xlf'), 7 => ($this->targetDirs[3].'/vendor/vich/uploader-bundle/Resources/translations/VichUploaderBundle.en.yml')), 'es' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.es.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.es.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.es.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.es.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.es.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.es.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.es.xlf')), 'et' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.et.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.et.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.et.yml')), 'eu' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.eu.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.eu.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.eu.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.eu.yml'), 4 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.eu.xlf'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.eu.xlf')), 'fa' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fa.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fa.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.fa.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.fa.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.fa.yml')), 'fi' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fi.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fi.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.fi.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.fi.yml')), 'fr' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fr.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fr.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.fr.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.fr.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.fr.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.fr.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.fr.xlf'), 7 => ($this->targetDirs[3].'/vendor/vich/uploader-bundle/Resources/translations/VichUploaderBundle.fr.yml')), 'gl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.gl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.gl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.gl.xlf')), 'he' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.he.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.he.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.he.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.he.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.he.yml')), 'hr' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hr.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hr.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.hr.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.hr.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.hr.yml')), 'hu' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hu.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hu.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.hu.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.hu.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.hu.yml')), 'hy' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hy.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hy.xlf')), 'id' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.id.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.id.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.id.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.id.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.id.yml')), 'it' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.it.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.it.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.it.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.it.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.it.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.it.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.it.xlf')), 'ja' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ja.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ja.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ja.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ja.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ja.yml')), 'lb' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lb.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lb.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.lb.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.lb.yml')), 'lt' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lt.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lt.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.lt.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.lt.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.lt.yml')), 'mn' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.mn.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.mn.xlf')), 'nb' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.nb.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.nb.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.nb.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.nb.yml')), 'nl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.nl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.nl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.nl.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.nl.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.nl.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.nl.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.nl.xlf')), 'no' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.no.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.no.xlf')), 'pl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pl.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.pl.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.pl.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.pl.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.pl.xlf')), 'pt' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pt.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pt.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.pt.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.pt.yml'), 4 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.pt.xlf'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.pt.xlf')), 'pt_BR' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pt_BR.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pt_BR.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pt_BR.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.pt_BR.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.pt_BR.yml')), 'ro' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ro.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ro.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ro.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ro.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ro.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.ro.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.ro.xlf')), 'ru' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ru.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ru.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ru.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ru.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.ru.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.ru.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.ru.xlf')), 'sk' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sk.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sk.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sk.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sk.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sk.yml')), 'sl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sl.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sl.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sl.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.sl.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.sl.xlf')), 'sq' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sq.xlf')), 'sr_Cyrl' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sr_Cyrl.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sr_Cyrl.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sr_Cyrl.xlf')), 'sr_Latn' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sr_Latn.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sr_Latn.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sr_Latn.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sr_Latn.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sr_Latn.yml')), 'sv' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sv.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sv.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sv.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.sv.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.sv.yml'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.sv.xlf'), 6 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.sv.xlf')), 'th' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.th.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.th.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.th.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.th.yml')), 'tr' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.tr.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.tr.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.tr.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.tr.yml'), 4 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/EasyAdminBundle.tr.xlf'), 5 => ($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/translations/messages.tr.xlf')), 'uk' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.uk.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.uk.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.uk.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.uk.yml')), 'vi' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.vi.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.vi.xlf'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.vi.yml'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.vi.yml')), 'zh_CN' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.zh_CN.xlf'), 1 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.zh_CN.xlf'), 2 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.zh_CN.xlf'), 3 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.zh_CN.yml'), 4 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.zh_CN.yml')), 'zh_TW' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.zh_TW.xlf')), 'lv' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lv.xlf'), 1 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.lv.yml'), 2 => ($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/translations/validators.lv.yml')), 'pt_PT' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pt_PT.xlf')), 'ua' => array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ua.xlf')))), array());
 
         $instance->setConfigCacheFactory($this->get('config_cache_factory'));
         $instance->setFallbackLocales(array(0 => 'en'));
@@ -3430,6 +3450,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addExtension(new \Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension());
         $instance->addExtension(new \JavierEguiluz\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension($this->get('easyadmin.configurator'), $this->get('property_accessor'), true));
         $instance->addExtension($this->get('ivory_ck_editor.twig_extension'));
+        $instance->addExtension(new \Vich\UploaderBundle\Twig\Extension\UploaderExtension($this->get('vich_uploader.templating.helper.uploader_helper')));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\DumpExtension($this->get('var_dumper.cloner')));
         $instance->addExtension(new \Symfony\Bundle\WebProfilerBundle\Twig\WebProfilerExtension());
         $instance->addGlobal('app', $e);
@@ -3498,6 +3519,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addPath(($this->targetDirs[3].'/vendor/friendsofsymfony/user-bundle/Resources/views'), 'FOSUser');
         $instance->addPath(($this->targetDirs[3].'/vendor/javiereguiluz/easyadmin-bundle/Resources/views'), 'EasyAdmin');
         $instance->addPath(($this->targetDirs[3].'/vendor/egeloen/ckeditor-bundle/Resources/views'), 'IvoryCKEditor');
+        $instance->addPath(($this->targetDirs[3].'/vendor/vich/uploader-bundle/Resources/views'), 'VichUploader');
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views'), 'Debug');
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views'), 'WebProfiler');
         $instance->addPath(($this->targetDirs[3].'/app/Resources/views'));
@@ -3637,6 +3659,123 @@ class appDevDebugProjectContainer extends Container
         $instance->setMaxString(-1);
 
         return $instance;
+    }
+
+    /**
+     * Gets the 'vich_uploader.file_injector' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Injector\FileInjector A Vich\UploaderBundle\Injector\FileInjector instance.
+     */
+    protected function getVichUploader_FileInjectorService()
+    {
+        return $this->services['vich_uploader.file_injector'] = new \Vich\UploaderBundle\Injector\FileInjector($this->get('vich_uploader.storage.file_system'));
+    }
+
+    /**
+     * Gets the 'vich_uploader.form.type.file' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Form\Type\VichFileType A Vich\UploaderBundle\Form\Type\VichFileType instance.
+     */
+    protected function getVichUploader_Form_Type_FileService()
+    {
+        return $this->services['vich_uploader.form.type.file'] = new \Vich\UploaderBundle\Form\Type\VichFileType($this->get('vich_uploader.storage.file_system'), $this->get('vich_uploader.upload_handler'), $this->get('translator'));
+    }
+
+    /**
+     * Gets the 'vich_uploader.form.type.image' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Form\Type\VichImageType A Vich\UploaderBundle\Form\Type\VichImageType instance.
+     */
+    protected function getVichUploader_Form_Type_ImageService()
+    {
+        return $this->services['vich_uploader.form.type.image'] = new \Vich\UploaderBundle\Form\Type\VichImageType($this->get('vich_uploader.storage.file_system'), $this->get('vich_uploader.upload_handler'), $this->get('translator'));
+    }
+
+    /**
+     * Gets the 'vich_uploader.namer_origname' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Naming\OrignameNamer A Vich\UploaderBundle\Naming\OrignameNamer instance.
+     */
+    protected function getVichUploader_NamerOrignameService()
+    {
+        return $this->services['vich_uploader.namer_origname'] = new \Vich\UploaderBundle\Naming\OrignameNamer();
+    }
+
+    /**
+     * Gets the 'vich_uploader.namer_uniqid' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Naming\UniqidNamer A Vich\UploaderBundle\Naming\UniqidNamer instance.
+     */
+    protected function getVichUploader_NamerUniqidService()
+    {
+        return $this->services['vich_uploader.namer_uniqid'] = new \Vich\UploaderBundle\Naming\UniqidNamer();
+    }
+
+    /**
+     * Gets the 'vich_uploader.storage.file_system' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Storage\FileSystemStorage A Vich\UploaderBundle\Storage\FileSystemStorage instance.
+     */
+    protected function getVichUploader_Storage_FileSystemService()
+    {
+        return $this->services['vich_uploader.storage.file_system'] = new \Vich\UploaderBundle\Storage\FileSystemStorage($this->get('vich_uploader.property_mapping_factory'));
+    }
+
+    /**
+     * Gets the 'vich_uploader.storage_factory' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Storage\StorageFactory A Vich\UploaderBundle\Storage\StorageFactory instance.
+     */
+    protected function getVichUploader_StorageFactoryService()
+    {
+        return $this->services['vich_uploader.storage_factory'] = new \Vich\UploaderBundle\Storage\StorageFactory($this);
+    }
+
+    /**
+     * Gets the 'vich_uploader.templating.helper.uploader_helper' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Templating\Helper\UploaderHelper A Vich\UploaderBundle\Templating\Helper\UploaderHelper instance.
+     */
+    protected function getVichUploader_Templating_Helper_UploaderHelperService()
+    {
+        return $this->services['vich_uploader.templating.helper.uploader_helper'] = new \Vich\UploaderBundle\Templating\Helper\UploaderHelper($this->get('vich_uploader.storage.file_system'));
+    }
+
+    /**
+     * Gets the 'vich_uploader.upload_handler' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Vich\UploaderBundle\Handler\UploadHandler A Vich\UploaderBundle\Handler\UploadHandler instance.
+     */
+    protected function getVichUploader_UploadHandlerService()
+    {
+        return $this->services['vich_uploader.upload_handler'] = new \Vich\UploaderBundle\Handler\UploadHandler($this->get('vich_uploader.property_mapping_factory'), $this->get('vich_uploader.storage.file_system'), $this->get('vich_uploader.file_injector'), $this->get('debug.event_dispatcher'));
     }
 
     /**
@@ -3797,7 +3936,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_ManagerService()
     {
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username'), $this->get('security.user_checker.main'), 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('56bb8744c35063.23955588')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username'), $this->get('security.user_checker.main'), 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('56bb918dde01c8.76400667')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -3928,6 +4067,45 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'vich_uploader.metadata_reader' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * This service is private.
+     * If you want to be able to request this service from the container directly,
+     * make it public, otherwise you might end up with broken code.
+     *
+     * @return \Vich\UploaderBundle\Metadata\MetadataReader A Vich\UploaderBundle\Metadata\MetadataReader instance.
+     */
+    protected function getVichUploader_MetadataReaderService()
+    {
+        $a = new \Vich\UploaderBundle\Metadata\Driver\FileLocator(array());
+
+        $b = new \Metadata\MetadataFactory(new \Vich\UploaderBundle\Metadata\Driver\ChainDriver(array(0 => new \Vich\UploaderBundle\Metadata\Driver\AnnotationDriver($this->get('annotation_reader')), 1 => new \Vich\UploaderBundle\Metadata\Driver\YamlDriver($a), 2 => new \Vich\UploaderBundle\Metadata\Driver\XmlDriver($a))));
+        $b->setCache(new \Metadata\Cache\FileCache((__DIR__.'/vich_uploader')));
+
+        return $this->services['vich_uploader.metadata_reader'] = new \Vich\UploaderBundle\Metadata\MetadataReader($b);
+    }
+
+    /**
+     * Gets the 'vich_uploader.property_mapping_factory' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * This service is private.
+     * If you want to be able to request this service from the container directly,
+     * make it public, otherwise you might end up with broken code.
+     *
+     * @return \Vich\UploaderBundle\Mapping\PropertyMappingFactory A Vich\UploaderBundle\Mapping\PropertyMappingFactory instance.
+     */
+    protected function getVichUploader_PropertyMappingFactoryService()
+    {
+        return $this->services['vich_uploader.property_mapping_factory'] = new \Vich\UploaderBundle\Mapping\PropertyMappingFactory($this, $this->get('vich_uploader.metadata_reader'), array('product_images' => array('uri_prefix' => 'web/images/achievement', 'upload_destination' => ($this->targetDirs[3].'/app/../web/images/achievements'), 'namer' => NULL, 'directory_namer' => NULL, 'delete_on_remove' => true, 'delete_on_update' => true, 'inject_on_load' => false, 'db_driver' => 'orm')), '_name');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getParameter($name)
@@ -3997,6 +4175,7 @@ class appDevDebugProjectContainer extends Container
                 'FOSUserBundle' => 'FOS\\UserBundle\\FOSUserBundle',
                 'EasyAdminBundle' => 'JavierEguiluz\\Bundle\\EasyAdminBundle\\EasyAdminBundle',
                 'IvoryCKEditorBundle' => 'Ivory\\CKEditorBundle\\IvoryCKEditorBundle',
+                'VichUploaderBundle' => 'Vich\\UploaderBundle\\VichUploaderBundle',
                 'DebugBundle' => 'Symfony\\Bundle\\DebugBundle\\DebugBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -4015,6 +4194,7 @@ class appDevDebugProjectContainer extends Container
             'mailer_password' => NULL,
             'secret' => '24e35285ed04c9e7aa8b374223d4d8a7d2d5b5c2',
             'locale' => 'en',
+            'app.path.achievement_images' => 'web/images/achievement',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
             'response_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
@@ -4570,6 +4750,36 @@ class appDevDebugProjectContainer extends Container
                             ),
                             'default' => false,
                             'menu_index' => 0,
+                            'submenu_index' => -1,
+                            'type' => 'entity',
+                            'params' => array(
+
+                            ),
+                        ),
+                        1 => array(
+                            'entity' => 'Achievement',
+                            'label' => 'Osiągnięcia',
+                            'icon' => 'fa-chevron-circle-right',
+                            'children' => array(
+
+                            ),
+                            'default' => false,
+                            'menu_index' => 1,
+                            'submenu_index' => -1,
+                            'type' => 'entity',
+                            'params' => array(
+
+                            ),
+                        ),
+                        2 => array(
+                            'entity' => 'Year',
+                            'label' => 'rok szkolny',
+                            'icon' => 'fa-chevron-circle-right',
+                            'children' => array(
+
+                            ),
+                            'default' => false,
+                            'menu_index' => 2,
                             'submenu_index' => -1,
                             'type' => 'entity',
                             'params' => array(
@@ -5256,6 +5466,1044 @@ class appDevDebugProjectContainer extends Container
                             'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig',
                         ),
                     ),
+                    'Achievement' => array(
+                        'label' => 'Osiągnięcia',
+                        'class' => 'AppBundle\\Entity\\Achievement',
+                        'form' => array(
+                            'fields' => array(
+                                0 => array(
+                                    'property' => 'imageFile',
+                                    'label' => 'obrazek',
+                                    'type' => 'file',
+                                ),
+                                1 => array(
+                                    'property' => 'year',
+                                    'label' => 'rok szkolny',
+                                ),
+                            ),
+                        ),
+                        'list' => array(
+                            'title' => 'osiągnięcia',
+                            'fields' => array(
+                                'image' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'obrazek',
+                                    'type' => 'image',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'image',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => '@EasyAdmin/default/field_image.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'image',
+                                    'scale' => 0,
+                                    'length' => 255,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'image',
+                                    'property' => 'image',
+                                    'base_path' => 'web/images/achievement',
+                                ),
+                            ),
+                            'actions' => array(
+                                'new' => array(
+                                    'name' => 'new',
+                                    'type' => 'method',
+                                    'label' => 'nowe osiągnięcie',
+                                    'css_class' => ' action-new',
+                                    'icon' => NULL,
+                                ),
+                                'edit' => array(
+                                    'name' => 'edit',
+                                    'type' => 'method',
+                                    'label' => 'modyfikuj osiągnięcie',
+                                    'css_class' => 'text-primary action-edit',
+                                    'icon' => NULL,
+                                ),
+                                'show' => array(
+                                    'name' => 'show',
+                                    'type' => 'method',
+                                    'label' => 'pokaż osiągnięcie',
+                                    'css_class' => ' action-show',
+                                    'icon' => NULL,
+                                ),
+                                'search' => array(
+                                    'name' => 'search',
+                                    'type' => 'method',
+                                    'label' => 'wyszukaj',
+                                    'css_class' => ' action-search',
+                                    'icon' => NULL,
+                                ),
+                                'delete' => array(
+                                    'name' => 'delete',
+                                    'type' => 'method',
+                                    'label' => 'usuń',
+                                    'css_class' => 'text-danger action-delete',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'name' => 'Achievement',
+                        'new' => array(
+                            'fields' => array(
+                                'imageFile' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'obrazek',
+                                    'type' => 'file',
+                                    'fieldType' => 'file',
+                                    'dataType' => NULL,
+                                    'virtual' => true,
+                                    'sortable' => false,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'columnName' => 'imageFile',
+                                    'fieldName' => 'imageFile',
+                                    'id' => false,
+                                    'length' => NULL,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'scale' => 0,
+                                    'unique' => false,
+                                    'property' => 'imageFile',
+                                ),
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'rok szkolny',
+                                    'type' => 'association',
+                                    'fieldType' => 'entity',
+                                    'dataType' => 'association',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'joinColumns' => array(
+                                        0 => array(
+                                            'name' => 'year_id',
+                                            'unique' => false,
+                                            'nullable' => true,
+                                            'onDelete' => NULL,
+                                            'columnDefinition' => NULL,
+                                            'referencedColumnName' => 'id',
+                                        ),
+                                    ),
+                                    'cascade' => array(
+
+                                    ),
+                                    'inversedBy' => 'achievements',
+                                    'targetEntity' => 'AppBundle\\Entity\\Year',
+                                    'fetch' => 2,
+                                    'mappedBy' => NULL,
+                                    'isOwningSide' => true,
+                                    'sourceEntity' => 'AppBundle\\Entity\\Achievement',
+                                    'isCascadeRemove' => false,
+                                    'isCascadePersist' => false,
+                                    'isCascadeRefresh' => false,
+                                    'isCascadeMerge' => false,
+                                    'isCascadeDetach' => false,
+                                    'sourceToTargetKeyColumns' => array(
+                                        'year_id' => 'id',
+                                    ),
+                                    'joinColumnFieldNames' => array(
+                                        'year_id' => 'year_id',
+                                    ),
+                                    'targetToSourceKeyColumns' => array(
+                                        'id' => 'year_id',
+                                    ),
+                                    'orphanRemoval' => false,
+                                    'associationType' => 2,
+                                    'property' => 'year',
+                                ),
+                            ),
+                            'form_options' => array(
+
+                            ),
+                            'actions' => array(
+                                'list' => array(
+                                    'name' => 'list',
+                                    'type' => 'method',
+                                    'label' => 'action.list',
+                                    'css_class' => 'btn btn-secondary action-list',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'edit' => array(
+                            'fields' => array(
+                                'imageFile' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'obrazek',
+                                    'type' => 'file',
+                                    'fieldType' => 'file',
+                                    'dataType' => NULL,
+                                    'virtual' => true,
+                                    'sortable' => false,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'columnName' => 'imageFile',
+                                    'fieldName' => 'imageFile',
+                                    'id' => false,
+                                    'length' => NULL,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'scale' => 0,
+                                    'unique' => false,
+                                    'property' => 'imageFile',
+                                ),
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'rok szkolny',
+                                    'type' => 'association',
+                                    'fieldType' => 'entity',
+                                    'dataType' => 'association',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'joinColumns' => array(
+                                        0 => array(
+                                            'name' => 'year_id',
+                                            'unique' => false,
+                                            'nullable' => true,
+                                            'onDelete' => NULL,
+                                            'columnDefinition' => NULL,
+                                            'referencedColumnName' => 'id',
+                                        ),
+                                    ),
+                                    'cascade' => array(
+
+                                    ),
+                                    'inversedBy' => 'achievements',
+                                    'targetEntity' => 'AppBundle\\Entity\\Year',
+                                    'fetch' => 2,
+                                    'mappedBy' => NULL,
+                                    'isOwningSide' => true,
+                                    'sourceEntity' => 'AppBundle\\Entity\\Achievement',
+                                    'isCascadeRemove' => false,
+                                    'isCascadePersist' => false,
+                                    'isCascadeRefresh' => false,
+                                    'isCascadeMerge' => false,
+                                    'isCascadeDetach' => false,
+                                    'sourceToTargetKeyColumns' => array(
+                                        'year_id' => 'id',
+                                    ),
+                                    'joinColumnFieldNames' => array(
+                                        'year_id' => 'year_id',
+                                    ),
+                                    'targetToSourceKeyColumns' => array(
+                                        'id' => 'year_id',
+                                    ),
+                                    'orphanRemoval' => false,
+                                    'associationType' => 2,
+                                    'property' => 'year',
+                                ),
+                            ),
+                            'form_options' => array(
+
+                            ),
+                            'actions' => array(
+                                'delete' => array(
+                                    'name' => 'delete',
+                                    'type' => 'method',
+                                    'label' => 'action.delete',
+                                    'css_class' => 'btn btn-default action-delete',
+                                    'icon' => 'trash-o',
+                                ),
+                                'list' => array(
+                                    'name' => 'list',
+                                    'type' => 'method',
+                                    'label' => 'action.list',
+                                    'css_class' => 'btn btn-secondary action-list',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'search' => array(
+                            'fields' => array(
+                                'id' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'ID',
+                                    'type' => 'integer',
+                                    'fieldType' => 'integer',
+                                    'dataType' => 'integer',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'id',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'id' => true,
+                                    'columnName' => 'id',
+                                    'property' => 'id',
+                                ),
+                                'image' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => NULL,
+                                    'type' => 'string',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'string',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'image',
+                                    'scale' => 0,
+                                    'length' => 255,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'image',
+                                    'property' => 'image',
+                                ),
+                            ),
+                        ),
+                        'show' => array(
+                            'fields' => array(
+                                'id' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'ID',
+                                    'type' => 'integer',
+                                    'fieldType' => 'integer',
+                                    'dataType' => 'integer',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => '@EasyAdmin/default/field_id.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'id',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'id' => true,
+                                    'columnName' => 'id',
+                                    'property' => 'id',
+                                ),
+                                'image' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => NULL,
+                                    'type' => 'string',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'string',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => '@EasyAdmin/default/field_string.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'image',
+                                    'scale' => 0,
+                                    'length' => 255,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'image',
+                                    'property' => 'image',
+                                ),
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => NULL,
+                                    'type' => 'association',
+                                    'fieldType' => 'entity',
+                                    'dataType' => 'association',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => '@EasyAdmin/default/field_association.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'joinColumns' => array(
+                                        0 => array(
+                                            'name' => 'year_id',
+                                            'unique' => false,
+                                            'nullable' => true,
+                                            'onDelete' => NULL,
+                                            'columnDefinition' => NULL,
+                                            'referencedColumnName' => 'id',
+                                        ),
+                                    ),
+                                    'cascade' => array(
+
+                                    ),
+                                    'inversedBy' => 'achievements',
+                                    'targetEntity' => 'AppBundle\\Entity\\Year',
+                                    'fetch' => 2,
+                                    'mappedBy' => NULL,
+                                    'isOwningSide' => true,
+                                    'sourceEntity' => 'AppBundle\\Entity\\Achievement',
+                                    'isCascadeRemove' => false,
+                                    'isCascadePersist' => false,
+                                    'isCascadeRefresh' => false,
+                                    'isCascadeMerge' => false,
+                                    'isCascadeDetach' => false,
+                                    'sourceToTargetKeyColumns' => array(
+                                        'year_id' => 'id',
+                                    ),
+                                    'joinColumnFieldNames' => array(
+                                        'year_id' => 'year_id',
+                                    ),
+                                    'targetToSourceKeyColumns' => array(
+                                        'id' => 'year_id',
+                                    ),
+                                    'orphanRemoval' => false,
+                                    'associationType' => 2,
+                                    'property' => 'year',
+                                ),
+                            ),
+                            'actions' => array(
+                                'edit' => array(
+                                    'name' => 'edit',
+                                    'type' => 'method',
+                                    'label' => 'action.edit',
+                                    'css_class' => 'btn btn-primary action-edit',
+                                    'icon' => 'edit',
+                                ),
+                                'delete' => array(
+                                    'name' => 'delete',
+                                    'type' => 'method',
+                                    'label' => 'action.delete',
+                                    'css_class' => 'btn btn-default action-delete',
+                                    'icon' => 'trash-o',
+                                ),
+                                'list' => array(
+                                    'name' => 'list',
+                                    'type' => 'method',
+                                    'label' => 'action.list',
+                                    'css_class' => 'btn btn-secondary action-list',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'disabled_actions' => array(
+
+                        ),
+                        'primary_key_field_name' => 'id',
+                        'properties' => array(
+                            'id' => array(
+                                'css_class' => '',
+                                'format' => NULL,
+                                'help' => NULL,
+                                'label' => NULL,
+                                'type' => 'integer',
+                                'fieldType' => 'integer',
+                                'dataType' => 'integer',
+                                'virtual' => false,
+                                'sortable' => true,
+                                'template' => NULL,
+                                'type_options' => array(
+
+                                ),
+                                'fieldName' => 'id',
+                                'scale' => 0,
+                                'length' => NULL,
+                                'unique' => false,
+                                'nullable' => false,
+                                'precision' => 0,
+                                'id' => true,
+                                'columnName' => 'id',
+                                'property' => 'id',
+                            ),
+                            'image' => array(
+                                'css_class' => '',
+                                'format' => NULL,
+                                'help' => NULL,
+                                'label' => NULL,
+                                'type' => 'string',
+                                'fieldType' => 'text',
+                                'dataType' => 'string',
+                                'virtual' => false,
+                                'sortable' => true,
+                                'template' => NULL,
+                                'type_options' => array(
+
+                                ),
+                                'fieldName' => 'image',
+                                'scale' => 0,
+                                'length' => 255,
+                                'unique' => false,
+                                'nullable' => false,
+                                'precision' => 0,
+                                'columnName' => 'image',
+                                'property' => 'image',
+                            ),
+                            'year' => array(
+                                'css_class' => '',
+                                'format' => NULL,
+                                'help' => NULL,
+                                'label' => NULL,
+                                'type' => 'association',
+                                'fieldType' => 'entity',
+                                'dataType' => 'association',
+                                'virtual' => false,
+                                'sortable' => true,
+                                'template' => NULL,
+                                'type_options' => array(
+
+                                ),
+                                'fieldName' => 'year',
+                                'joinColumns' => array(
+                                    0 => array(
+                                        'name' => 'year_id',
+                                        'unique' => false,
+                                        'nullable' => true,
+                                        'onDelete' => NULL,
+                                        'columnDefinition' => NULL,
+                                        'referencedColumnName' => 'id',
+                                    ),
+                                ),
+                                'cascade' => array(
+
+                                ),
+                                'inversedBy' => 'achievements',
+                                'targetEntity' => 'AppBundle\\Entity\\Year',
+                                'fetch' => 2,
+                                'mappedBy' => NULL,
+                                'isOwningSide' => true,
+                                'sourceEntity' => 'AppBundle\\Entity\\Achievement',
+                                'isCascadeRemove' => false,
+                                'isCascadePersist' => false,
+                                'isCascadeRefresh' => false,
+                                'isCascadeMerge' => false,
+                                'isCascadeDetach' => false,
+                                'sourceToTargetKeyColumns' => array(
+                                    'year_id' => 'id',
+                                ),
+                                'joinColumnFieldNames' => array(
+                                    'year_id' => 'year_id',
+                                ),
+                                'targetToSourceKeyColumns' => array(
+                                    'id' => 'year_id',
+                                ),
+                                'orphanRemoval' => false,
+                                'associationType' => 2,
+                                'property' => 'year',
+                            ),
+                        ),
+                        'templates' => array(
+                            'layout' => '@EasyAdmin/default/layout.html.twig',
+                            'menu' => '@EasyAdmin/default/menu.html.twig',
+                            'edit' => '@EasyAdmin/default/edit.html.twig',
+                            'list' => '@EasyAdmin/default/list.html.twig',
+                            'new' => '@EasyAdmin/default/new.html.twig',
+                            'show' => '@EasyAdmin/default/show.html.twig',
+                            'exception' => '@EasyAdmin/default/exception.html.twig',
+                            'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig',
+                            'paginator' => '@EasyAdmin/default/paginator.html.twig',
+                            'field_array' => '@EasyAdmin/default/field_array.html.twig',
+                            'field_association' => '@EasyAdmin/default/field_association.html.twig',
+                            'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig',
+                            'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig',
+                            'field_date' => '@EasyAdmin/default/field_date.html.twig',
+                            'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig',
+                            'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig',
+                            'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig',
+                            'field_float' => '@EasyAdmin/default/field_float.html.twig',
+                            'field_guid' => '@EasyAdmin/default/field_guid.html.twig',
+                            'field_id' => '@EasyAdmin/default/field_id.html.twig',
+                            'field_image' => '@EasyAdmin/default/field_image.html.twig',
+                            'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig',
+                            'field_integer' => '@EasyAdmin/default/field_integer.html.twig',
+                            'field_object' => '@EasyAdmin/default/field_object.html.twig',
+                            'field_raw' => '@EasyAdmin/default/field_raw.html.twig',
+                            'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig',
+                            'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig',
+                            'field_string' => '@EasyAdmin/default/field_string.html.twig',
+                            'field_text' => '@EasyAdmin/default/field_text.html.twig',
+                            'field_time' => '@EasyAdmin/default/field_time.html.twig',
+                            'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig',
+                            'label_empty' => '@EasyAdmin/default/label_empty.html.twig',
+                            'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig',
+                            'label_null' => '@EasyAdmin/default/label_null.html.twig',
+                            'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig',
+                        ),
+                    ),
+                    'Year' => array(
+                        'label' => 'rok szkolny',
+                        'class' => 'AppBundle\\Entity\\Year',
+                        'form' => array(
+                            'fields' => array(
+                                0 => array(
+                                    'property' => 'year',
+                                    'label' => 'rok szkolny',
+                                ),
+                            ),
+                        ),
+                        'list' => array(
+                            'title' => 'rok szkolny',
+                            'fields' => array(
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'rok szkolny',
+                                    'type' => 'string',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'string',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => '@EasyAdmin/default/field_string.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'year',
+                                    'property' => 'year',
+                                ),
+                            ),
+                            'actions' => array(
+                                'new' => array(
+                                    'name' => 'new',
+                                    'type' => 'method',
+                                    'label' => 'nowy rok szkolny ',
+                                    'css_class' => ' action-new',
+                                    'icon' => NULL,
+                                ),
+                                'edit' => array(
+                                    'name' => 'edit',
+                                    'type' => 'method',
+                                    'label' => 'modyfikuj rok',
+                                    'css_class' => 'text-primary action-edit',
+                                    'icon' => NULL,
+                                ),
+                                'show' => array(
+                                    'name' => 'show',
+                                    'type' => 'method',
+                                    'label' => 'pokaż rok',
+                                    'css_class' => ' action-show',
+                                    'icon' => NULL,
+                                ),
+                                'search' => array(
+                                    'name' => 'search',
+                                    'type' => 'method',
+                                    'label' => 'wyszukaj',
+                                    'css_class' => ' action-search',
+                                    'icon' => NULL,
+                                ),
+                                'delete' => array(
+                                    'name' => 'delete',
+                                    'type' => 'method',
+                                    'label' => 'usuń',
+                                    'css_class' => 'text-danger action-delete',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'name' => 'Year',
+                        'new' => array(
+                            'fields' => array(
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'rok szkolny',
+                                    'type' => 'string',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'string',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'year',
+                                    'property' => 'year',
+                                ),
+                            ),
+                            'form_options' => array(
+
+                            ),
+                            'actions' => array(
+                                'list' => array(
+                                    'name' => 'list',
+                                    'type' => 'method',
+                                    'label' => 'action.list',
+                                    'css_class' => 'btn btn-secondary action-list',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'edit' => array(
+                            'fields' => array(
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'rok szkolny',
+                                    'type' => 'string',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'string',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'year',
+                                    'property' => 'year',
+                                ),
+                            ),
+                            'form_options' => array(
+
+                            ),
+                            'actions' => array(
+                                'delete' => array(
+                                    'name' => 'delete',
+                                    'type' => 'method',
+                                    'label' => 'action.delete',
+                                    'css_class' => 'btn btn-default action-delete',
+                                    'icon' => 'trash-o',
+                                ),
+                                'list' => array(
+                                    'name' => 'list',
+                                    'type' => 'method',
+                                    'label' => 'action.list',
+                                    'css_class' => 'btn btn-secondary action-list',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'search' => array(
+                            'fields' => array(
+                                'id' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'ID',
+                                    'type' => 'integer',
+                                    'fieldType' => 'integer',
+                                    'dataType' => 'integer',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'id',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'id' => true,
+                                    'columnName' => 'id',
+                                    'property' => 'id',
+                                ),
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => NULL,
+                                    'type' => 'string',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'string',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => NULL,
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'year',
+                                    'property' => 'year',
+                                ),
+                            ),
+                        ),
+                        'show' => array(
+                            'fields' => array(
+                                'id' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => 'ID',
+                                    'type' => 'integer',
+                                    'fieldType' => 'integer',
+                                    'dataType' => 'integer',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => '@EasyAdmin/default/field_id.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'id',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'id' => true,
+                                    'columnName' => 'id',
+                                    'property' => 'id',
+                                ),
+                                'year' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => NULL,
+                                    'type' => 'string',
+                                    'fieldType' => 'text',
+                                    'dataType' => 'string',
+                                    'virtual' => false,
+                                    'sortable' => true,
+                                    'template' => '@EasyAdmin/default/field_string.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'year',
+                                    'scale' => 0,
+                                    'length' => NULL,
+                                    'unique' => false,
+                                    'nullable' => false,
+                                    'precision' => 0,
+                                    'columnName' => 'year',
+                                    'property' => 'year',
+                                ),
+                                'achievements' => array(
+                                    'css_class' => '',
+                                    'format' => NULL,
+                                    'help' => NULL,
+                                    'label' => NULL,
+                                    'type' => 'association',
+                                    'fieldType' => 'entity',
+                                    'dataType' => 'association',
+                                    'virtual' => false,
+                                    'sortable' => false,
+                                    'template' => '@EasyAdmin/default/field_association.html.twig',
+                                    'type_options' => array(
+
+                                    ),
+                                    'fieldName' => 'achievements',
+                                    'mappedBy' => 'year',
+                                    'targetEntity' => 'AppBundle\\Entity\\Achievement',
+                                    'cascade' => array(
+
+                                    ),
+                                    'orphanRemoval' => false,
+                                    'fetch' => 2,
+                                    'inversedBy' => NULL,
+                                    'isOwningSide' => false,
+                                    'sourceEntity' => 'AppBundle\\Entity\\Year',
+                                    'isCascadeRemove' => false,
+                                    'isCascadePersist' => false,
+                                    'isCascadeRefresh' => false,
+                                    'isCascadeMerge' => false,
+                                    'isCascadeDetach' => false,
+                                    'associationType' => 4,
+                                    'property' => 'achievements',
+                                ),
+                            ),
+                            'actions' => array(
+                                'edit' => array(
+                                    'name' => 'edit',
+                                    'type' => 'method',
+                                    'label' => 'action.edit',
+                                    'css_class' => 'btn btn-primary action-edit',
+                                    'icon' => 'edit',
+                                ),
+                                'delete' => array(
+                                    'name' => 'delete',
+                                    'type' => 'method',
+                                    'label' => 'action.delete',
+                                    'css_class' => 'btn btn-default action-delete',
+                                    'icon' => 'trash-o',
+                                ),
+                                'list' => array(
+                                    'name' => 'list',
+                                    'type' => 'method',
+                                    'label' => 'action.list',
+                                    'css_class' => 'btn btn-secondary action-list',
+                                    'icon' => NULL,
+                                ),
+                            ),
+                        ),
+                        'disabled_actions' => array(
+
+                        ),
+                        'primary_key_field_name' => 'id',
+                        'properties' => array(
+                            'id' => array(
+                                'css_class' => '',
+                                'format' => NULL,
+                                'help' => NULL,
+                                'label' => NULL,
+                                'type' => 'integer',
+                                'fieldType' => 'integer',
+                                'dataType' => 'integer',
+                                'virtual' => false,
+                                'sortable' => true,
+                                'template' => NULL,
+                                'type_options' => array(
+
+                                ),
+                                'fieldName' => 'id',
+                                'scale' => 0,
+                                'length' => NULL,
+                                'unique' => false,
+                                'nullable' => false,
+                                'precision' => 0,
+                                'id' => true,
+                                'columnName' => 'id',
+                                'property' => 'id',
+                            ),
+                            'year' => array(
+                                'css_class' => '',
+                                'format' => NULL,
+                                'help' => NULL,
+                                'label' => NULL,
+                                'type' => 'string',
+                                'fieldType' => 'text',
+                                'dataType' => 'string',
+                                'virtual' => false,
+                                'sortable' => true,
+                                'template' => NULL,
+                                'type_options' => array(
+
+                                ),
+                                'fieldName' => 'year',
+                                'scale' => 0,
+                                'length' => NULL,
+                                'unique' => false,
+                                'nullable' => false,
+                                'precision' => 0,
+                                'columnName' => 'year',
+                                'property' => 'year',
+                            ),
+                            'achievements' => array(
+                                'css_class' => '',
+                                'format' => NULL,
+                                'help' => NULL,
+                                'label' => NULL,
+                                'type' => 'association',
+                                'fieldType' => 'entity',
+                                'dataType' => 'association',
+                                'virtual' => false,
+                                'sortable' => false,
+                                'template' => NULL,
+                                'type_options' => array(
+
+                                ),
+                                'fieldName' => 'achievements',
+                                'mappedBy' => 'year',
+                                'targetEntity' => 'AppBundle\\Entity\\Achievement',
+                                'cascade' => array(
+
+                                ),
+                                'orphanRemoval' => false,
+                                'fetch' => 2,
+                                'inversedBy' => NULL,
+                                'isOwningSide' => false,
+                                'sourceEntity' => 'AppBundle\\Entity\\Year',
+                                'isCascadeRemove' => false,
+                                'isCascadePersist' => false,
+                                'isCascadeRefresh' => false,
+                                'isCascadeMerge' => false,
+                                'isCascadeDetach' => false,
+                                'associationType' => 4,
+                                'property' => 'achievements',
+                            ),
+                        ),
+                        'templates' => array(
+                            'layout' => '@EasyAdmin/default/layout.html.twig',
+                            'menu' => '@EasyAdmin/default/menu.html.twig',
+                            'edit' => '@EasyAdmin/default/edit.html.twig',
+                            'list' => '@EasyAdmin/default/list.html.twig',
+                            'new' => '@EasyAdmin/default/new.html.twig',
+                            'show' => '@EasyAdmin/default/show.html.twig',
+                            'exception' => '@EasyAdmin/default/exception.html.twig',
+                            'flash_messages' => '@EasyAdmin/default/flash_messages.html.twig',
+                            'paginator' => '@EasyAdmin/default/paginator.html.twig',
+                            'field_array' => '@EasyAdmin/default/field_array.html.twig',
+                            'field_association' => '@EasyAdmin/default/field_association.html.twig',
+                            'field_bigint' => '@EasyAdmin/default/field_bigint.html.twig',
+                            'field_boolean' => '@EasyAdmin/default/field_boolean.html.twig',
+                            'field_date' => '@EasyAdmin/default/field_date.html.twig',
+                            'field_datetime' => '@EasyAdmin/default/field_datetime.html.twig',
+                            'field_datetimetz' => '@EasyAdmin/default/field_datetimetz.html.twig',
+                            'field_decimal' => '@EasyAdmin/default/field_decimal.html.twig',
+                            'field_float' => '@EasyAdmin/default/field_float.html.twig',
+                            'field_guid' => '@EasyAdmin/default/field_guid.html.twig',
+                            'field_id' => '@EasyAdmin/default/field_id.html.twig',
+                            'field_image' => '@EasyAdmin/default/field_image.html.twig',
+                            'field_json_array' => '@EasyAdmin/default/field_json_array.html.twig',
+                            'field_integer' => '@EasyAdmin/default/field_integer.html.twig',
+                            'field_object' => '@EasyAdmin/default/field_object.html.twig',
+                            'field_raw' => '@EasyAdmin/default/field_raw.html.twig',
+                            'field_simple_array' => '@EasyAdmin/default/field_simple_array.html.twig',
+                            'field_smallint' => '@EasyAdmin/default/field_smallint.html.twig',
+                            'field_string' => '@EasyAdmin/default/field_string.html.twig',
+                            'field_text' => '@EasyAdmin/default/field_text.html.twig',
+                            'field_time' => '@EasyAdmin/default/field_time.html.twig',
+                            'field_toggle' => '@EasyAdmin/default/field_toggle.html.twig',
+                            'label_empty' => '@EasyAdmin/default/label_empty.html.twig',
+                            'label_inaccessible' => '@EasyAdmin/default/label_inaccessible.html.twig',
+                            'label_null' => '@EasyAdmin/default/label_null.html.twig',
+                            'label_undefined' => '@EasyAdmin/default/label_undefined.html.twig',
+                        ),
+                    ),
                 ),
                 'formats' => array(
                     'date' => 'Y-m-d',
@@ -5296,6 +6544,20 @@ class appDevDebugProjectContainer extends Container
                     ),
                 ),
             ),
+            'vich_uploader.default_filename_attribute_suffix' => '_name',
+            'vich_uploader.mappings' => array(
+                'product_images' => array(
+                    'uri_prefix' => 'web/images/achievement',
+                    'upload_destination' => ($this->targetDirs[3].'/app/../web/images/achievements'),
+                    'namer' => NULL,
+                    'directory_namer' => NULL,
+                    'delete_on_remove' => true,
+                    'delete_on_update' => true,
+                    'inject_on_load' => false,
+                    'db_driver' => 'orm',
+                ),
+            ),
+            'vich_uploader.file_injector.class' => 'Vich\\UploaderBundle\\Injector\\FileInjector',
             'web_profiler.controller.profiler.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController',
             'web_profiler.controller.router.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\RouterController',
             'web_profiler.controller.exception.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ExceptionController',
