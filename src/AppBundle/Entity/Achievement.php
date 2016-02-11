@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
 * @ORM\Entity
+* @ORM\Table()
 * @Vich\Uploadable
 */
 class Achievement
@@ -18,13 +19,13 @@ class Achievement
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Year", inversedBy="achievements")
      * @ORM\JoinColumn(name="year_id", referencedColumnName="id")
      */
-    protected $year;
+    private $year;
 
 /**
 * @ORM\Column(type="string", length=255)
@@ -33,7 +34,7 @@ class Achievement
 private $image;
 
 /**
-* @Vich\UploadableField(mapping="product_images", fileNameProperty="image")
+* @Vich\UploadableField(mapping="achievement_images", fileNameProperty="image")
 * @var File
 */
 private $imageFile;
@@ -90,7 +91,7 @@ return $this->image;
     }
 
     /**
-     * @param mixed $year
+     * @param  /AppBundle/Entity/Year $year
      */
     public function setYear($year)
     {

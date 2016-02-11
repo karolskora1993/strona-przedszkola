@@ -7,7 +7,8 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app.path.achievement_images: web/images/achievement
+    app.path.achievement_images: /images/achievements
+    app.path.article_files: /files/articles
 
 framework:
     #esi:             ~
@@ -116,6 +117,7 @@ easy_admin:
                 title: 'osiągnięcia'
                 fields:
                  - { property: 'image', type: 'image', label:'obrazek',base_path: %app.path.achievement_images% }
+                 - { property: 'year', label:'rok szkolny'}
                 actions:
                                          - { name: 'new', label: 'nowe osiągnięcie' }
                                          - { name: 'edit', label: 'modyfikuj osiągnięcie' }
@@ -128,11 +130,11 @@ easy_admin:
                     class: AppBundle\Entity\Year
                     form:
                       fields:
-                        - { property: 'year', label:'rok szkolny'}
+                        - { property: 'schoolYear', label:'rok szkolny'}
                     list:
                       title: 'rok szkolny'
                       fields:
-                       - { property: 'year', label:'rok szkolny'}
+                       - { property: 'schoolYear', label:'rok szkolny'}
                       actions:
                                                - { name: 'new', label: 'nowy rok szkolny ' }
                                                - { name: 'edit', label: 'modyfikuj rok' }
@@ -140,10 +142,33 @@ easy_admin:
                                                - { name: 'search', label: 'wyszukaj' }
                                                - { name: 'delete', label: 'usuń' }
 
+      Article:
+                    label: 'publikacje'
+                    class: AppBundle\Entity\Article
+                    form:
+                      fields:
+                        - { property: 'description', label:'opis publikacji'}
+                        - { property: 'articleFile', label: 'plik', type: 'Vich\UploaderBundle\Form\Type\VichFileType' }
+                    list:
+                      title: 'publikacje'
+                      fields:
+                       - { property: 'description', label:'opis publikacji'}
+                       - { property: 'article', label:'plik', template: 'file', base_path: %app.path.article_files% }
+                      actions:
+                                               - { name: 'new', label: 'nowa publikacja' }
+                                               - { name: 'edit', label: 'modyfikuj publikacje' }
+                                               - { name: 'show', label: 'pokaż publikacje' }
+                                               - { name: 'search', label: 'wyszukaj' }
+                                               - { name: 'delete', label: 'usuń' }
+
+
 
 vich_uploader:
     db_driver: orm
     mappings:
-        product_images:
+        achievement_images:
             uri_prefix:         %app.path.achievement_images%
             upload_destination: %kernel.root_dir%/../web/images/achievements
+        article_files:
+            uri_prefix: %app.path.article_files%
+            upload_destination: %kernel.root_dir%/../web/files/articles

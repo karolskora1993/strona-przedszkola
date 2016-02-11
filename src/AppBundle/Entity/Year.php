@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="school_year")
+ * @ORM\Table()
  */
 class Year
 {
@@ -20,9 +20,10 @@ class Year
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(name="schoolYear", type="string", length=255)
+     * @var string
      */
-    protected $year;
+    protected $schoolYear;
 
     /**
      * @ORM\OneToMany(targetEntity="Achievement", mappedBy="year")
@@ -80,6 +81,27 @@ class Year
     public function setAchievements($achievements)
     {
         $this->achievements = $achievements;
+    }
+
+    public function __toString()
+    {
+        return $this->schoolYear;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSchoolYear()
+    {
+        return $this->schoolYear;
+    }
+
+    /**
+     * @param string $schoolYear
+     */
+    public function setSchoolYear($schoolYear)
+    {
+        $this->schoolYear = $schoolYear;
     }
 
 }
