@@ -30,9 +30,16 @@ class Year
      */
     protected $achievements;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Achievement", mappedBy="year")
+     */
+    protected $galleries;
+
     public function __construct()
     {
         $this->achievements = new ArrayCollection();
+        $this->galleries = new ArrayCollection();
+
     }
 
     /**
@@ -102,6 +109,22 @@ class Year
     public function setSchoolYear($schoolYear)
     {
         $this->schoolYear = $schoolYear;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGalleries()
+    {
+        return $this->galleries;
+    }
+
+    /**
+     * @param mixed $galleries
+     */
+    public function setGalleries($galleries)
+    {
+        $this->galleries = $galleries;
     }
 
 }

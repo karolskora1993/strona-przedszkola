@@ -8,6 +8,7 @@ imports:
 parameters:
     locale: en
     app.path.achievement_images: /images/achievements
+    app.path.gallery_images: /images/galleries
     app.path.article_files: /files/articles
 
 framework:
@@ -94,7 +95,7 @@ easy_admin:
             - { property: 'author', label: 'autor ogłoszenia' }
             - { property: 'date', label: 'data ogłoszenia' }
         list:
-          title: 'ogłoszenia'
+          title: 'Ogłoszenia'
           fields:
            - { property: 'text', label: 'treść ogłoszenia' }
            - { property: 'author', label: 'autor ogłoszenia' }
@@ -124,9 +125,31 @@ easy_admin:
                                          - { name: 'show', label: 'pokaż osiągnięcie' }
                                          - { name: 'search', label: 'wyszukaj' }
                                          - { name: 'delete', label: 'usuń' }
+      Gallery:
+                    label: 'Galerie'
+                    class: AppBundle\Entity\Gallery
+                    form:
+                      fields:
+                        - { property: 'imageFile', label:'obrazek', type: 'file' }
+                        - { property: 'year', label:'rok szkolny'}
+                        - { property: 'name', label:'nazwa galerii'}
+                        - { property: 'href', label:'link do galerii'}
+                    list:
+                      title: 'Galerie'
+                      fields:
+                       - { property: 'image', type: 'image', label:'obrazek',base_path: %app.path.gallery_images% }
+                       - { property: 'year', label:'rok szkolny'}
+                       - { property: 'name', label:'nazwa galerii'}
+                       - { property: 'href', label:'link do galerii'}
+                      actions:
+                                               - { name: 'new', label: 'nowa galeria' }
+                                               - { name: 'edit', label: 'modyfikuj galerie' }
+                                               - { name: 'show', label: 'pokaż galerie' }
+                                               - { name: 'search', label: 'wyszukaj' }
+                                               - { name: 'delete', label: 'usuń' }
 
       Year:
-                    label: 'rok szkolny'
+                    label: 'Rok szkolny'
                     class: AppBundle\Entity\Year
                     form:
                       fields:
@@ -148,9 +171,9 @@ easy_admin:
                     form:
                       fields:
                         - { property: 'description', label:'opis publikacji'}
-                        - { property: 'articleFile', label: 'plik', type: 'Vich\UploaderBundle\Form\Type\VichFileType' }
+                        - { property: 'articleFile', label: 'plik', type: 'file' }
                     list:
-                      title: 'publikacje'
+                      title: 'Publikacje'
                       fields:
                        - { property: 'description', label:'opis publikacji'}
                        - { property: 'article', label:'plik', template: 'file', base_path: %app.path.article_files% }
@@ -162,13 +185,15 @@ easy_admin:
                                                - { name: 'delete', label: 'usuń' }
 
 
-
 vich_uploader:
     db_driver: orm
     mappings:
         achievement_images:
             uri_prefix:         %app.path.achievement_images%
             upload_destination: %kernel.root_dir%/../web/images/achievements
+        gallery_images:
+                    uri_prefix:         %app.path.gallery_images%
+                    upload_destination: %kernel.root_dir%/../web/images/galleries
         article_files:
             uri_prefix: %app.path.article_files%
             upload_destination: %kernel.root_dir%/../web/files/articles
