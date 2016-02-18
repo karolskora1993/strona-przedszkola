@@ -54,7 +54,6 @@
                     {% if user== null %}
                     <li><a href="{{ path('fos_user_security_login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     {% else %}
-                        <li><a href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-log-out"></span>wyloguj</a></li>
                         <li><a href="{{ path('easyadmin') }}"><span class="glyphicon glyphicon-edit"></span>administruj</a></li>
                     {% endif %}
                 </ul>
@@ -370,17 +369,9 @@ zastanówcie no się, dziatki.
                             <h3 class="panel-title">Nasze publikacje</h3>
                         </div>
                         <div class="panel-body">
-                            <p>referat bajki psychoterapeutyczne: <a href="publikacje/referatbajkipsychoterapeutyczne.doc">otwórz</a></p>
-                            <p>referat patriotyzm: <a href="publikacje/referatpatriotyzm.doc">otwórz</a></p>
-                            <p>referat jak pomoc dziecku nadpobudliwemu: <a href="publikacje/Jakpomocdzieckunadpobudliwemu.doc">otwórz</a></p>
-                            <p>Bajka najlepszym lekarstwem na dzieciece problemy: <a href="publikacje/Bajkanajlepszymlekarstwemnadziecieceproblemy.doc">otwórz</a></p>
-                            <p>Dziecięce lęki: <a href="publikacje/Ddziecieceleki.doc">otwórz</a></p>
-                            <p>Kochani rodzice !: <a href="publikacje/Kochanirodzice.doc">otwórz</a></p>
-                            <p>Poczytaj mi mamo: <a href="publikacje/Poczytajmimamo.doc">otwórz</a></p>
-                            <p>Zajęcia plastyczne a rozwój dziecka: <a href="publikacje/Zajeciaplastycznearozwojdziecka.doc">otwórz</a></p>
-                            <p>Wpływ programów telewizyjnych na rozwój i zachowanie dzieci przedszkolnych: <a href="publikacje/wplywprogramowtelewizyjnychnarozwojizachowaniedzieciprzedszkolnych.doc ">otwórz</a></p>
-                            <p>jak powstaje dziecieca agresja: <a href="publikacje/jakpowstajedzieciecaagresja.doc ">otwórz</a></p>
-                            <p>jak pracowac z dzieckiem nadpobudliwym psychoruchowo: <a href="publikacje/jakpracowaczdzieckiemnadpobudliwympsychoruchowo.doc ">otwórz</a></p>
+                            {% for article in articles %}
+                            <p>{{ article.description }}: <a href="{{ article.article }}">otwórz</a></p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -395,7 +386,7 @@ zastanówcie no się, dziatki.
                         <div class="panel-heading">
                             <h3 class="panel-title ">nasze osiągnięcia</h3>
                         </div>
-                        <div class="panel-body animated bounceInRight">
+                        <div class="panel-body animated bounceInRight" id="osiagniecia">
 
                             {% for year in schoolYears %}
                             <h3 id="{{ year.schoolYear }}">Nasze osiągnięcia {{ year.schoolYear }} </h3>
@@ -413,17 +404,49 @@ zastanówcie no się, dziatki.
             </div>
         </div>
     </div>
+
+    <div class="row-blue" id="galeria">
+        <div class="container animatedParent">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title ">nasze galerie</h3>
+                        </div>
+                        <div class="panel-body animated bounceInLeft">
+
+                            {% for year in schoolYears %}
+                                <h3 id="{{ year.schoolYear }}">Nasze galerie {{ year.schoolYear }} </h3>
+                                {% for gallery in year.gatteries %}
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="thumbnail">
+                                            <img src="{{ gallery.image }}" alt="obrazek galerii">
+                                            <div class="caption">
+                                                <h5>{{ gallery.name }}</h5>
+                                                </br>
+                                                <p><a href="{{ gallery.href }}" class="btn btn-primary" role="button">wyświetl</a>></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs">
                         <li role="presentation" class="active"><a href="#">STRONA GŁÓWNA</a></li>
-                        <li role="presentation"><a href="#">O NAS</a></li>
-                        <li role="presentation"><a href="#">DLA RODZICÓW</a></li>
-                        <li role="presentation"><a href="#">PUBLIKACJE</a></li>
-                        <li role="presentation"><a href="#">OSIĄGNIĘCIA</a></li>
-                        <li role="presentation"><a href="#">GALERIA</a></li>
+                        <li role="presentation"><a href="#o_nas">O NAS</a></li>
+                        <li role="presentation"><a href="#plan_dnia">DLA RODZICÓW</a></li>
+                        <li role="presentation"><a href="#publikacje">PUBLIKACJE</a></li>
+                        <li role="presentation"><a href="#osiagniecia">OSIĄGNIĘCIA</a></li>
+                        <li role="presentation"><a href="#galeria">GALERIA</a></li>
                     </ul>
                 </div>
             </div><!--end row-->

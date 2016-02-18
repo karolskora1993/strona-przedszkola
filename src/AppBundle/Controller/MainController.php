@@ -19,6 +19,8 @@ class MainController extends Controller
 
         $adverts=$this->getDoctrine()->getRepository('AppBundle:Advertisement')->findAll();
 
+        $articles=$this->getDoctrine()->getRepository('AppBundle:Article')->findAll();
+
         /*$prod=[];
         for($i=0; $i<sizeof($products);$i++)
         {
@@ -26,6 +28,6 @@ class MainController extends Controller
                 $prod[$i]=$products[$i];
         }*/
 
-        return $this->render("::layout.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'adverts'=>$adverts));
+        return $this->render("::layout.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'adverts'=>$adverts, 'articles'=>$articles));
     }
 }
