@@ -61,7 +61,7 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-    <img src="images/bg3.gif" class="img-responsive"/>
+    <img src="{{ asset('images/logo.jpg') }}" class="img-responsive"/>
     <div class="row-blue" id="film">
         <div class="container animatedParent">
             <div class="col-md-12">
@@ -86,47 +86,19 @@
         <div class="container animatedParent">
             <div class="col-md-8">
                 <div class="panel-body">
+                    {% for advert in adverts %}
                     <div class="panel panel-success animated bounceInLeft">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Wyprawka dla dzieci z grupy I i II</h3>
+                            <h3 class="panel-title">{{ advert.title }}</h3>
                         </div>
                         <div class="panel-body">
-                            <ul>
-                                <li>-pantofle  najlepiej na rzepy ,  podpisane</li>
-                                <li>-<b>Duży koc obleczony w dużą poszwę- podpisany</b></li>
-                                <li>-mała poduszeczka</li>
-                                <li>-piżamki- podpisane</li>
-                                <li>-zapasowe ubrania w razie "awarii"(majteczki , skarpety , spodnie , bluzeczki  w woreczku z materiału)</li>
-                                <li>-w razie potrzeby pampersy do założenia w czasie leżakowania</li>
-                                <li>-chusteczki higieniczne (cały wagon)</li>
-                                <li>-chusteczki nawilżane</li>
-                            </ul>
+                            {{ advert.text }}
                         </div>
-                        <div class="panel-footer"><p style="text-align:right">Autor:Dorota Skóra</p></div>
+                        <div class="panel-footer"><p style="text-align:right">Autor:{{ advert.author }}</p></div>
                     </div>
-                    <div class="panel panel-primary animated bounceInLeft">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Wyprawka dla dzieci grup starszych</h3>
-                        </div>
-                        <div class="panel-body">
-                            <ul>
-                                <li>-obuwie zastępcze podpisane w woreczku z materiału,</li>
-                                <li>-strój gimnastyczny  podpisany w woreczku z materiału,</li>
-                                <li>-chusteczki higieniczne (cały wagon)</li>
-                                <li>-zapasowe ubrania w razie "awarii"(majteczki , skarpety , spodnie , bluzeczki  w woreczku)  pozostawione w szatni w półce indywidualnej dziecka,</li>
-                            </ul>
-                        </div>
-                        <div class="panel-footer"><p style="text-align:right">Autor:Dorota Skóra</p></div>
-                    </div>
-
+                    {% endfor %}
                 </div>
                 <span id="o_nas"></span>
-                <nav>
-                    <ul class="pager">
-                        <li><a href="#">nowsze</a></li>
-                        <li><a href="#">starsze</a></li>
-                    </ul>
-                </nav>
             </div>
             <div class="col-md-4">
                 <div class="panel-body">

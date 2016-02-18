@@ -21,20 +21,20 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e = $this->env->getExtension("native_profiler");
-        $__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e->enter($__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::layout.html.twig"));
+        $__internal_91a938149919b3645ed0a03a47f9cf87583e6e04c2534757cee4bdc8df772f97 = $this->env->getExtension("native_profiler");
+        $__internal_91a938149919b3645ed0a03a47f9cf87583e6e04c2534757cee4bdc8df772f97->enter($__internal_91a938149919b3645ed0a03a47f9cf87583e6e04c2534757cee4bdc8df772f97_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::layout.html.twig"));
 
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e->leave($__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e_prof);
+        $__internal_91a938149919b3645ed0a03a47f9cf87583e6e04c2534757cee4bdc8df772f97->leave($__internal_91a938149919b3645ed0a03a47f9cf87583e6e04c2534757cee4bdc8df772f97_prof);
 
     }
 
     // line 2
     public function block_body($context, array $blocks = array())
     {
-        $__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970 = $this->env->getExtension("native_profiler");
-        $__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970->enter($__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_1e4804d368729aebbeae66dabde5910c6a177985a5eb9a4d90cbf50e4c5929b0 = $this->env->getExtension("native_profiler");
+        $__internal_1e4804d368729aebbeae66dabde5910c6a177985a5eb9a4d90cbf50e4c5929b0->enter($__internal_1e4804d368729aebbeae66dabde5910c6a177985a5eb9a4d90cbf50e4c5929b0_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
         // line 3
         echo "    <div class=\"nav\" id=\"top\"></div>
@@ -126,7 +126,10 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-    <img src=\"images/bg3.gif\" class=\"img-responsive\"/>
+    <img src=\"";
+        // line 64
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("images/logo.jpg"), "html", null, true);
+        echo "\" class=\"img-responsive\"/>
     <div class=\"row-blue\" id=\"film\">
         <div class=\"container animatedParent\">
             <div class=\"col-md-12\">
@@ -151,47 +154,38 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
         <div class=\"container animatedParent\">
             <div class=\"col-md-8\">
                 <div class=\"panel-body\">
-                    <div class=\"panel panel-success animated bounceInLeft\">
+                    ";
+        // line 89
+        $context['_parent'] = $context;
+        $context['_seq'] = twig_ensure_traversable((isset($context["adverts"]) ? $context["adverts"] : $this->getContext($context, "adverts")));
+        foreach ($context['_seq'] as $context["_key"] => $context["advert"]) {
+            // line 90
+            echo "                    <div class=\"panel panel-success animated bounceInLeft\">
                         <div class=\"panel-heading\">
-                            <h3 class=\"panel-title\">Wyprawka dla dzieci z grupy I i II</h3>
+                            <h3 class=\"panel-title\">";
+            // line 92
+            echo twig_escape_filter($this->env, $this->getAttribute($context["advert"], "title", array()), "html", null, true);
+            echo "</h3>
                         </div>
                         <div class=\"panel-body\">
-                            <ul>
-                                <li>-pantofle  najlepiej na rzepy ,  podpisane</li>
-                                <li>-<b>Duży koc obleczony w dużą poszwę- podpisany</b></li>
-                                <li>-mała poduszeczka</li>
-                                <li>-piżamki- podpisane</li>
-                                <li>-zapasowe ubrania w razie \"awarii\"(majteczki , skarpety , spodnie , bluzeczki  w woreczku z materiału)</li>
-                                <li>-w razie potrzeby pampersy do założenia w czasie leżakowania</li>
-                                <li>-chusteczki higieniczne (cały wagon)</li>
-                                <li>-chusteczki nawilżane</li>
-                            </ul>
+                            ";
+            // line 95
+            echo twig_escape_filter($this->env, $this->getAttribute($context["advert"], "text", array()), "html", null, true);
+            echo "
                         </div>
-                        <div class=\"panel-footer\"><p style=\"text-align:right\">Autor:Dorota Skóra</p></div>
+                        <div class=\"panel-footer\"><p style=\"text-align:right\">Autor:";
+            // line 97
+            echo twig_escape_filter($this->env, $this->getAttribute($context["advert"], "author", array()), "html", null, true);
+            echo "</p></div>
                     </div>
-                    <div class=\"panel panel-primary animated bounceInLeft\">
-                        <div class=\"panel-heading\">
-                            <h3 class=\"panel-title\">Wyprawka dla dzieci grup starszych</h3>
-                        </div>
-                        <div class=\"panel-body\">
-                            <ul>
-                                <li>-obuwie zastępcze podpisane w woreczku z materiału,</li>
-                                <li>-strój gimnastyczny  podpisany w woreczku z materiału,</li>
-                                <li>-chusteczki higieniczne (cały wagon)</li>
-                                <li>-zapasowe ubrania w razie \"awarii\"(majteczki , skarpety , spodnie , bluzeczki  w woreczku)  pozostawione w szatni w półce indywidualnej dziecka,</li>
-                            </ul>
-                        </div>
-                        <div class=\"panel-footer\"><p style=\"text-align:right\">Autor:Dorota Skóra</p></div>
-                    </div>
-
-                </div>
+                    ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['advert'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 100
+        echo "                </div>
                 <span id=\"o_nas\"></span>
-                <nav>
-                    <ul class=\"pager\">
-                        <li><a href=\"#\">nowsze</a></li>
-                        <li><a href=\"#\">starsze</a></li>
-                    </ul>
-                </nav>
             </div>
             <div class=\"col-md-4\">
                 <div class=\"panel-body\">
@@ -491,26 +485,26 @@ zastanówcie no się, dziatki.
                         <div class=\"panel-body animated bounceInRight\">
 
                             ";
-        // line 428
+        // line 400
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["schoolYears"]) ? $context["schoolYears"] : $this->getContext($context, "schoolYears")));
         foreach ($context['_seq'] as $context["_key"] => $context["year"]) {
-            // line 429
+            // line 401
             echo "                            <h3 id=\"";
             echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
             echo "\">Nasze osiągnięcia ";
             echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
             echo " </h3>
                                 ";
-            // line 430
+            // line 402
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable($this->getAttribute($context["year"], "achievements", array()));
             foreach ($context['_seq'] as $context["_key"] => $context["achievement"]) {
-                // line 431
+                // line 403
                 echo "                                <div class=\"col-xs-6 col-md-3\">
                                     <a href=\"#\" class=\"thumbnail\">
                                         <img src=\"";
-                // line 433
+                // line 405
                 echo twig_escape_filter($this->env, $this->getAttribute($context["achievement"], "image", array()), "html", null, true);
                 echo "\" alt=\"dyplom\">
                                     </a>
@@ -520,13 +514,13 @@ zastanówcie no się, dziatki.
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['achievement'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 437
+            // line 409
             echo "                            ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['year'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 438
+        // line 410
         echo "                        </div>
                     </div>
                 </div>
@@ -558,7 +552,7 @@ zastanówcie no się, dziatki.
 
 ";
         
-        $__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970->leave($__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970_prof);
+        $__internal_1e4804d368729aebbeae66dabde5910c6a177985a5eb9a4d90cbf50e4c5929b0->leave($__internal_1e4804d368729aebbeae66dabde5910c6a177985a5eb9a4d90cbf50e4c5929b0_prof);
 
     }
 
@@ -574,7 +568,7 @@ zastanówcie no się, dziatki.
 
     public function getDebugInfo()
     {
-        return array (  530 => 438,  524 => 437,  514 => 433,  510 => 431,  506 => 430,  499 => 429,  495 => 428,  125 => 60,  120 => 58,  115 => 57,  109 => 55,  107 => 54,  101 => 50,  89 => 47,  85 => 46,  40 => 3,  34 => 2,  11 => 1,);
+        return array (  524 => 410,  518 => 409,  508 => 405,  504 => 403,  500 => 402,  493 => 401,  489 => 400,  187 => 100,  178 => 97,  173 => 95,  167 => 92,  163 => 90,  159 => 89,  131 => 64,  125 => 60,  120 => 58,  115 => 57,  109 => 55,  107 => 54,  101 => 50,  89 => 47,  85 => 46,  40 => 3,  34 => 2,  11 => 1,);
     }
 }
 /* {% extends 'base.html.twig' %}*/
@@ -640,7 +634,7 @@ zastanówcie no się, dziatki.
 /*             </div><!-- /.navbar-collapse -->*/
 /*         </div><!-- /.container-fluid -->*/
 /*     </nav>*/
-/*     <img src="images/bg3.gif" class="img-responsive"/>*/
+/*     <img src="{{ asset('images/logo.jpg') }}" class="img-responsive"/>*/
 /*     <div class="row-blue" id="film">*/
 /*         <div class="container animatedParent">*/
 /*             <div class="col-md-12">*/
@@ -665,47 +659,19 @@ zastanówcie no się, dziatki.
 /*         <div class="container animatedParent">*/
 /*             <div class="col-md-8">*/
 /*                 <div class="panel-body">*/
+/*                     {% for advert in adverts %}*/
 /*                     <div class="panel panel-success animated bounceInLeft">*/
 /*                         <div class="panel-heading">*/
-/*                             <h3 class="panel-title">Wyprawka dla dzieci z grupy I i II</h3>*/
+/*                             <h3 class="panel-title">{{ advert.title }}</h3>*/
 /*                         </div>*/
 /*                         <div class="panel-body">*/
-/*                             <ul>*/
-/*                                 <li>-pantofle  najlepiej na rzepy ,  podpisane</li>*/
-/*                                 <li>-<b>Duży koc obleczony w dużą poszwę- podpisany</b></li>*/
-/*                                 <li>-mała poduszeczka</li>*/
-/*                                 <li>-piżamki- podpisane</li>*/
-/*                                 <li>-zapasowe ubrania w razie "awarii"(majteczki , skarpety , spodnie , bluzeczki  w woreczku z materiału)</li>*/
-/*                                 <li>-w razie potrzeby pampersy do założenia w czasie leżakowania</li>*/
-/*                                 <li>-chusteczki higieniczne (cały wagon)</li>*/
-/*                                 <li>-chusteczki nawilżane</li>*/
-/*                             </ul>*/
+/*                             {{ advert.text }}*/
 /*                         </div>*/
-/*                         <div class="panel-footer"><p style="text-align:right">Autor:Dorota Skóra</p></div>*/
+/*                         <div class="panel-footer"><p style="text-align:right">Autor:{{ advert.author }}</p></div>*/
 /*                     </div>*/
-/*                     <div class="panel panel-primary animated bounceInLeft">*/
-/*                         <div class="panel-heading">*/
-/*                             <h3 class="panel-title">Wyprawka dla dzieci grup starszych</h3>*/
-/*                         </div>*/
-/*                         <div class="panel-body">*/
-/*                             <ul>*/
-/*                                 <li>-obuwie zastępcze podpisane w woreczku z materiału,</li>*/
-/*                                 <li>-strój gimnastyczny  podpisany w woreczku z materiału,</li>*/
-/*                                 <li>-chusteczki higieniczne (cały wagon)</li>*/
-/*                                 <li>-zapasowe ubrania w razie "awarii"(majteczki , skarpety , spodnie , bluzeczki  w woreczku)  pozostawione w szatni w półce indywidualnej dziecka,</li>*/
-/*                             </ul>*/
-/*                         </div>*/
-/*                         <div class="panel-footer"><p style="text-align:right">Autor:Dorota Skóra</p></div>*/
-/*                     </div>*/
-/* */
+/*                     {% endfor %}*/
 /*                 </div>*/
 /*                 <span id="o_nas"></span>*/
-/*                 <nav>*/
-/*                     <ul class="pager">*/
-/*                         <li><a href="#">nowsze</a></li>*/
-/*                         <li><a href="#">starsze</a></li>*/
-/*                     </ul>*/
-/*                 </nav>*/
 /*             </div>*/
 /*             <div class="col-md-4">*/
 /*                 <div class="panel-body">*/

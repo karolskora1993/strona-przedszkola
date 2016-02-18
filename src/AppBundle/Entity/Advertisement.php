@@ -24,9 +24,14 @@ class Advertisement
     protected $text;
 
     /**
+ * @ORM\Column(type="string")
+ */
+    protected $author;
+
+    /**
      * @ORM\Column(type="string")
      */
-    protected $author;
+    protected $title;
 
     /**
      * @ORM\Column(type="date")
@@ -97,4 +102,21 @@ class Advertisement
     {
         $this->text = $text;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
 }

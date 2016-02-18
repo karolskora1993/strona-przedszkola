@@ -91,12 +91,14 @@ easy_admin:
         class: AppBundle\Entity\Advertisement
         form:
           fields:
+            - { property: 'title', label: 'tytuł ogłoszenia' }
             - { property: 'text', label: 'treść ogłoszenia', type: 'Ivory\CKEditorBundle\Form\Type\CKEditorType' }
             - { property: 'author', label: 'autor ogłoszenia' }
             - { property: 'date', label: 'data ogłoszenia' }
         list:
           title: 'Ogłoszenia'
           fields:
+           - { property: 'title', label: 'tytuł ogłoszenia' }
            - { property: 'text', label: 'treść ogłoszenia' }
            - { property: 'author', label: 'autor ogłoszenia' }
            - { property: 'date', label: 'data ogłoszenia' }
