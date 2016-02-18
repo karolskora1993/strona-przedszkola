@@ -105,11 +105,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // admin_panel
-        if ($pathinfo === '/admin_panel') {
-            return array (  '_controller' => 'AppBundle\\Controller\\AdminPanelController::adminPanelAction',  '_route' => 'admin_panel',);
-        }
-
         // homepage
         if (rtrim($pathinfo, '/') === '') {
             if (substr($pathinfo, -1) !== '/') {

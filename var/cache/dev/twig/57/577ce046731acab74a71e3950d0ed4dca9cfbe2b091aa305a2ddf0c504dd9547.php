@@ -21,20 +21,20 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_cbe57e745ae77c0d8a03ab9dec1de6adbe42351dd41792646f1349011774fbcc = $this->env->getExtension("native_profiler");
-        $__internal_cbe57e745ae77c0d8a03ab9dec1de6adbe42351dd41792646f1349011774fbcc->enter($__internal_cbe57e745ae77c0d8a03ab9dec1de6adbe42351dd41792646f1349011774fbcc_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::layout.html.twig"));
+        $__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e = $this->env->getExtension("native_profiler");
+        $__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e->enter($__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::layout.html.twig"));
 
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_cbe57e745ae77c0d8a03ab9dec1de6adbe42351dd41792646f1349011774fbcc->leave($__internal_cbe57e745ae77c0d8a03ab9dec1de6adbe42351dd41792646f1349011774fbcc_prof);
+        $__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e->leave($__internal_cb0fac073a3be6998257a8a6fbab43acdf3131a82c8c66184825a154b4eb449e_prof);
 
     }
 
     // line 2
     public function block_body($context, array $blocks = array())
     {
-        $__internal_c816561f6da967b9d8029ade5f3a28f2918ef05d472efa3f490da8126e3157af = $this->env->getExtension("native_profiler");
-        $__internal_c816561f6da967b9d8029ade5f3a28f2918ef05d472efa3f490da8126e3157af->enter($__internal_c816561f6da967b9d8029ade5f3a28f2918ef05d472efa3f490da8126e3157af_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970 = $this->env->getExtension("native_profiler");
+        $__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970->enter($__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
         // line 3
         echo "    <div class=\"nav\" id=\"top\"></div>
@@ -80,37 +80,48 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
                     <li class=\"dropdown\">
                         <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">OSIĄGNIĘCIA <span class=\"caret\"></span></a>
                         <ul class=\"dropdown-menu\">
-                            <li><a href=\"#osiagniecia1213\">ROK SZKOLNY 2012/2013</a></li>
+                            ";
+        // line 46
+        $context['_parent'] = $context;
+        $context['_seq'] = twig_ensure_traversable((isset($context["schoolYears"]) ? $context["schoolYears"] : $this->getContext($context, "schoolYears")));
+        foreach ($context['_seq'] as $context["_key"] => $context["schoolYear"]) {
+            // line 47
+            echo "                            <li><a href=\"#";
+            echo twig_escape_filter($this->env, $this->getAttribute($context["schoolYear"], "schoolYear", array()), "html", null, true);
+            echo "\">";
+            echo twig_escape_filter($this->env, $this->getAttribute($context["schoolYear"], "schoolYear", array()), "html", null, true);
+            echo "</a></li>
                             <li role=\"separator\" class=\"divider\"></li>
-                            <li><a href=\"#osiagniecia1314\">ROK SZKOLNY 2013/2014</a></li>
-                            <li role=\"separator\" class=\"divider\"></li>
-                            <li><a href=\"#osiagniecia1415\">ROK SZKOLNY 2014/2015</a></li>
-                            <li role=\"separator\" class=\"divider\"></li>
-                            <li><a href=\"#osiagniecia1516\">ROK SZKOLNY 2015/2016</a></li>
-                        </ul>
+                            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['schoolYear'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 50
+        echo "                        </ul>
                     </li>
                 </ul>
                 <ul class=\"nav navbar-nav navbar-right\">
                     ";
-        // line 57
+        // line 54
         if (((isset($context["user"]) ? $context["user"] : $this->getContext($context, "user")) == null)) {
-            // line 58
+            // line 55
             echo "                    <li><a href=\"";
             echo $this->env->getExtension('routing')->getPath("fos_user_security_login");
             echo "\"><span class=\"glyphicon glyphicon-log-in\"></span> Login</a></li>
                     ";
         } else {
-            // line 60
+            // line 57
             echo "                        <li><a href=\"";
             echo $this->env->getExtension('routing')->getPath("fos_user_security_logout");
             echo "\"><span class=\"glyphicon glyphicon-log-out\"></span>wyloguj</a></li>
                         <li><a href=\"";
-            // line 61
+            // line 58
             echo $this->env->getExtension('routing')->getPath("easyadmin");
             echo "\"><span class=\"glyphicon glyphicon-edit\"></span>administruj</a></li>
                     ";
         }
-        // line 63
+        // line 60
         echo "                </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -478,214 +489,45 @@ zastanówcie no się, dziatki.
                             <h3 class=\"panel-title \">nasze osiągnięcia</h3>
                         </div>
                         <div class=\"panel-body animated bounceInRight\">
-                            <h3 id=\"osiagniecia1213\">Nasze osiągnięcia w roku szkolnym 2012/2013</h3>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
+
+                            ";
+        // line 428
+        $context['_parent'] = $context;
+        $context['_seq'] = twig_ensure_traversable((isset($context["schoolYears"]) ? $context["schoolYears"] : $this->getContext($context, "schoolYears")));
+        foreach ($context['_seq'] as $context["_key"] => $context["year"]) {
+            // line 429
+            echo "                            <h3 id=\"";
+            echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
+            echo "\">Nasze osiągnięcia ";
+            echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
+            echo " </h3>
+                                ";
+            // line 430
+            $context['_parent'] = $context;
+            $context['_seq'] = twig_ensure_traversable($this->getAttribute($context["year"], "achievements", array()));
+            foreach ($context['_seq'] as $context["_key"] => $context["achievement"]) {
+                // line 431
+                echo "                                <div class=\"col-xs-6 col-md-3\">
                                     <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12131.jpg\" alt=\"dyplom\">
+                                        <img src=\"";
+                // line 433
+                echo twig_escape_filter($this->env, $this->getAttribute($context["achievement"], "image", array()), "html", null, true);
+                echo "\" alt=\"dyplom\">
                                     </a>
                                 </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12132.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12133.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12134.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12135.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12136.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12137.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1213/12138.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <hr id=\"osiagniecia1314\">
-                            <h3>Nasze osiągnięcia w roku szkolnym 2013/2014</h3>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13141.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13142.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13143.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13144.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13145.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13146.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13147.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13148.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/13149.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/131410.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/131411.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/131412.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/131413.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/131414.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1314/131415.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <hr id=\"osiagniecia1415\">
-                            <h3 >Nasze osiągnięcia w roku szkolnym 2014/2015</h3>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14151.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14152.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14153.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14154.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14155.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14156.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14157.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14158.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/14159.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/141510.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/141511.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/141512.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class=\"row\">
-                                <div class=\"col-xs-6 col-md-3\">
-                                    <a href=\"#\" class=\"thumbnail\">
-                                        <img src=\"images/dyplomy/1415/141513.jpg\" alt=\"dyplom\">
-                                    </a>
-                                </div>
-                            </div>
-                            <hr id=\"osiagniecia1516\">
-                            <h3 >Nasze osiągnięcia w roku szkolnym 2015/2016</h3>
-                        </div>
+                                ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['achievement'], $context['_parent'], $context['loop']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 437
+            echo "                            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['year'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 438
+        echo "                        </div>
                     </div>
                 </div>
             </div>
@@ -716,7 +558,7 @@ zastanówcie no się, dziatki.
 
 ";
         
-        $__internal_c816561f6da967b9d8029ade5f3a28f2918ef05d472efa3f490da8126e3157af->leave($__internal_c816561f6da967b9d8029ade5f3a28f2918ef05d472efa3f490da8126e3157af_prof);
+        $__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970->leave($__internal_dfefa2ec604306686d2c9a6c974c9ee746ea50e4b621d3858202c4ab16bb9970_prof);
 
     }
 
@@ -732,7 +574,7 @@ zastanówcie no się, dziatki.
 
     public function getDebugInfo()
     {
-        return array (  114 => 63,  109 => 61,  104 => 60,  98 => 58,  96 => 57,  40 => 3,  34 => 2,  11 => 1,);
+        return array (  530 => 438,  524 => 437,  514 => 433,  510 => 431,  506 => 430,  499 => 429,  495 => 428,  125 => 60,  120 => 58,  115 => 57,  109 => 55,  107 => 54,  101 => 50,  89 => 47,  85 => 46,  40 => 3,  34 => 2,  11 => 1,);
     }
 }
 /* {% extends 'base.html.twig' %}*/
@@ -780,13 +622,10 @@ zastanówcie no się, dziatki.
 /*                     <li class="dropdown">*/
 /*                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">OSIĄGNIĘCIA <span class="caret"></span></a>*/
 /*                         <ul class="dropdown-menu">*/
-/*                             <li><a href="#osiagniecia1213">ROK SZKOLNY 2012/2013</a></li>*/
+/*                             {% for schoolYear in schoolYears %}*/
+/*                             <li><a href="#{{ schoolYear.schoolYear }}">{{ schoolYear.schoolYear }}</a></li>*/
 /*                             <li role="separator" class="divider"></li>*/
-/*                             <li><a href="#osiagniecia1314">ROK SZKOLNY 2013/2014</a></li>*/
-/*                             <li role="separator" class="divider"></li>*/
-/*                             <li><a href="#osiagniecia1415">ROK SZKOLNY 2014/2015</a></li>*/
-/*                             <li role="separator" class="divider"></li>*/
-/*                             <li><a href="#osiagniecia1516">ROK SZKOLNY 2015/2016</a></li>*/
+/*                             {% endfor %}*/
 /*                         </ul>*/
 /*                     </li>*/
 /*                 </ul>*/
@@ -1164,213 +1003,17 @@ zastanówcie no się, dziatki.
 /*                             <h3 class="panel-title ">nasze osiągnięcia</h3>*/
 /*                         </div>*/
 /*                         <div class="panel-body animated bounceInRight">*/
-/*                             <h3 id="osiagniecia1213">Nasze osiągnięcia w roku szkolnym 2012/2013</h3>*/
-/*                             <div class="row">*/
+/* */
+/*                             {% for year in schoolYears %}*/
+/*                             <h3 id="{{ year.schoolYear }}">Nasze osiągnięcia {{ year.schoolYear }} </h3>*/
+/*                                 {% for achievement in year.achievements %}*/
 /*                                 <div class="col-xs-6 col-md-3">*/
 /*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12131.jpg" alt="dyplom">*/
+/*                                         <img src="{{ achievement.image}}" alt="dyplom">*/
 /*                                     </a>*/
 /*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12132.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12133.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12134.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12135.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12136.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12137.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1213/12138.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <hr id="osiagniecia1314">*/
-/*                             <h3>Nasze osiągnięcia w roku szkolnym 2013/2014</h3>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13141.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13142.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13143.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13144.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13145.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13146.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13147.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13148.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/13149.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/131410.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/131411.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/131412.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/131413.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/131414.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1314/131415.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <hr id="osiagniecia1415">*/
-/*                             <h3 >Nasze osiągnięcia w roku szkolnym 2014/2015</h3>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14151.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14152.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14153.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14154.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14155.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14156.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14157.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14158.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/14159.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/141510.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/141511.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/141512.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <div class="row">*/
-/*                                 <div class="col-xs-6 col-md-3">*/
-/*                                     <a href="#" class="thumbnail">*/
-/*                                         <img src="images/dyplomy/1415/141513.jpg" alt="dyplom">*/
-/*                                     </a>*/
-/*                                 </div>*/
-/*                             </div>*/
-/*                             <hr id="osiagniecia1516">*/
-/*                             <h3 >Nasze osiągnięcia w roku szkolnym 2015/2016</h3>*/
+/*                                 {% endfor %}*/
+/*                             {% endfor %}*/
 /*                         </div>*/
 /*                     </div>*/
 /*                 </div>*/

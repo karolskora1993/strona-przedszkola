@@ -15,6 +15,17 @@ class MainController extends Controller
     {
         $user=$this->getUser();
 
-        return $this->render("::layout.html.twig", array('user'=>$user));
+        $schoolYears=$this->getDoctrine()->getRepository('AppBundle:Year')->findAll();
+
+        $adverts=$this->getDoctrine()->getRepository('AppBundle:Advertisement')->findAll();
+
+        /*$prod=[];
+        for($i=0; $i<sizeof($products);$i++)
+        {
+            if($products[$i]->getCategory() == $category)
+                $prod[$i]=$products[$i];
+        }*/
+
+        return $this->render("::layout.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'adverts'=>$adverts));
     }
 }

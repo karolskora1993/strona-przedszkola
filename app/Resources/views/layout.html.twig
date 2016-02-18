@@ -43,13 +43,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">OSIĄGNIĘCIA <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#osiagniecia1213">ROK SZKOLNY 2012/2013</a></li>
+                            {% for schoolYear in schoolYears %}
+                            <li><a href="#{{ schoolYear.schoolYear }}">{{ schoolYear.schoolYear }}</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#osiagniecia1314">ROK SZKOLNY 2013/2014</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#osiagniecia1415">ROK SZKOLNY 2014/2015</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#osiagniecia1516">ROK SZKOLNY 2015/2016</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
                 </ul>
@@ -427,213 +424,17 @@ zastanówcie no się, dziatki.
                             <h3 class="panel-title ">nasze osiągnięcia</h3>
                         </div>
                         <div class="panel-body animated bounceInRight">
-                            <h3 id="osiagniecia1213">Nasze osiągnięcia w roku szkolnym 2012/2013</h3>
-                            <div class="row">
+
+                            {% for year in schoolYears %}
+                            <h3 id="{{ year.schoolYear }}">Nasze osiągnięcia {{ year.schoolYear }} </h3>
+                                {% for achievement in year.achievements %}
                                 <div class="col-xs-6 col-md-3">
                                     <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12131.jpg" alt="dyplom">
+                                        <img src="{{ achievement.image}}" alt="dyplom">
                                     </a>
                                 </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12132.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12133.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12134.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12135.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12136.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12137.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1213/12138.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <hr id="osiagniecia1314">
-                            <h3>Nasze osiągnięcia w roku szkolnym 2013/2014</h3>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13141.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13142.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13143.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13144.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13145.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13146.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13147.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13148.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/13149.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/131410.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/131411.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/131412.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/131413.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/131414.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1314/131415.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <hr id="osiagniecia1415">
-                            <h3 >Nasze osiągnięcia w roku szkolnym 2014/2015</h3>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14151.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14152.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14153.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14154.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14155.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14156.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14157.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14158.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/14159.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/141510.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/141511.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/141512.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="images/dyplomy/1415/141513.jpg" alt="dyplom">
-                                    </a>
-                                </div>
-                            </div>
-                            <hr id="osiagniecia1516">
-                            <h3 >Nasze osiągnięcia w roku szkolnym 2015/2016</h3>
+                                {% endfor %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
