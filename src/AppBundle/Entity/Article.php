@@ -64,9 +64,9 @@ class Article
     /**
      * @param string $desciption
      */
-    public function setDescription($desciption)
+    public function setDescription($description)
     {
-        $this->desciption = description;
+        $this->desciption = $description;
     }
 
     /**

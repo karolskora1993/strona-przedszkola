@@ -42,6 +42,21 @@ twig:
     strict_variables: "%kernel.debug%"
 
 # Doctrine Configuration
+#doctrine:
+#    dbal:
+#        driver:   pdo_mysql
+#        host:     sql.karas1993.nazwa.pl
+#        port:     3306
+#        dbname:   karas1993
+#        user:     karas1993
+#        password: Kkoaw1492
+#        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
 doctrine:
     dbal:
         driver:   pdo_mysql
@@ -51,13 +66,6 @@ doctrine:
         user:     root
         password: root
         charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
-
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore

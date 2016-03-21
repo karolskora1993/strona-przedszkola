@@ -31,7 +31,7 @@ class Year
     protected $achievements;
 
     /**
-     * @ORM\OneToMany(targetEntity="Achievement", mappedBy="year")
+     * @ORM\OneToMany(targetEntity="Gallery", mappedBy="year")
      */
     protected $galleries;
 

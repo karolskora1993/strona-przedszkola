@@ -17,7 +17,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#aktualnosci">AKTUALNOŚCI <span class="sr-only">(current)</span></a></li>
+                    <li ><a href="#aktualnosci">AKTUALNOŚCI <span class="sr-only">(current)</span></a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">O NAS <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -49,19 +49,18 @@
                             {% endfor %}
                         </ul>
                     </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if user== null %}
-                    <li><a href="{{ path('fos_user_security_login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    {% else %}
-                        <li><a href="{{ path('easyadmin') }}"><span class="glyphicon glyphicon-edit"></span>administruj</a></li>
-                    {% endif %}
+                    <li><a href="#galeria">GALERIA</a></li>
+
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+    <div class="container-fluid">
+    <div class="row">
     <img src="{{ asset('images/logo.jpg') }}" class="img-responsive"/>
-    <div class="row-blue" id="film">
+    </div>
+    </div>
+    <div class="row row-blue" id="film">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
@@ -81,7 +80,7 @@
             </div>
         </div>
     </div>
-    <div class="row-green">
+    <div class="row row-green">
         <div class="container animatedParent">
             <div class="col-md-8">
                 <div class="panel-body">
@@ -136,7 +135,7 @@ e-mail: przedszkole3lancut@gmail.com
             </div>
         </div>
     </div>
-    <div class="row-blue" id="o_nas2">
+    <div class="row row-blue" id="o_nas2">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
@@ -221,7 +220,7 @@ e-mail: przedszkole3lancut@gmail.com
             </div>
         </div>
     </div>
-    <div class="row-green" id="plan_dnia">
+    <div class="row row-green" id="plan_dnia">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
@@ -283,7 +282,7 @@ e-mail: przedszkole3lancut@gmail.com
             </div>
         </div>
     </div>
-    <div class="row-blue" id="zywienie">
+    <div class="row row-blue" id="zywienie">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
@@ -326,7 +325,7 @@ zastanówcie no się, dziatki.
             </div>
         </div>
     </div>
-    <div class="row-green">
+    <div class="row row-green">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
@@ -360,7 +359,7 @@ zastanówcie no się, dziatki.
             </div>
         </div>
     </div>
-    <div class="row-blue">
+    <div class="row row-blue">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
@@ -370,15 +369,26 @@ zastanówcie no się, dziatki.
                         </div>
                         <div class="panel-body">
                             {% for article in articles %}
-                            <p>{{ article.description }}: <a href="{{ article.article }}">otwórz</a></p>
+                            <p>{{ article.description }}: <a href="/web/files/articles/{{ article.article }}">otwórz</a></p>
                             {% endfor %}
+                            <p>referat bajki psychoterapeutyczne: <a href="/web/files/articles/referatbajkipsychoterapeutyczne.doc">otwórz</a></p>
+                            <p>referat patriotyzm: <a href="/web/files/articles/referatpatriotyzm.doc">otwórz</a></p>
+                            <p>referat jak pomoc dziecku nadpobudliwemu: <a href="/web/files/articles/Jakpomocdzieckunadpobudliwemu.doc">otwórz</a></p>
+                            <p>Bajka najlepszym lekarstwem na dzieciece problemy: <a href="/web/files/articles/Bajkanajlepszymlekarstwemnadziecieceproblemy.doc">otwórz</a></p>
+                            <p>Dziecięce lęki: <a href="/web/files/articles/Ddziecieceleki.doc">otwórz</a></p>
+                            <p>Kochani rodzice !: <a href="/web/files/articles/Kochanirodzice.doc">otwórz</a></p>
+                            <p>Poczytaj mi mamo: <a href="/web/files/articles/Poczytajmimamo.doc">otwórz</a></p>
+                            <p>Zajęcia plastyczne a rozwój dziecka: <a href="/web/files/articles/Zajeciaplastycznearozwojdziecka.doc">otwórz</a></p>
+                            <p>Wpływ programów telewizyjnych na rozwój i zachowanie dzieci przedszkolnych: <a href="/web/files/articles/wplywprogramowtelewizyjnychnarozwojizachowaniedzieciprzedszkolnych.doc ">otwórz</a></p>
+                            <p>jak powstaje dziecieca agresja: <a href="/web/files/articles/jakpowstajedzieciecaagresja.doc ">otwórz</a></p>
+                            <p>jak pracowac z dzieckiem nadpobudliwym psychoruchowo: <a href="/web/files/articles/jakpracowaczdzieckiemnadpobudliwympsychoruchowo.doc ">otwórz</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row-green" id="osiagniecia">
+    <div class="row row-green" id="osiagniecia">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
@@ -389,14 +399,17 @@ zastanówcie no się, dziatki.
                         <div class="panel-body animated bounceInRight" id="osiagniecia">
 
                             {% for year in schoolYears %}
-                            <h3 id="{{ year.schoolYear }}">Nasze osiągnięcia {{ year.schoolYear }} </h3>
+                                <div class="row">
+                                <h3 id="{{ year.schoolYear }}">Nasze osiągnięcia {{ year.schoolYear }} </h3>
+                                <br>
                                 {% for achievement in year.achievements %}
-                                <div class="col-xs-6 col-md-3">
-                                    <a href="#" class="thumbnail">
-                                        <img src="{{ achievement.image}}" alt="dyplom">
+                                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                    <a href="#" class="thumbnail" target="_blank">
+                                        <img src="/images/achievements/{{ achievement.image}}" alt="dyplom">
                                     </a>
-                                </div>
+                                    </div>
                                 {% endfor %}
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -405,30 +418,33 @@ zastanówcie no się, dziatki.
         </div>
     </div>
 
-    <div class="row-blue" id="galeria">
+    <div class="row row-blue" id="galeria">
         <div class="container animatedParent">
             <div class="col-md-12">
                 <div class="panel-body">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-success animated bounceInLeft">
                         <div class="panel-heading">
                             <h3 class="panel-title ">nasze galerie</h3>
                         </div>
-                        <div class="panel-body animated bounceInLeft">
+                        <div class="panel-body">
 
                             {% for year in schoolYears %}
-                                <h3 id="{{ year.schoolYear }}">Nasze galerie {{ year.schoolYear }} </h3>
-                                {% for gallery in year.gatteries %}
-                                    <div class="col-sm-6 col-md-4">
+                            <div class="row">
+                            <h3 id="{{ year.schoolYear }}">Nasze galerie {{ year.schoolYear }} </h3>
+                                <br>
+                                {% for gallery in year.galleries %}
+                                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                                         <div class="thumbnail">
-                                            <img src="{{ gallery.image }}" alt="obrazek galerii">
+                                            <img src="/images/galleries/{{ gallery.image }}" alt="obrazek galerii">
                                             <div class="caption">
                                                 <h5>{{ gallery.name }}</h5>
                                                 </br>
-                                                <p><a href="{{ gallery.href }}" class="btn btn-primary" role="button">wyświetl</a>></p>
+                                                <p><a href="{{ gallery.href }}" class="btn btn-primary" role="button" target="_blank">wyświetl</a></p>
                                             </div>
                                         </div>
                                     </div>
                                 {% endfor %}
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -441,12 +457,19 @@ zastanówcie no się, dziatki.
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs">
-                        <li role="presentation" class="active"><a href="#">STRONA GŁÓWNA</a></li>
+                        <li role="presentation" ><a href="#">STRONA GŁÓWNA</a></li>
                         <li role="presentation"><a href="#o_nas">O NAS</a></li>
                         <li role="presentation"><a href="#plan_dnia">DLA RODZICÓW</a></li>
                         <li role="presentation"><a href="#publikacje">PUBLIKACJE</a></li>
                         <li role="presentation"><a href="#osiagniecia">OSIĄGNIĘCIA</a></li>
                         <li role="presentation"><a href="#galeria">GALERIA</a></li>
+                        {% if user== null %}
+                            <li><a href="{{ path('fos_user_security_login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        {% else %}
+                            <li><a href="{{ path('easyadmin') }}"><span class="glyphicon glyphicon-edit"></span>administruj</a></li>
+                            <li><a href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-edit"></span>wyloguj</a></li>
+
+                        {% endif %}
                     </ul>
                 </div>
             </div><!--end row-->

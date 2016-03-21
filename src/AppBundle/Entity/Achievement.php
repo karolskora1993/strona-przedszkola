@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Doctrine\ORM\Mapping as ORM;
 

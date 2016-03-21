@@ -21,20 +21,20 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_8bd7aa1fbacf8a9499c0e4326ab0b746538a6e418fb9010c4cdab18cbd79773a = $this->env->getExtension("native_profiler");
-        $__internal_8bd7aa1fbacf8a9499c0e4326ab0b746538a6e418fb9010c4cdab18cbd79773a->enter($__internal_8bd7aa1fbacf8a9499c0e4326ab0b746538a6e418fb9010c4cdab18cbd79773a_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::layout.html.twig"));
+        $__internal_a48104f55c365e4eacbf99fed70c178069ab9466ed13235f3a35230565ada944 = $this->env->getExtension("native_profiler");
+        $__internal_a48104f55c365e4eacbf99fed70c178069ab9466ed13235f3a35230565ada944->enter($__internal_a48104f55c365e4eacbf99fed70c178069ab9466ed13235f3a35230565ada944_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::layout.html.twig"));
 
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_8bd7aa1fbacf8a9499c0e4326ab0b746538a6e418fb9010c4cdab18cbd79773a->leave($__internal_8bd7aa1fbacf8a9499c0e4326ab0b746538a6e418fb9010c4cdab18cbd79773a_prof);
+        $__internal_a48104f55c365e4eacbf99fed70c178069ab9466ed13235f3a35230565ada944->leave($__internal_a48104f55c365e4eacbf99fed70c178069ab9466ed13235f3a35230565ada944_prof);
 
     }
 
     // line 2
     public function block_body($context, array $blocks = array())
     {
-        $__internal_1f0f8c599838021dc4daa800dd9262f231ed0a238f0d02e63c59133e489ae366 = $this->env->getExtension("native_profiler");
-        $__internal_1f0f8c599838021dc4daa800dd9262f231ed0a238f0d02e63c59133e489ae366->enter($__internal_1f0f8c599838021dc4daa800dd9262f231ed0a238f0d02e63c59133e489ae366_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_f6307b3de334a19cb43caa017b57eafa13bd4240077bbc147122bb5d43cad307 = $this->env->getExtension("native_profiler");
+        $__internal_f6307b3de334a19cb43caa017b57eafa13bd4240077bbc147122bb5d43cad307->enter($__internal_f6307b3de334a19cb43caa017b57eafa13bd4240077bbc147122bb5d43cad307_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
         // line 3
         echo "    <div class=\"nav\" id=\"top\"></div>
@@ -601,8 +601,8 @@ zastanówcie no się, dziatki.
                     <ul class=\"nav nav-tabs\">
                         <li role=\"presentation\" class=\"active\"><a href=\"#\">STRONA GŁÓWNA</a></li>
                         <li role=\"presentation\"><a href=\"#o_nas\">O NAS</a></li>
-                        <li role=\"presentation\"><a href=\"#\"plan_dnia>DLA RODZICÓW</a></li>
-                        <li role=\"presentation\"><a href=\"#\"publikacje>PUBLIKACJE</a></li>
+                        <li role=\"presentation\"><a href=\"#plan_dnia\">DLA RODZICÓW</a></li>
+                        <li role=\"presentation\"><a href=\"#publikacje\">PUBLIKACJE</a></li>
                         <li role=\"presentation\"><a href=\"#osiagniecia\">OSIĄGNIĘCIA</a></li>
                         <li role=\"presentation\"><a href=\"#galeria\">GALERIA</a></li>
                     </ul>
@@ -619,7 +619,7 @@ zastanówcie no się, dziatki.
 
 ";
         
-        $__internal_1f0f8c599838021dc4daa800dd9262f231ed0a238f0d02e63c59133e489ae366->leave($__internal_1f0f8c599838021dc4daa800dd9262f231ed0a238f0d02e63c59133e489ae366_prof);
+        $__internal_f6307b3de334a19cb43caa017b57eafa13bd4240077bbc147122bb5d43cad307->leave($__internal_f6307b3de334a19cb43caa017b57eafa13bd4240077bbc147122bb5d43cad307_prof);
 
     }
 
@@ -1083,8 +1083,8 @@ zastanówcie no się, dziatki.
 /*                     <ul class="nav nav-tabs">*/
 /*                         <li role="presentation" class="active"><a href="#">STRONA GŁÓWNA</a></li>*/
 /*                         <li role="presentation"><a href="#o_nas">O NAS</a></li>*/
-/*                         <li role="presentation"><a href="#"plan_dnia>DLA RODZICÓW</a></li>*/
-/*                         <li role="presentation"><a href="#"publikacje>PUBLIKACJE</a></li>*/
+/*                         <li role="presentation"><a href="#plan_dnia">DLA RODZICÓW</a></li>*/
+/*                         <li role="presentation"><a href="#publikacje">PUBLIKACJE</a></li>*/
 /*                         <li role="presentation"><a href="#osiagniecia">OSIĄGNIĘCIA</a></li>*/
 /*                         <li role="presentation"><a href="#galeria">GALERIA</a></li>*/
 /*                     </ul>*/
