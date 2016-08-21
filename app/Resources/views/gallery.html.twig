@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig'%}
+{% block content %}
+    <div class="row row-blue" id="galeria">
+        <div class="container animatedParent">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <div class="panel panel-success animated bounceInLeft">
+                        <div class="panel-heading">
+                            <h3 class="panel-title ">nasze galerie</h3>
+                        </div>
+                        <div class="panel-body">
+                             <div class="row">
+                                    <h3 id="galeria{{ year.schoolYear }}">Nasze galerie {{ year.schoolYear }} </h3>
+                                    <br>
+                                    {% for gallery in year.galleries %}
+                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                                            <div class="thumbnail">
+                                                <img src="/images/galleries/{{ gallery.image }}" alt="obrazek galerii">
+                                                <div class="caption">
+                                                    <h5>{{ gallery.name }}</h5>
+                                                    </br>
+                                                    <p><a href="{{ gallery.href }}" class="btn btn-primary" role="button" target="_blank">wyświetl</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -21,13 +21,25 @@ class MainController extends Controller
 
         $articles=$this->getDoctrine()->getRepository('AppBundle:Article')->findAll();
 
-        /*$prod=[];
-        for($i=0; $i<sizeof($products);$i++)
-        {
-            if($products[$i]->getCategory() == $category)
-                $prod[$i]=$products[$i];
-        }*/
 
-        return $this->render("::layout.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'adverts'=>$adverts, 'articles'=>$articles));
+        return $this->render("::index.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'adverts'=>$adverts, 'articles'=>$articles));
     }
+
+/**
+ * @Route("/gallery/{yearID}")
+ */
+public function galleryAction($yearID)
+{
+    $user=$this->getUser();
+
+    $schoolYears=$this->getDoctrine()->getRepository('AppBundle:Year')->findAll();
+
+    $articles=$this->getDoctrine()->getRepository('AppBundle:Article')->findAll();
+
+    $year=$this->getDoctrine()->getRepository('AppBundle:Year')->find($yearID);
+
+
+    return $this->render("::gallery.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'articles'=>$articles, 'year'=>$year));
+}
+
 }

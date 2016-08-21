@@ -20,6 +20,12 @@
 video {
   width: 100%    !important;
   height: auto   !important;
+  background: url("../images/poster.png") transparent  no-repeat 0 0;
+  -webkit-background-size:cover;
+  -moz-background-size:cover;
+  -o-background-size:cover;
+  background-size:cover;
+}
 }
 footer{
     background-color: #337ab7;

@@ -114,6 +114,11 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'AppBundle\\Controller\\MainController::indexAction',  '_route' => 'homepage',);
         }
 
+        // app_main_gallery
+        if (0 === strpos($pathinfo, '/gallery') && preg_match('#^/gallery/(?P<yearID>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_main_gallery')), array (  '_controller' => 'AppBundle\\Controller\\MainController::galleryAction',));
+        }
+
         if (0 === strpos($pathinfo, '/log')) {
             if (0 === strpos($pathinfo, '/login')) {
                 // fos_user_security_login
