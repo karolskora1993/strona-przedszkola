@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig'%}
+{% block content %}
+<div class="row row-green">
+        <div class="container animatedParent">
+            <div class="col-md-12">
+                <div class="panel-body">
+                        <div class="panel panel-success animated bounceInLeft">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ article.title }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{ article.article | raw }}
+                            </div>
+                            <div class="panel-footer"><p style="text-align:right">Autor:{{ article.author }}</p></div>
+                        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig'%}
+{% block content %}
+    <div class="row row-green" id="osiagniecia">
+        <div class="container animatedParent">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title ">nasze osiągnięcia</h3>
+                        </div>
+                        <div class="panel-body animated bounceInRight" id="osiagniecia">
+                                <div class="row">
+                                    <h3 id="{{ year.schoolYear }}">Nasze osiągnięcia {{ year.schoolYear }} </h3>
+                                    <br>
+                                    {% for achievement in year.achievements %}
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                            <a href="#" class="thumbnail" target="_blank">
+                                                <img src="/images/achievements/{{ achievement.image}}" alt="dyplom">
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

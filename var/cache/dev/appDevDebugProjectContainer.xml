@@ -3144,7 +3144,7 @@
                 <parameter key="type_options" type="collection"/>
                 <parameter key="fieldName">galleries</parameter>
                 <parameter key="mappedBy">year</parameter>
-                <parameter key="targetEntity">AppBundle\Entity\Achievement</parameter>
+                <parameter key="targetEntity">AppBundle\Entity\Gallery</parameter>
                 <parameter key="cascade" type="collection"/>
                 <parameter key="orphanRemoval">false</parameter>
                 <parameter key="fetch">2</parameter>
@@ -3273,7 +3273,7 @@
               <parameter key="type_options" type="collection"/>
               <parameter key="fieldName">galleries</parameter>
               <parameter key="mappedBy">year</parameter>
-              <parameter key="targetEntity">AppBundle\Entity\Achievement</parameter>
+              <parameter key="targetEntity">AppBundle\Entity\Gallery</parameter>
               <parameter key="cascade" type="collection"/>
               <parameter key="orphanRemoval">false</parameter>
               <parameter key="fetch">2</parameter>
@@ -3333,24 +3333,28 @@
           <parameter key="form" type="collection">
             <parameter key="fields" type="collection">
               <parameter type="collection">
-                <parameter key="property">description</parameter>
-                <parameter key="label">opis publikacji</parameter>
+                <parameter key="property">title</parameter>
+                <parameter key="label">tytuł artykułu</parameter>
               </parameter>
               <parameter type="collection">
-                <parameter key="property">articleFile</parameter>
-                <parameter key="label">plik</parameter>
-                <parameter key="type">file</parameter>
+                <parameter key="property">article</parameter>
+                <parameter key="label">treść artykułu</parameter>
+                <parameter key="type">Ivory\CKEditorBundle\Form\Type\CKEditorType</parameter>
+              </parameter>
+              <parameter type="collection">
+                <parameter key="property">author</parameter>
+                <parameter key="label">autor ogłoszenia</parameter>
               </parameter>
             </parameter>
           </parameter>
           <parameter key="list" type="collection">
             <parameter key="title">Publikacje</parameter>
             <parameter key="fields" type="collection">
-              <parameter key="description" type="collection">
+              <parameter key="title" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
-                <parameter key="label">opis publikacji</parameter>
+                <parameter key="label">tytuł artykułu</parameter>
                 <parameter key="type">string</parameter>
                 <parameter key="fieldType">text</parameter>
                 <parameter key="dataType">string</parameter>
@@ -3358,36 +3362,56 @@
                 <parameter key="sortable">true</parameter>
                 <parameter key="template">@EasyAdmin/default/field_string.html.twig</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="fieldName">description</parameter>
+                <parameter key="fieldName">title</parameter>
                 <parameter key="scale">0</parameter>
                 <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
-                <parameter key="columnName">description</parameter>
-                <parameter key="property">description</parameter>
+                <parameter key="columnName">title</parameter>
+                <parameter key="property">title</parameter>
               </parameter>
               <parameter key="article" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
-                <parameter key="label">plik</parameter>
-                <parameter key="type">string</parameter>
-                <parameter key="fieldType">text</parameter>
-                <parameter key="dataType">string</parameter>
+                <parameter key="label">treść artykułu</parameter>
+                <parameter key="type">text</parameter>
+                <parameter key="fieldType">textarea</parameter>
+                <parameter key="dataType">text</parameter>
                 <parameter key="virtual">false</parameter>
                 <parameter key="sortable">true</parameter>
-                <parameter key="template">easy_admin/file.html.twig</parameter>
+                <parameter key="template">@EasyAdmin/default/field_text.html.twig</parameter>
                 <parameter key="type_options" type="collection"/>
                 <parameter key="fieldName">article</parameter>
                 <parameter key="scale">0</parameter>
-                <parameter key="length">255</parameter>
+                <parameter key="length">null</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
                 <parameter key="columnName">article</parameter>
                 <parameter key="property">article</parameter>
-                <parameter key="base_path">/files/articles</parameter>
+              </parameter>
+              <parameter key="author" type="collection">
+                <parameter key="css_class"></parameter>
+                <parameter key="format">null</parameter>
+                <parameter key="help">null</parameter>
+                <parameter key="label">autor artykułu</parameter>
+                <parameter key="type">string</parameter>
+                <parameter key="fieldType">text</parameter>
+                <parameter key="dataType">string</parameter>
+                <parameter key="virtual">false</parameter>
+                <parameter key="sortable">true</parameter>
+                <parameter key="template">@EasyAdmin/default/field_string.html.twig</parameter>
+                <parameter key="type_options" type="collection"/>
+                <parameter key="fieldName">author</parameter>
+                <parameter key="scale">0</parameter>
+                <parameter key="length">255</parameter>
+                <parameter key="unique">false</parameter>
+                <parameter key="nullable">false</parameter>
+                <parameter key="precision">0</parameter>
+                <parameter key="columnName">author</parameter>
+                <parameter key="property">author</parameter>
               </parameter>
             </parameter>
             <parameter key="actions" type="collection">
@@ -3431,11 +3455,11 @@
           <parameter key="name">Article</parameter>
           <parameter key="new" type="collection">
             <parameter key="fields" type="collection">
-              <parameter key="description" type="collection">
+              <parameter key="title" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
-                <parameter key="label">opis publikacji</parameter>
+                <parameter key="label">tytuł artykułu</parameter>
                 <parameter key="type">string</parameter>
                 <parameter key="fieldType">text</parameter>
                 <parameter key="dataType">string</parameter>
@@ -3443,36 +3467,56 @@
                 <parameter key="sortable">true</parameter>
                 <parameter key="template">null</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="fieldName">description</parameter>
+                <parameter key="fieldName">title</parameter>
                 <parameter key="scale">0</parameter>
                 <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
-                <parameter key="columnName">description</parameter>
-                <parameter key="property">description</parameter>
+                <parameter key="columnName">title</parameter>
+                <parameter key="property">title</parameter>
               </parameter>
-              <parameter key="articleFile" type="collection">
+              <parameter key="article" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
-                <parameter key="label">plik</parameter>
-                <parameter key="type">file</parameter>
-                <parameter key="fieldType">file</parameter>
-                <parameter key="dataType">null</parameter>
-                <parameter key="virtual">true</parameter>
-                <parameter key="sortable">false</parameter>
+                <parameter key="label">treść artykułu</parameter>
+                <parameter key="type">Ivory\CKEditorBundle\Form\Type\CKEditorType</parameter>
+                <parameter key="fieldType">Ivory\CKEditorBundle\Form\Type\CKEditorType</parameter>
+                <parameter key="dataType">text</parameter>
+                <parameter key="virtual">false</parameter>
+                <parameter key="sortable">true</parameter>
                 <parameter key="template">null</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="columnName">articleFile</parameter>
-                <parameter key="fieldName">articleFile</parameter>
-                <parameter key="id">false</parameter>
+                <parameter key="fieldName">article</parameter>
+                <parameter key="scale">0</parameter>
                 <parameter key="length">null</parameter>
+                <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
+                <parameter key="columnName">article</parameter>
+                <parameter key="property">article</parameter>
+              </parameter>
+              <parameter key="author" type="collection">
+                <parameter key="css_class"></parameter>
+                <parameter key="format">null</parameter>
+                <parameter key="help">null</parameter>
+                <parameter key="label">autor ogłoszenia</parameter>
+                <parameter key="type">string</parameter>
+                <parameter key="fieldType">text</parameter>
+                <parameter key="dataType">string</parameter>
+                <parameter key="virtual">false</parameter>
+                <parameter key="sortable">true</parameter>
+                <parameter key="template">null</parameter>
+                <parameter key="type_options" type="collection"/>
+                <parameter key="fieldName">author</parameter>
                 <parameter key="scale">0</parameter>
+                <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
-                <parameter key="property">articleFile</parameter>
+                <parameter key="nullable">false</parameter>
+                <parameter key="precision">0</parameter>
+                <parameter key="columnName">author</parameter>
+                <parameter key="property">author</parameter>
               </parameter>
             </parameter>
             <parameter key="form_options" type="collection"/>
@@ -3488,11 +3532,11 @@
           </parameter>
           <parameter key="edit" type="collection">
             <parameter key="fields" type="collection">
-              <parameter key="description" type="collection">
+              <parameter key="title" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
-                <parameter key="label">opis publikacji</parameter>
+                <parameter key="label">tytuł artykułu</parameter>
                 <parameter key="type">string</parameter>
                 <parameter key="fieldType">text</parameter>
                 <parameter key="dataType">string</parameter>
@@ -3500,36 +3544,56 @@
                 <parameter key="sortable">true</parameter>
                 <parameter key="template">null</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="fieldName">description</parameter>
+                <parameter key="fieldName">title</parameter>
                 <parameter key="scale">0</parameter>
                 <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
-                <parameter key="columnName">description</parameter>
-                <parameter key="property">description</parameter>
+                <parameter key="columnName">title</parameter>
+                <parameter key="property">title</parameter>
               </parameter>
-              <parameter key="articleFile" type="collection">
+              <parameter key="article" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
-                <parameter key="label">plik</parameter>
-                <parameter key="type">file</parameter>
-                <parameter key="fieldType">file</parameter>
-                <parameter key="dataType">null</parameter>
-                <parameter key="virtual">true</parameter>
-                <parameter key="sortable">false</parameter>
+                <parameter key="label">treść artykułu</parameter>
+                <parameter key="type">Ivory\CKEditorBundle\Form\Type\CKEditorType</parameter>
+                <parameter key="fieldType">Ivory\CKEditorBundle\Form\Type\CKEditorType</parameter>
+                <parameter key="dataType">text</parameter>
+                <parameter key="virtual">false</parameter>
+                <parameter key="sortable">true</parameter>
                 <parameter key="template">null</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="columnName">articleFile</parameter>
-                <parameter key="fieldName">articleFile</parameter>
-                <parameter key="id">false</parameter>
+                <parameter key="fieldName">article</parameter>
+                <parameter key="scale">0</parameter>
                 <parameter key="length">null</parameter>
+                <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
+                <parameter key="columnName">article</parameter>
+                <parameter key="property">article</parameter>
+              </parameter>
+              <parameter key="author" type="collection">
+                <parameter key="css_class"></parameter>
+                <parameter key="format">null</parameter>
+                <parameter key="help">null</parameter>
+                <parameter key="label">autor ogłoszenia</parameter>
+                <parameter key="type">string</parameter>
+                <parameter key="fieldType">text</parameter>
+                <parameter key="dataType">string</parameter>
+                <parameter key="virtual">false</parameter>
+                <parameter key="sortable">true</parameter>
+                <parameter key="template">null</parameter>
+                <parameter key="type_options" type="collection"/>
+                <parameter key="fieldName">author</parameter>
                 <parameter key="scale">0</parameter>
+                <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
-                <parameter key="property">articleFile</parameter>
+                <parameter key="nullable">false</parameter>
+                <parameter key="precision">0</parameter>
+                <parameter key="columnName">author</parameter>
+                <parameter key="property">author</parameter>
               </parameter>
             </parameter>
             <parameter key="form_options" type="collection"/>
@@ -3574,7 +3638,7 @@
                 <parameter key="columnName">id</parameter>
                 <parameter key="property">id</parameter>
               </parameter>
-              <parameter key="description" type="collection">
+              <parameter key="title" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
@@ -3586,20 +3650,41 @@
                 <parameter key="sortable">true</parameter>
                 <parameter key="template">null</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="fieldName">description</parameter>
+                <parameter key="fieldName">title</parameter>
                 <parameter key="scale">0</parameter>
                 <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
-                <parameter key="columnName">description</parameter>
-                <parameter key="property">description</parameter>
+                <parameter key="columnName">title</parameter>
+                <parameter key="property">title</parameter>
               </parameter>
               <parameter key="article" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
                 <parameter key="label">null</parameter>
+                <parameter key="type">text</parameter>
+                <parameter key="fieldType">textarea</parameter>
+                <parameter key="dataType">text</parameter>
+                <parameter key="virtual">false</parameter>
+                <parameter key="sortable">true</parameter>
+                <parameter key="template">null</parameter>
+                <parameter key="type_options" type="collection"/>
+                <parameter key="fieldName">article</parameter>
+                <parameter key="scale">0</parameter>
+                <parameter key="length">null</parameter>
+                <parameter key="unique">false</parameter>
+                <parameter key="nullable">false</parameter>
+                <parameter key="precision">0</parameter>
+                <parameter key="columnName">article</parameter>
+                <parameter key="property">article</parameter>
+              </parameter>
+              <parameter key="author" type="collection">
+                <parameter key="css_class"></parameter>
+                <parameter key="format">null</parameter>
+                <parameter key="help">null</parameter>
+                <parameter key="label">null</parameter>
                 <parameter key="type">string</parameter>
                 <parameter key="fieldType">text</parameter>
                 <parameter key="dataType">string</parameter>
@@ -3607,14 +3692,14 @@
                 <parameter key="sortable">true</parameter>
                 <parameter key="template">null</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="fieldName">article</parameter>
+                <parameter key="fieldName">author</parameter>
                 <parameter key="scale">0</parameter>
                 <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
-                <parameter key="columnName">article</parameter>
-                <parameter key="property">article</parameter>
+                <parameter key="columnName">author</parameter>
+                <parameter key="property">author</parameter>
               </parameter>
             </parameter>
           </parameter>
@@ -3642,7 +3727,7 @@
                 <parameter key="columnName">id</parameter>
                 <parameter key="property">id</parameter>
               </parameter>
-              <parameter key="description" type="collection">
+              <parameter key="title" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
@@ -3654,20 +3739,41 @@
                 <parameter key="sortable">true</parameter>
                 <parameter key="template">@EasyAdmin/default/field_string.html.twig</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="fieldName">description</parameter>
+                <parameter key="fieldName">title</parameter>
                 <parameter key="scale">0</parameter>
                 <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
-                <parameter key="columnName">description</parameter>
-                <parameter key="property">description</parameter>
+                <parameter key="columnName">title</parameter>
+                <parameter key="property">title</parameter>
               </parameter>
               <parameter key="article" type="collection">
                 <parameter key="css_class"></parameter>
                 <parameter key="format">null</parameter>
                 <parameter key="help">null</parameter>
                 <parameter key="label">null</parameter>
+                <parameter key="type">text</parameter>
+                <parameter key="fieldType">textarea</parameter>
+                <parameter key="dataType">text</parameter>
+                <parameter key="virtual">false</parameter>
+                <parameter key="sortable">true</parameter>
+                <parameter key="template">@EasyAdmin/default/field_text.html.twig</parameter>
+                <parameter key="type_options" type="collection"/>
+                <parameter key="fieldName">article</parameter>
+                <parameter key="scale">0</parameter>
+                <parameter key="length">null</parameter>
+                <parameter key="unique">false</parameter>
+                <parameter key="nullable">false</parameter>
+                <parameter key="precision">0</parameter>
+                <parameter key="columnName">article</parameter>
+                <parameter key="property">article</parameter>
+              </parameter>
+              <parameter key="author" type="collection">
+                <parameter key="css_class"></parameter>
+                <parameter key="format">null</parameter>
+                <parameter key="help">null</parameter>
+                <parameter key="label">null</parameter>
                 <parameter key="type">string</parameter>
                 <parameter key="fieldType">text</parameter>
                 <parameter key="dataType">string</parameter>
@@ -3675,14 +3781,14 @@
                 <parameter key="sortable">true</parameter>
                 <parameter key="template">@EasyAdmin/default/field_string.html.twig</parameter>
                 <parameter key="type_options" type="collection"/>
-                <parameter key="fieldName">article</parameter>
+                <parameter key="fieldName">author</parameter>
                 <parameter key="scale">0</parameter>
                 <parameter key="length">255</parameter>
                 <parameter key="unique">false</parameter>
                 <parameter key="nullable">false</parameter>
                 <parameter key="precision">0</parameter>
-                <parameter key="columnName">article</parameter>
-                <parameter key="property">article</parameter>
+                <parameter key="columnName">author</parameter>
+                <parameter key="property">author</parameter>
               </parameter>
             </parameter>
             <parameter key="actions" type="collection">
@@ -3734,7 +3840,7 @@
               <parameter key="columnName">id</parameter>
               <parameter key="property">id</parameter>
             </parameter>
-            <parameter key="description" type="collection">
+            <parameter key="title" type="collection">
               <parameter key="css_class"></parameter>
               <parameter key="format">null</parameter>
               <parameter key="help">null</parameter>
@@ -3746,20 +3852,41 @@
               <parameter key="sortable">true</parameter>
               <parameter key="template">null</parameter>
               <parameter key="type_options" type="collection"/>
-              <parameter key="fieldName">description</parameter>
+              <parameter key="fieldName">title</parameter>
               <parameter key="scale">0</parameter>
               <parameter key="length">255</parameter>
               <parameter key="unique">false</parameter>
               <parameter key="nullable">false</parameter>
               <parameter key="precision">0</parameter>
-              <parameter key="columnName">description</parameter>
-              <parameter key="property">description</parameter>
+              <parameter key="columnName">title</parameter>
+              <parameter key="property">title</parameter>
             </parameter>
             <parameter key="article" type="collection">
               <parameter key="css_class"></parameter>
               <parameter key="format">null</parameter>
               <parameter key="help">null</parameter>
               <parameter key="label">null</parameter>
+              <parameter key="type">text</parameter>
+              <parameter key="fieldType">textarea</parameter>
+              <parameter key="dataType">text</parameter>
+              <parameter key="virtual">false</parameter>
+              <parameter key="sortable">true</parameter>
+              <parameter key="template">null</parameter>
+              <parameter key="type_options" type="collection"/>
+              <parameter key="fieldName">article</parameter>
+              <parameter key="scale">0</parameter>
+              <parameter key="length">null</parameter>
+              <parameter key="unique">false</parameter>
+              <parameter key="nullable">false</parameter>
+              <parameter key="precision">0</parameter>
+              <parameter key="columnName">article</parameter>
+              <parameter key="property">article</parameter>
+            </parameter>
+            <parameter key="author" type="collection">
+              <parameter key="css_class"></parameter>
+              <parameter key="format">null</parameter>
+              <parameter key="help">null</parameter>
+              <parameter key="label">null</parameter>
               <parameter key="type">string</parameter>
               <parameter key="fieldType">text</parameter>
               <parameter key="dataType">string</parameter>
@@ -3767,14 +3894,14 @@
               <parameter key="sortable">true</parameter>
               <parameter key="template">null</parameter>
               <parameter key="type_options" type="collection"/>
-              <parameter key="fieldName">article</parameter>
+              <parameter key="fieldName">author</parameter>
               <parameter key="scale">0</parameter>
               <parameter key="length">255</parameter>
               <parameter key="unique">false</parameter>
               <parameter key="nullable">false</parameter>
               <parameter key="precision">0</parameter>
-              <parameter key="columnName">article</parameter>
-              <parameter key="property">article</parameter>
+              <parameter key="columnName">author</parameter>
+              <parameter key="property">author</parameter>
             </parameter>
           </parameter>
           <parameter key="templates" type="collection">
@@ -5571,7 +5698,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>56c781f48978d4.94353399</argument>
+            <argument>57cc69bb0ec0e0.43645037</argument>
           </service>
         </argument>
       </argument>
@@ -5860,7 +5987,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>56c781f48978d4.94353399</argument>
+            <argument>57cc69bb0ec0e0.43645037</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -9265,7 +9392,7 @@
                   <argument key="type_options" type="collection"/>
                   <argument key="fieldName">galleries</argument>
                   <argument key="mappedBy">year</argument>
-                  <argument key="targetEntity">AppBundle\Entity\Achievement</argument>
+                  <argument key="targetEntity">AppBundle\Entity\Gallery</argument>
                   <argument key="cascade" type="collection"/>
                   <argument key="orphanRemoval">false</argument>
                   <argument key="fetch">2</argument>
@@ -9394,7 +9521,7 @@
                 <argument key="type_options" type="collection"/>
                 <argument key="fieldName">galleries</argument>
                 <argument key="mappedBy">year</argument>
-                <argument key="targetEntity">AppBundle\Entity\Achievement</argument>
+                <argument key="targetEntity">AppBundle\Entity\Gallery</argument>
                 <argument key="cascade" type="collection"/>
                 <argument key="orphanRemoval">false</argument>
                 <argument key="fetch">2</argument>
@@ -9454,24 +9581,28 @@
             <argument key="form" type="collection">
               <argument key="fields" type="collection">
                 <argument type="collection">
-                  <argument key="property">description</argument>
-                  <argument key="label">opis publikacji</argument>
+                  <argument key="property">title</argument>
+                  <argument key="label">tytuł artykułu</argument>
                 </argument>
                 <argument type="collection">
-                  <argument key="property">articleFile</argument>
-                  <argument key="label">plik</argument>
-                  <argument key="type">file</argument>
+                  <argument key="property">article</argument>
+                  <argument key="label">treść artykułu</argument>
+                  <argument key="type">Ivory\CKEditorBundle\Form\Type\CKEditorType</argument>
+                </argument>
+                <argument type="collection">
+                  <argument key="property">author</argument>
+                  <argument key="label">autor ogłoszenia</argument>
                 </argument>
               </argument>
             </argument>
             <argument key="list" type="collection">
               <argument key="title">Publikacje</argument>
               <argument key="fields" type="collection">
-                <argument key="description" type="collection">
+                <argument key="title" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
-                  <argument key="label">opis publikacji</argument>
+                  <argument key="label">tytuł artykułu</argument>
                   <argument key="type">string</argument>
                   <argument key="fieldType">text</argument>
                   <argument key="dataType">string</argument>
@@ -9479,36 +9610,56 @@
                   <argument key="sortable">true</argument>
                   <argument key="template">@EasyAdmin/default/field_string.html.twig</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="fieldName">description</argument>
+                  <argument key="fieldName">title</argument>
                   <argument key="scale">0</argument>
                   <argument key="length">255</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
-                  <argument key="columnName">description</argument>
-                  <argument key="property">description</argument>
+                  <argument key="columnName">title</argument>
+                  <argument key="property">title</argument>
                 </argument>
                 <argument key="article" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
-                  <argument key="label">plik</argument>
-                  <argument key="type">string</argument>
-                  <argument key="fieldType">text</argument>
-                  <argument key="dataType">string</argument>
+                  <argument key="label">treść artykułu</argument>
+                  <argument key="type">text</argument>
+                  <argument key="fieldType">textarea</argument>
+                  <argument key="dataType">text</argument>
                   <argument key="virtual">false</argument>
                   <argument key="sortable">true</argument>
-                  <argument key="template">easy_admin/file.html.twig</argument>
+                  <argument key="template">@EasyAdmin/default/field_text.html.twig</argument>
                   <argument key="type_options" type="collection"/>
                   <argument key="fieldName">article</argument>
                   <argument key="scale">0</argument>
-                  <argument key="length">255</argument>
+                  <argument key="length">null</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
                   <argument key="columnName">article</argument>
                   <argument key="property">article</argument>
-                  <argument key="base_path">/files/articles</argument>
+                </argument>
+                <argument key="author" type="collection">
+                  <argument key="css_class"></argument>
+                  <argument key="format">null</argument>
+                  <argument key="help">null</argument>
+                  <argument key="label">autor artykułu</argument>
+                  <argument key="type">string</argument>
+                  <argument key="fieldType">text</argument>
+                  <argument key="dataType">string</argument>
+                  <argument key="virtual">false</argument>
+                  <argument key="sortable">true</argument>
+                  <argument key="template">@EasyAdmin/default/field_string.html.twig</argument>
+                  <argument key="type_options" type="collection"/>
+                  <argument key="fieldName">author</argument>
+                  <argument key="scale">0</argument>
+                  <argument key="length">255</argument>
+                  <argument key="unique">false</argument>
+                  <argument key="nullable">false</argument>
+                  <argument key="precision">0</argument>
+                  <argument key="columnName">author</argument>
+                  <argument key="property">author</argument>
                 </argument>
               </argument>
               <argument key="actions" type="collection">
@@ -9552,11 +9703,11 @@
             <argument key="name">Article</argument>
             <argument key="new" type="collection">
               <argument key="fields" type="collection">
-                <argument key="description" type="collection">
+                <argument key="title" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
-                  <argument key="label">opis publikacji</argument>
+                  <argument key="label">tytuł artykułu</argument>
                   <argument key="type">string</argument>
                   <argument key="fieldType">text</argument>
                   <argument key="dataType">string</argument>
@@ -9564,36 +9715,56 @@
                   <argument key="sortable">true</argument>
                   <argument key="template">null</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="fieldName">description</argument>
+                  <argument key="fieldName">title</argument>
                   <argument key="scale">0</argument>
                   <argument key="length">255</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
-                  <argument key="columnName">description</argument>
-                  <argument key="property">description</argument>
+                  <argument key="columnName">title</argument>
+                  <argument key="property">title</argument>
                 </argument>
-                <argument key="articleFile" type="collection">
+                <argument key="article" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
-                  <argument key="label">plik</argument>
-                  <argument key="type">file</argument>
-                  <argument key="fieldType">file</argument>
-                  <argument key="dataType">null</argument>
-                  <argument key="virtual">true</argument>
-                  <argument key="sortable">false</argument>
+                  <argument key="label">treść artykułu</argument>
+                  <argument key="type">Ivory\CKEditorBundle\Form\Type\CKEditorType</argument>
+                  <argument key="fieldType">Ivory\CKEditorBundle\Form\Type\CKEditorType</argument>
+                  <argument key="dataType">text</argument>
+                  <argument key="virtual">false</argument>
+                  <argument key="sortable">true</argument>
                   <argument key="template">null</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="columnName">articleFile</argument>
-                  <argument key="fieldName">articleFile</argument>
-                  <argument key="id">false</argument>
+                  <argument key="fieldName">article</argument>
+                  <argument key="scale">0</argument>
                   <argument key="length">null</argument>
+                  <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
+                  <argument key="columnName">article</argument>
+                  <argument key="property">article</argument>
+                </argument>
+                <argument key="author" type="collection">
+                  <argument key="css_class"></argument>
+                  <argument key="format">null</argument>
+                  <argument key="help">null</argument>
+                  <argument key="label">autor ogłoszenia</argument>
+                  <argument key="type">string</argument>
+                  <argument key="fieldType">text</argument>
+                  <argument key="dataType">string</argument>
+                  <argument key="virtual">false</argument>
+                  <argument key="sortable">true</argument>
+                  <argument key="template">null</argument>
+                  <argument key="type_options" type="collection"/>
+                  <argument key="fieldName">author</argument>
                   <argument key="scale">0</argument>
+                  <argument key="length">255</argument>
                   <argument key="unique">false</argument>
-                  <argument key="property">articleFile</argument>
+                  <argument key="nullable">false</argument>
+                  <argument key="precision">0</argument>
+                  <argument key="columnName">author</argument>
+                  <argument key="property">author</argument>
                 </argument>
               </argument>
               <argument key="form_options" type="collection"/>
@@ -9609,11 +9780,11 @@
             </argument>
             <argument key="edit" type="collection">
               <argument key="fields" type="collection">
-                <argument key="description" type="collection">
+                <argument key="title" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
-                  <argument key="label">opis publikacji</argument>
+                  <argument key="label">tytuł artykułu</argument>
                   <argument key="type">string</argument>
                   <argument key="fieldType">text</argument>
                   <argument key="dataType">string</argument>
@@ -9621,36 +9792,56 @@
                   <argument key="sortable">true</argument>
                   <argument key="template">null</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="fieldName">description</argument>
+                  <argument key="fieldName">title</argument>
                   <argument key="scale">0</argument>
                   <argument key="length">255</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
-                  <argument key="columnName">description</argument>
-                  <argument key="property">description</argument>
+                  <argument key="columnName">title</argument>
+                  <argument key="property">title</argument>
                 </argument>
-                <argument key="articleFile" type="collection">
+                <argument key="article" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
-                  <argument key="label">plik</argument>
-                  <argument key="type">file</argument>
-                  <argument key="fieldType">file</argument>
-                  <argument key="dataType">null</argument>
-                  <argument key="virtual">true</argument>
-                  <argument key="sortable">false</argument>
+                  <argument key="label">treść artykułu</argument>
+                  <argument key="type">Ivory\CKEditorBundle\Form\Type\CKEditorType</argument>
+                  <argument key="fieldType">Ivory\CKEditorBundle\Form\Type\CKEditorType</argument>
+                  <argument key="dataType">text</argument>
+                  <argument key="virtual">false</argument>
+                  <argument key="sortable">true</argument>
                   <argument key="template">null</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="columnName">articleFile</argument>
-                  <argument key="fieldName">articleFile</argument>
-                  <argument key="id">false</argument>
+                  <argument key="fieldName">article</argument>
+                  <argument key="scale">0</argument>
                   <argument key="length">null</argument>
+                  <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
+                  <argument key="columnName">article</argument>
+                  <argument key="property">article</argument>
+                </argument>
+                <argument key="author" type="collection">
+                  <argument key="css_class"></argument>
+                  <argument key="format">null</argument>
+                  <argument key="help">null</argument>
+                  <argument key="label">autor ogłoszenia</argument>
+                  <argument key="type">string</argument>
+                  <argument key="fieldType">text</argument>
+                  <argument key="dataType">string</argument>
+                  <argument key="virtual">false</argument>
+                  <argument key="sortable">true</argument>
+                  <argument key="template">null</argument>
+                  <argument key="type_options" type="collection"/>
+                  <argument key="fieldName">author</argument>
                   <argument key="scale">0</argument>
+                  <argument key="length">255</argument>
                   <argument key="unique">false</argument>
-                  <argument key="property">articleFile</argument>
+                  <argument key="nullable">false</argument>
+                  <argument key="precision">0</argument>
+                  <argument key="columnName">author</argument>
+                  <argument key="property">author</argument>
                 </argument>
               </argument>
               <argument key="form_options" type="collection"/>
@@ -9695,7 +9886,7 @@
                   <argument key="columnName">id</argument>
                   <argument key="property">id</argument>
                 </argument>
-                <argument key="description" type="collection">
+                <argument key="title" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
@@ -9707,20 +9898,41 @@
                   <argument key="sortable">true</argument>
                   <argument key="template">null</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="fieldName">description</argument>
+                  <argument key="fieldName">title</argument>
                   <argument key="scale">0</argument>
                   <argument key="length">255</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
-                  <argument key="columnName">description</argument>
-                  <argument key="property">description</argument>
+                  <argument key="columnName">title</argument>
+                  <argument key="property">title</argument>
                 </argument>
                 <argument key="article" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
                   <argument key="label">null</argument>
+                  <argument key="type">text</argument>
+                  <argument key="fieldType">textarea</argument>
+                  <argument key="dataType">text</argument>
+                  <argument key="virtual">false</argument>
+                  <argument key="sortable">true</argument>
+                  <argument key="template">null</argument>
+                  <argument key="type_options" type="collection"/>
+                  <argument key="fieldName">article</argument>
+                  <argument key="scale">0</argument>
+                  <argument key="length">null</argument>
+                  <argument key="unique">false</argument>
+                  <argument key="nullable">false</argument>
+                  <argument key="precision">0</argument>
+                  <argument key="columnName">article</argument>
+                  <argument key="property">article</argument>
+                </argument>
+                <argument key="author" type="collection">
+                  <argument key="css_class"></argument>
+                  <argument key="format">null</argument>
+                  <argument key="help">null</argument>
+                  <argument key="label">null</argument>
                   <argument key="type">string</argument>
                   <argument key="fieldType">text</argument>
                   <argument key="dataType">string</argument>
@@ -9728,14 +9940,14 @@
                   <argument key="sortable">true</argument>
                   <argument key="template">null</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="fieldName">article</argument>
+                  <argument key="fieldName">author</argument>
                   <argument key="scale">0</argument>
                   <argument key="length">255</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
-                  <argument key="columnName">article</argument>
-                  <argument key="property">article</argument>
+                  <argument key="columnName">author</argument>
+                  <argument key="property">author</argument>
                 </argument>
               </argument>
             </argument>
@@ -9763,7 +9975,7 @@
                   <argument key="columnName">id</argument>
                   <argument key="property">id</argument>
                 </argument>
-                <argument key="description" type="collection">
+                <argument key="title" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
@@ -9775,20 +9987,41 @@
                   <argument key="sortable">true</argument>
                   <argument key="template">@EasyAdmin/default/field_string.html.twig</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="fieldName">description</argument>
+                  <argument key="fieldName">title</argument>
                   <argument key="scale">0</argument>
                   <argument key="length">255</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
-                  <argument key="columnName">description</argument>
-                  <argument key="property">description</argument>
+                  <argument key="columnName">title</argument>
+                  <argument key="property">title</argument>
                 </argument>
                 <argument key="article" type="collection">
                   <argument key="css_class"></argument>
                   <argument key="format">null</argument>
                   <argument key="help">null</argument>
                   <argument key="label">null</argument>
+                  <argument key="type">text</argument>
+                  <argument key="fieldType">textarea</argument>
+                  <argument key="dataType">text</argument>
+                  <argument key="virtual">false</argument>
+                  <argument key="sortable">true</argument>
+                  <argument key="template">@EasyAdmin/default/field_text.html.twig</argument>
+                  <argument key="type_options" type="collection"/>
+                  <argument key="fieldName">article</argument>
+                  <argument key="scale">0</argument>
+                  <argument key="length">null</argument>
+                  <argument key="unique">false</argument>
+                  <argument key="nullable">false</argument>
+                  <argument key="precision">0</argument>
+                  <argument key="columnName">article</argument>
+                  <argument key="property">article</argument>
+                </argument>
+                <argument key="author" type="collection">
+                  <argument key="css_class"></argument>
+                  <argument key="format">null</argument>
+                  <argument key="help">null</argument>
+                  <argument key="label">null</argument>
                   <argument key="type">string</argument>
                   <argument key="fieldType">text</argument>
                   <argument key="dataType">string</argument>
@@ -9796,14 +10029,14 @@
                   <argument key="sortable">true</argument>
                   <argument key="template">@EasyAdmin/default/field_string.html.twig</argument>
                   <argument key="type_options" type="collection"/>
-                  <argument key="fieldName">article</argument>
+                  <argument key="fieldName">author</argument>
                   <argument key="scale">0</argument>
                   <argument key="length">255</argument>
                   <argument key="unique">false</argument>
                   <argument key="nullable">false</argument>
                   <argument key="precision">0</argument>
-                  <argument key="columnName">article</argument>
-                  <argument key="property">article</argument>
+                  <argument key="columnName">author</argument>
+                  <argument key="property">author</argument>
                 </argument>
               </argument>
               <argument key="actions" type="collection">
@@ -9855,7 +10088,7 @@
                 <argument key="columnName">id</argument>
                 <argument key="property">id</argument>
               </argument>
-              <argument key="description" type="collection">
+              <argument key="title" type="collection">
                 <argument key="css_class"></argument>
                 <argument key="format">null</argument>
                 <argument key="help">null</argument>
@@ -9867,20 +10100,41 @@
                 <argument key="sortable">true</argument>
                 <argument key="template">null</argument>
                 <argument key="type_options" type="collection"/>
-                <argument key="fieldName">description</argument>
+                <argument key="fieldName">title</argument>
                 <argument key="scale">0</argument>
                 <argument key="length">255</argument>
                 <argument key="unique">false</argument>
                 <argument key="nullable">false</argument>
                 <argument key="precision">0</argument>
-                <argument key="columnName">description</argument>
-                <argument key="property">description</argument>
+                <argument key="columnName">title</argument>
+                <argument key="property">title</argument>
               </argument>
               <argument key="article" type="collection">
                 <argument key="css_class"></argument>
                 <argument key="format">null</argument>
                 <argument key="help">null</argument>
                 <argument key="label">null</argument>
+                <argument key="type">text</argument>
+                <argument key="fieldType">textarea</argument>
+                <argument key="dataType">text</argument>
+                <argument key="virtual">false</argument>
+                <argument key="sortable">true</argument>
+                <argument key="template">null</argument>
+                <argument key="type_options" type="collection"/>
+                <argument key="fieldName">article</argument>
+                <argument key="scale">0</argument>
+                <argument key="length">null</argument>
+                <argument key="unique">false</argument>
+                <argument key="nullable">false</argument>
+                <argument key="precision">0</argument>
+                <argument key="columnName">article</argument>
+                <argument key="property">article</argument>
+              </argument>
+              <argument key="author" type="collection">
+                <argument key="css_class"></argument>
+                <argument key="format">null</argument>
+                <argument key="help">null</argument>
+                <argument key="label">null</argument>
                 <argument key="type">string</argument>
                 <argument key="fieldType">text</argument>
                 <argument key="dataType">string</argument>
@@ -9888,14 +10142,14 @@
                 <argument key="sortable">true</argument>
                 <argument key="template">null</argument>
                 <argument key="type_options" type="collection"/>
-                <argument key="fieldName">article</argument>
+                <argument key="fieldName">author</argument>
                 <argument key="scale">0</argument>
                 <argument key="length">255</argument>
                 <argument key="unique">false</argument>
                 <argument key="nullable">false</argument>
                 <argument key="precision">0</argument>
-                <argument key="columnName">article</argument>
-                <argument key="property">article</argument>
+                <argument key="columnName">author</argument>
+                <argument key="property">author</argument>
               </argument>
             </argument>
             <argument key="templates" type="collection">
@@ -9976,17 +10230,17 @@
       <tag name="form.type"/>
       <argument type="service" id="easyadmin.configurator"/>
       <argument type="collection">
-        <argument key="4" type="service">
+        <argument key="3" type="service">
           <service class="JavierEguiluz\Bundle\EasyAdminBundle\Form\Type\Configurator\CollectionTypeConfigurator" public="false">
             <tag name="easyadmin.form.type.configurator" priority="20"/>
           </service>
         </argument>
-        <argument key="3" type="service">
+        <argument key="2" type="service">
           <service class="JavierEguiluz\Bundle\EasyAdminBundle\Form\Type\Configurator\CheckboxTypeConfigurator" public="false">
             <tag name="easyadmin.form.type.configurator" priority="10"/>
           </service>
         </argument>
-        <argument key="2" type="service">
+        <argument key="1" type="service">
           <service class="JavierEguiluz\Bundle\EasyAdminBundle\Form\Type\Configurator\RequiredOptionConfigurator" public="false">
             <tag name="easyadmin.form.type.configurator" priority="-10"/>
             <argument type="service">
@@ -9999,7 +10253,7 @@
             </argument>
           </service>
         </argument>
-        <argument key="1" type="service">
+        <argument key="0" type="service">
           <service class="JavierEguiluz\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator" public="false">
             <tag name="easyadmin.form.type.configurator" priority="-20"/>
             <argument type="service">
@@ -10010,11 +10264,6 @@
                 </argument>
               </service>
             </argument>
-          </service>
-        </argument>
-        <argument key="0" type="service">
-          <service class="JavierEguiluz\Bundle\EasyAdminBundle\Form\Type\Configurator\IvoryCKEditorTypeConfigurator" public="false">
-            <tag name="easyadmin.form.type.configurator" priority="-130"/>
           </service>
         </argument>
       </argument>
@@ -10030,7 +10279,117 @@
       <argument type="service" id="ivory_ck_editor.styles_set_manager"/>
       <argument type="service" id="ivory_ck_editor.template_manager"/>
     </service>
-    <service id="ivory_ck_editor.config_manager" class="Ivory\CKEditorBundle\Model\ConfigManager"/>
+    <service id="ivory_ck_editor.config_manager" class="Ivory\CKEditorBundle\Model\ConfigManager">
+      <call method="setConfig">
+        <argument>default</argument>
+        <argument type="collection">
+          <argument key="toolbar" type="collection">
+            <argument type="collection">
+              <argument>Source</argument>
+              <argument>-</argument>
+              <argument>NewPage</argument>
+              <argument>Preview</argument>
+              <argument>Print</argument>
+              <argument>-</argument>
+              <argument>Templates</argument>
+            </argument>
+            <argument type="collection">
+              <argument>Cut</argument>
+              <argument>Copy</argument>
+              <argument>Paste</argument>
+              <argument>PasteText</argument>
+              <argument>PasteFromWord</argument>
+              <argument>-</argument>
+              <argument>Undo</argument>
+              <argument>Redo</argument>
+            </argument>
+            <argument type="collection">
+              <argument>Find</argument>
+              <argument>Replace</argument>
+              <argument>-</argument>
+              <argument>SelectAll</argument>
+              <argument>-</argument>
+              <argument>Scayt</argument>
+            </argument>
+            <argument type="collection">
+              <argument>Form</argument>
+              <argument>Checkbox</argument>
+              <argument>Radio</argument>
+              <argument>TextField</argument>
+              <argument>Textarea</argument>
+              <argument>SelectField</argument>
+              <argument>Button</argument>
+              <argument>ImageButton</argument>
+              <argument>HiddenField</argument>
+            </argument>
+            <argument>/</argument>
+            <argument type="collection">
+              <argument>Bold</argument>
+              <argument>Italic</argument>
+              <argument>Underline</argument>
+              <argument>Strike</argument>
+              <argument>Subscript</argument>
+              <argument>Superscript</argument>
+              <argument>-</argument>
+              <argument>RemoveFormat</argument>
+            </argument>
+            <argument type="collection">
+              <argument>NumberedList</argument>
+              <argument>BulletedList</argument>
+              <argument>-</argument>
+              <argument>Outdent</argument>
+              <argument>Indent</argument>
+              <argument>-</argument>
+              <argument>Blockquote</argument>
+              <argument>CreateDiv</argument>
+              <argument>-</argument>
+              <argument>JustifyLeft</argument>
+              <argument>JustifyCenter</argument>
+              <argument>JustifyRight</argument>
+              <argument>JustifyBlock</argument>
+              <argument>-</argument>
+              <argument>BidiLtr</argument>
+              <argument>BidiRtl</argument>
+            </argument>
+            <argument type="collection">
+              <argument>Link</argument>
+              <argument>Unlink</argument>
+              <argument>Anchor</argument>
+            </argument>
+            <argument type="collection">
+              <argument>Image</argument>
+              <argument>FLash</argument>
+              <argument>Table</argument>
+              <argument>HorizontalRule</argument>
+              <argument>SpecialChar</argument>
+              <argument>Smiley</argument>
+              <argument>PageBreak</argument>
+              <argument>Iframe</argument>
+            </argument>
+            <argument>/</argument>
+            <argument type="collection">
+              <argument>Styles</argument>
+              <argument>Format</argument>
+              <argument>Font</argument>
+              <argument>FontSize</argument>
+              <argument>TextColor</argument>
+              <argument>BGColor</argument>
+            </argument>
+            <argument type="collection">
+              <argument>Maximize</argument>
+              <argument>ShowBlocks</argument>
+            </argument>
+            <argument type="collection">
+              <argument>About</argument>
+            </argument>
+          </argument>
+          <argument key="extraAllowedContent">p</argument>
+        </argument>
+      </call>
+      <call method="setDefaultConfig">
+        <argument>default</argument>
+      </call>
+    </service>
     <service id="ivory_ck_editor.plugin_manager" class="Ivory\CKEditorBundle\Model\PluginManager"/>
     <service id="ivory_ck_editor.styles_set_manager" class="Ivory\CKEditorBundle\Model\StylesSetManager"/>
     <service id="ivory_ck_editor.template_manager" class="Ivory\CKEditorBundle\Model\TemplateManager"/>

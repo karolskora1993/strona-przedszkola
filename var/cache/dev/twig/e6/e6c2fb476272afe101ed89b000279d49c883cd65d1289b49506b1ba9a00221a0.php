@@ -21,20 +21,20 @@ class __TwigTemplate_690b193143c06d03a892243646b101efb2982584e8109d3d9fe5d56bc35
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_a39cd305d5c89af57787267c2d9f161bdc246de50ddd9c63c6ee27e334ae85a3 = $this->env->getExtension("native_profiler");
-        $__internal_a39cd305d5c89af57787267c2d9f161bdc246de50ddd9c63c6ee27e334ae85a3->enter($__internal_a39cd305d5c89af57787267c2d9f161bdc246de50ddd9c63c6ee27e334ae85a3_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::index.html.twig"));
+        $__internal_146b88629b1ba81ad122f4e897c8888fd1d47a230807886397a41cd543b95979 = $this->env->getExtension("native_profiler");
+        $__internal_146b88629b1ba81ad122f4e897c8888fd1d47a230807886397a41cd543b95979->enter($__internal_146b88629b1ba81ad122f4e897c8888fd1d47a230807886397a41cd543b95979_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::index.html.twig"));
 
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_a39cd305d5c89af57787267c2d9f161bdc246de50ddd9c63c6ee27e334ae85a3->leave($__internal_a39cd305d5c89af57787267c2d9f161bdc246de50ddd9c63c6ee27e334ae85a3_prof);
+        $__internal_146b88629b1ba81ad122f4e897c8888fd1d47a230807886397a41cd543b95979->leave($__internal_146b88629b1ba81ad122f4e897c8888fd1d47a230807886397a41cd543b95979_prof);
 
     }
 
     // line 2
     public function block_content($context, array $blocks = array())
     {
-        $__internal_be4efe9142161e81443f38d71d291f503053ae6c41547b256b163fe4516b99ef = $this->env->getExtension("native_profiler");
-        $__internal_be4efe9142161e81443f38d71d291f503053ae6c41547b256b163fe4516b99ef->enter($__internal_be4efe9142161e81443f38d71d291f503053ae6c41547b256b163fe4516b99ef_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "content"));
+        $__internal_8b11d0a24a31ee25c38d3f61c0067cdadb8d89676595d707af625f2693259551 = $this->env->getExtension("native_profiler");
+        $__internal_8b11d0a24a31ee25c38d3f61c0067cdadb8d89676595d707af625f2693259551->enter($__internal_8b11d0a24a31ee25c38d3f61c0067cdadb8d89676595d707af625f2693259551_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "content"));
 
         // line 3
         echo "    <div class=\"row row-blue\" id=\"film\">
@@ -77,7 +77,7 @@ class __TwigTemplate_690b193143c06d03a892243646b101efb2982584e8109d3d9fe5d56bc35
                             <div class=\"panel-body\">
                                 ";
             // line 33
-            echo twig_escape_filter($this->env, $this->getAttribute($context["advert"], "text", array()), "html", null, true);
+            echo $this->getAttribute($context["advert"], "text", array());
             echo "
                             </div>
                             <div class=\"panel-footer\"><p style=\"text-align:right\">Autor:";
@@ -355,178 +355,9 @@ zastanówcie no się, dziatki.
             </div>
         </div>
     </div>
-    <div class=\"row row-blue\">
-        <div class=\"container animatedParent\">
-            <div class=\"col-md-12\">
-                <div class=\"panel-body\">
-                    <div class=\"panel panel-success animated bounceInLeft\">
-                        <div class=\"panel-heading\">
-                            <h3 class=\"panel-title\">Nasze publikacje</h3>
-                        </div>
-                        <div class=\"panel-body\">
-                            ";
-        // line 311
-        $context['_parent'] = $context;
-        $context['_seq'] = twig_ensure_traversable((isset($context["articles"]) ? $context["articles"] : $this->getContext($context, "articles")));
-        foreach ($context['_seq'] as $context["_key"] => $context["article"]) {
-            // line 312
-            echo "                                <p>";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["article"], "description", array()), "html", null, true);
-            echo ": <a href=\"/web/files/articles/";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["article"], "article", array()), "html", null, true);
-            echo "\">otwórz</a></p>
-                            ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['article'], $context['_parent'], $context['loop']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 314
-        echo "                            <p>referat bajki psychoterapeutyczne: <a href=\"/web/files/articles/referatbajkipsychoterapeutyczne.doc\">otwórz</a></p>
-                            <p>referat patriotyzm: <a href=\"/web/files/articles/referatpatriotyzm.doc\">otwórz</a></p>
-                            <p>referat jak pomoc dziecku nadpobudliwemu: <a href=\"/web/files/articles/Jakpomocdzieckunadpobudliwemu.doc\">otwórz</a></p>
-                            <p>Bajka najlepszym lekarstwem na dzieciece problemy: <a href=\"/web/files/articles/Bajkanajlepszymlekarstwemnadziecieceproblemy.doc\">otwórz</a></p>
-                            <p>Dziecięce lęki: <a href=\"/web/files/articles/Ddziecieceleki.doc\">otwórz</a></p>
-                            <p>Kochani rodzice !: <a href=\"/web/files/articles/Kochanirodzice.doc\">otwórz</a></p>
-                            <p>Poczytaj mi mamo: <a href=\"/web/files/articles/Poczytajmimamo.doc\">otwórz</a></p>
-                            <p>Zajęcia plastyczne a rozwój dziecka: <a href=\"/web/files/articles/Zajeciaplastycznearozwojdziecka.doc\">otwórz</a></p>
-                            <p>Wpływ programów telewizyjnych na rozwój i zachowanie dzieci przedszkolnych: <a href=\"/web/files/articles/wplywprogramowtelewizyjnychnarozwojizachowaniedzieciprzedszkolnych.doc \">otwórz</a></p>
-                            <p>jak powstaje dziecieca agresja: <a href=\"/web/files/articles/jakpowstajedzieciecaagresja.doc \">otwórz</a></p>
-                            <p>jak pracowac z dzieckiem nadpobudliwym psychoruchowo: <a href=\"/web/files/articles/jakpracowaczdzieckiemnadpobudliwympsychoruchowo.doc \">otwórz</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class=\"row row-green\" id=\"osiagniecia\">
-        <div class=\"container animatedParent\">
-            <div class=\"col-md-12\">
-                <div class=\"panel-body\">
-                    <div class=\"panel panel-primary\">
-                        <div class=\"panel-heading\">
-                            <h3 class=\"panel-title \">nasze osiągnięcia</h3>
-                        </div>
-                        <div class=\"panel-body animated bounceInRight\" id=\"osiagniecia\">
-
-                            ";
-        // line 341
-        $context['_parent'] = $context;
-        $context['_seq'] = twig_ensure_traversable((isset($context["schoolYears"]) ? $context["schoolYears"] : $this->getContext($context, "schoolYears")));
-        foreach ($context['_seq'] as $context["_key"] => $context["year"]) {
-            // line 342
-            echo "                                <div class=\"row\">
-                                    <h3 id=\"";
-            // line 343
-            echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
-            echo "\">Nasze osiągnięcia ";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
-            echo " </h3>
-                                    <br>
-                                    ";
-            // line 345
-            $context['_parent'] = $context;
-            $context['_seq'] = twig_ensure_traversable($this->getAttribute($context["year"], "achievements", array()));
-            foreach ($context['_seq'] as $context["_key"] => $context["achievement"]) {
-                // line 346
-                echo "                                        <div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\">
-                                            <a href=\"#\" class=\"thumbnail\" target=\"_blank\">
-                                                <img src=\"/images/achievements/";
-                // line 348
-                echo twig_escape_filter($this->env, $this->getAttribute($context["achievement"], "image", array()), "html", null, true);
-                echo "\" alt=\"dyplom\">
-                                            </a>
-                                        </div>
-                                    ";
-            }
-            $_parent = $context['_parent'];
-            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['achievement'], $context['_parent'], $context['loop']);
-            $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 352
-            echo "                                </div>
-                            ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['year'], $context['_parent'], $context['loop']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 354
-        echo "                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class=\"row row-blue\" id=\"galeria\">
-        <div class=\"container animatedParent\">
-            <div class=\"col-md-12\">
-                <div class=\"panel-body\">
-                    <div class=\"panel panel-success animated bounceInLeft\">
-                        <div class=\"panel-heading\">
-                            <h3 class=\"panel-title \">nasze galerie</h3>
-                        </div>
-                        <div class=\"panel-body\">
-
-                            ";
-        // line 371
-        $context['_parent'] = $context;
-        $context['_seq'] = twig_ensure_traversable((isset($context["schoolYears"]) ? $context["schoolYears"] : $this->getContext($context, "schoolYears")));
-        foreach ($context['_seq'] as $context["_key"] => $context["year"]) {
-            // line 372
-            echo "                                <div class=\"row\">
-                                    <h3 id=\"galeria";
-            // line 373
-            echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
-            echo "\">Nasze galerie ";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["year"], "schoolYear", array()), "html", null, true);
-            echo " </h3>
-                                    <br>
-                                    ";
-            // line 375
-            $context['_parent'] = $context;
-            $context['_seq'] = twig_ensure_traversable($this->getAttribute($context["year"], "galleries", array()));
-            foreach ($context['_seq'] as $context["_key"] => $context["gallery"]) {
-                // line 376
-                echo "                                        <div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-12\">
-                                            <div class=\"thumbnail\">
-                                                <img src=\"/images/galleries/";
-                // line 378
-                echo twig_escape_filter($this->env, $this->getAttribute($context["gallery"], "image", array()), "html", null, true);
-                echo "\" alt=\"obrazek galerii\">
-                                                <div class=\"caption\">
-                                                    <h5>";
-                // line 380
-                echo twig_escape_filter($this->env, $this->getAttribute($context["gallery"], "name", array()), "html", null, true);
-                echo "</h5>
-                                                    </br>
-                                                    <p><a href=\"";
-                // line 382
-                echo twig_escape_filter($this->env, $this->getAttribute($context["gallery"], "href", array()), "html", null, true);
-                echo "\" class=\"btn btn-primary\" role=\"button\" target=\"_blank\">wyświetl</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ";
-            }
-            $_parent = $context['_parent'];
-            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['gallery'], $context['_parent'], $context['loop']);
-            $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 387
-            echo "                                </div>
-                            ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['year'], $context['_parent'], $context['loop']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 389
-        echo "                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 ";
         
-        $__internal_be4efe9142161e81443f38d71d291f503053ae6c41547b256b163fe4516b99ef->leave($__internal_be4efe9142161e81443f38d71d291f503053ae6c41547b256b163fe4516b99ef_prof);
+        $__internal_8b11d0a24a31ee25c38d3f61c0067cdadb8d89676595d707af625f2693259551->leave($__internal_8b11d0a24a31ee25c38d3f61c0067cdadb8d89676595d707af625f2693259551_prof);
 
     }
 
@@ -542,7 +373,7 @@ zastanówcie no się, dziatki.
 
     public function getDebugInfo()
     {
-        return array (  521 => 389,  514 => 387,  503 => 382,  498 => 380,  493 => 378,  489 => 376,  485 => 375,  478 => 373,  475 => 372,  471 => 371,  452 => 354,  445 => 352,  435 => 348,  431 => 346,  427 => 345,  420 => 343,  417 => 342,  413 => 341,  384 => 314,  373 => 312,  369 => 311,  94 => 38,  85 => 35,  80 => 33,  74 => 30,  70 => 28,  66 => 27,  40 => 3,  34 => 2,  11 => 1,);
+        return array (  94 => 38,  85 => 35,  80 => 33,  74 => 30,  70 => 28,  66 => 27,  40 => 3,  34 => 2,  11 => 1,);
     }
 }
 /* {% extends 'layout.html.twig' %}*/
@@ -577,7 +408,7 @@ zastanówcie no się, dziatki.
 /*                                 <h3 class="panel-title">{{ advert.title }}</h3>*/
 /*                             </div>*/
 /*                             <div class="panel-body">*/
-/*                                 {{ advert.text }}*/
+/*                                 {{ advert.text | raw }}*/
 /*                             </div>*/
 /*                             <div class="panel-footer"><p style="text-align:right">Autor:{{ advert.author }}</p></div>*/
 /*                         </div>*/
@@ -841,99 +672,6 @@ zastanówcie no się, dziatki.
 /*                         </div>*/
 /*                         <span id="publikacje"></span>*/
 /*                         <div class="panel-footer"><p style="text-align:right">Autor:Janina Jęczalik</p></div>*/
-/*                     </div>*/
-/*                 </div>*/
-/*             </div>*/
-/*         </div>*/
-/*     </div>*/
-/*     <div class="row row-blue">*/
-/*         <div class="container animatedParent">*/
-/*             <div class="col-md-12">*/
-/*                 <div class="panel-body">*/
-/*                     <div class="panel panel-success animated bounceInLeft">*/
-/*                         <div class="panel-heading">*/
-/*                             <h3 class="panel-title">Nasze publikacje</h3>*/
-/*                         </div>*/
-/*                         <div class="panel-body">*/
-/*                             {% for article in articles %}*/
-/*                                 <p>{{ article.description }}: <a href="/web/files/articles/{{ article.article }}">otwórz</a></p>*/
-/*                             {% endfor %}*/
-/*                             <p>referat bajki psychoterapeutyczne: <a href="/web/files/articles/referatbajkipsychoterapeutyczne.doc">otwórz</a></p>*/
-/*                             <p>referat patriotyzm: <a href="/web/files/articles/referatpatriotyzm.doc">otwórz</a></p>*/
-/*                             <p>referat jak pomoc dziecku nadpobudliwemu: <a href="/web/files/articles/Jakpomocdzieckunadpobudliwemu.doc">otwórz</a></p>*/
-/*                             <p>Bajka najlepszym lekarstwem na dzieciece problemy: <a href="/web/files/articles/Bajkanajlepszymlekarstwemnadziecieceproblemy.doc">otwórz</a></p>*/
-/*                             <p>Dziecięce lęki: <a href="/web/files/articles/Ddziecieceleki.doc">otwórz</a></p>*/
-/*                             <p>Kochani rodzice !: <a href="/web/files/articles/Kochanirodzice.doc">otwórz</a></p>*/
-/*                             <p>Poczytaj mi mamo: <a href="/web/files/articles/Poczytajmimamo.doc">otwórz</a></p>*/
-/*                             <p>Zajęcia plastyczne a rozwój dziecka: <a href="/web/files/articles/Zajeciaplastycznearozwojdziecka.doc">otwórz</a></p>*/
-/*                             <p>Wpływ programów telewizyjnych na rozwój i zachowanie dzieci przedszkolnych: <a href="/web/files/articles/wplywprogramowtelewizyjnychnarozwojizachowaniedzieciprzedszkolnych.doc ">otwórz</a></p>*/
-/*                             <p>jak powstaje dziecieca agresja: <a href="/web/files/articles/jakpowstajedzieciecaagresja.doc ">otwórz</a></p>*/
-/*                             <p>jak pracowac z dzieckiem nadpobudliwym psychoruchowo: <a href="/web/files/articles/jakpracowaczdzieckiemnadpobudliwympsychoruchowo.doc ">otwórz</a></p>*/
-/*                         </div>*/
-/*                     </div>*/
-/*                 </div>*/
-/*             </div>*/
-/*         </div>*/
-/*     </div>*/
-/*     <div class="row row-green" id="osiagniecia">*/
-/*         <div class="container animatedParent">*/
-/*             <div class="col-md-12">*/
-/*                 <div class="panel-body">*/
-/*                     <div class="panel panel-primary">*/
-/*                         <div class="panel-heading">*/
-/*                             <h3 class="panel-title ">nasze osiągnięcia</h3>*/
-/*                         </div>*/
-/*                         <div class="panel-body animated bounceInRight" id="osiagniecia">*/
-/* */
-/*                             {% for year in schoolYears %}*/
-/*                                 <div class="row">*/
-/*                                     <h3 id="{{ year.schoolYear }}">Nasze osiągnięcia {{ year.schoolYear }} </h3>*/
-/*                                     <br>*/
-/*                                     {% for achievement in year.achievements %}*/
-/*                                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">*/
-/*                                             <a href="#" class="thumbnail" target="_blank">*/
-/*                                                 <img src="/images/achievements/{{ achievement.image}}" alt="dyplom">*/
-/*                                             </a>*/
-/*                                         </div>*/
-/*                                     {% endfor %}*/
-/*                                 </div>*/
-/*                             {% endfor %}*/
-/*                         </div>*/
-/*                     </div>*/
-/*                 </div>*/
-/*             </div>*/
-/*         </div>*/
-/*     </div>*/
-/* */
-/*     <div class="row row-blue" id="galeria">*/
-/*         <div class="container animatedParent">*/
-/*             <div class="col-md-12">*/
-/*                 <div class="panel-body">*/
-/*                     <div class="panel panel-success animated bounceInLeft">*/
-/*                         <div class="panel-heading">*/
-/*                             <h3 class="panel-title ">nasze galerie</h3>*/
-/*                         </div>*/
-/*                         <div class="panel-body">*/
-/* */
-/*                             {% for year in schoolYears %}*/
-/*                                 <div class="row">*/
-/*                                     <h3 id="galeria{{ year.schoolYear }}">Nasze galerie {{ year.schoolYear }} </h3>*/
-/*                                     <br>*/
-/*                                     {% for gallery in year.galleries %}*/
-/*                                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">*/
-/*                                             <div class="thumbnail">*/
-/*                                                 <img src="/images/galleries/{{ gallery.image }}" alt="obrazek galerii">*/
-/*                                                 <div class="caption">*/
-/*                                                     <h5>{{ gallery.name }}</h5>*/
-/*                                                     </br>*/
-/*                                                     <p><a href="{{ gallery.href }}" class="btn btn-primary" role="button" target="_blank">wyświetl</a></p>*/
-/*                                                 </div>*/
-/*                                             </div>*/
-/*                                         </div>*/
-/*                                     {% endfor %}*/
-/*                                 </div>*/
-/*                             {% endfor %}*/
-/*                         </div>*/
 /*                     </div>*/
 /*                 </div>*/
 /*             </div>*/

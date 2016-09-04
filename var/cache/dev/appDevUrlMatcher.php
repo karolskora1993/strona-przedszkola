@@ -119,7 +119,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_main_gallery')), array (  '_controller' => 'AppBundle\\Controller\\MainController::galleryAction',));
         }
 
+        // app_main_achievement
+        if (0 === strpos($pathinfo, '/achievements') && preg_match('#^/achievements/(?P<yearID>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_main_achievement')), array (  '_controller' => 'AppBundle\\Controller\\MainController::achievementAction',));
+        }
+
         if (0 === strpos($pathinfo, '/log')) {
+            // app_main_logopedia
+            if (0 === strpos($pathinfo, '/logopedia') && preg_match('#^/logopedia/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_main_logopedia')), array (  '_controller' => 'AppBundle\\Controller\\MainController::LogopediaAction',));
+            }
+
             if (0 === strpos($pathinfo, '/login')) {
                 // fos_user_security_login
                 if ($pathinfo === '/login') {

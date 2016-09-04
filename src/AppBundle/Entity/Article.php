@@ -23,19 +23,19 @@ class Article
      * @ORM\Column(type="string", length=255)
      * @var string
      */
-    private $description;
+    private $title;
+
+    /**
+ * @ORM\Column(type="text")
+ * @var string
+ */
+    private $article;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @var string
      */
-    private $article;
-
-    /**
-     * @Vich\UploadableField(mapping="article_files", fileNameProperty="article")
-     * @var File
-     */
-    private $articleFile;
+    private $author;
 
     /**
      * @return mixed
@@ -56,33 +56,17 @@ class Article
     /**
      * @return string
      */
-    public function getDescription()
+    public function getTitle()
     {
-        return $this->description;
+        return $this->title;
     }
 
     /**
-     * @param string $desciption
+     * @param string $title
      */
-    public function setDescription($description)
+    public function setTitle($title)
     {
-        $this->desciption = $description;
-    }
-
-    /**
-     * @return File
-     */
-    public function getArticleFile()
-    {
-        return $this->articleFile;
-    }
-
-    /**
-     * @param File $articleFile
-     */
-    public function setArticleFile($articleFile)
-    {
-        $this->articleFile = $articleFile;
+        $this->title = $title;
     }
 
     /**
@@ -94,11 +78,30 @@ class Article
     }
 
     /**
-     * @param string $file
+     * @param string $article
      */
     public function setArticle($article)
     {
         $this->article = $article;
     }
+
+    /**
+     * @return string
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param string $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+
+
+
 
 }

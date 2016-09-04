@@ -22,20 +22,20 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_2bc3e395c9839fe5eec4af7f06363f6bbd99b07db042c56a41d277480a0a6edd = $this->env->getExtension("native_profiler");
-        $__internal_2bc3e395c9839fe5eec4af7f06363f6bbd99b07db042c56a41d277480a0a6edd->enter($__internal_2bc3e395c9839fe5eec4af7f06363f6bbd99b07db042c56a41d277480a0a6edd_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "layout.html.twig"));
+        $__internal_45bafe99d8e5bf9f373c2f97499e3c0f34717cc20897d5b11b7abcc8f7d8f83c = $this->env->getExtension("native_profiler");
+        $__internal_45bafe99d8e5bf9f373c2f97499e3c0f34717cc20897d5b11b7abcc8f7d8f83c->enter($__internal_45bafe99d8e5bf9f373c2f97499e3c0f34717cc20897d5b11b7abcc8f7d8f83c_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "layout.html.twig"));
 
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_2bc3e395c9839fe5eec4af7f06363f6bbd99b07db042c56a41d277480a0a6edd->leave($__internal_2bc3e395c9839fe5eec4af7f06363f6bbd99b07db042c56a41d277480a0a6edd_prof);
+        $__internal_45bafe99d8e5bf9f373c2f97499e3c0f34717cc20897d5b11b7abcc8f7d8f83c->leave($__internal_45bafe99d8e5bf9f373c2f97499e3c0f34717cc20897d5b11b7abcc8f7d8f83c_prof);
 
     }
 
     // line 2
     public function block_body($context, array $blocks = array())
     {
-        $__internal_e7e3dbbed28ec10eb540ed18982e374f389bcbfe8f6ed212a48a41dbfe4703f7 = $this->env->getExtension("native_profiler");
-        $__internal_e7e3dbbed28ec10eb540ed18982e374f389bcbfe8f6ed212a48a41dbfe4703f7->enter($__internal_e7e3dbbed28ec10eb540ed18982e374f389bcbfe8f6ed212a48a41dbfe4703f7_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_ac503208d5411f1cfbdbe6909a2713951961def17ef8618ff789611fe0e7a358 = $this->env->getExtension("native_profiler");
+        $__internal_ac503208d5411f1cfbdbe6909a2713951961def17ef8618ff789611fe0e7a358->enter($__internal_ac503208d5411f1cfbdbe6909a2713951961def17ef8618ff789611fe0e7a358_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
         // line 3
         echo "    <div class=\"nav\" id=\"top\"></div>
@@ -101,23 +101,40 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
         echo "#pierwszy_dzien\">PIERWSZY DZIEŃ W PRZEDSZKOLU</a></li>
                         </ul>
                     </li>
-                    <li><a href=\"";
-        // line 42
-        echo "/";
-        echo "#publikacje\">PUBLIKACJE</a></li>
+                    <li class=\"dropdown\">
+                        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">KĄCIK LOGOPEDYCZNY <span class=\"caret\"></span></a>
+                        <ul class=\"dropdown-menu\">
+                            ";
+        // line 45
+        $context['_parent'] = $context;
+        $context['_seq'] = twig_ensure_traversable((isset($context["articles"]) ? $context["articles"] : $this->getContext($context, "articles")));
+        foreach ($context['_seq'] as $context["_key"] => $context["article"]) {
+            // line 46
+            echo "                                <li><a href=\"";
+            echo twig_escape_filter($this->env, ("/logopedia/" . $this->getAttribute($context["article"], "id", array())), "html", null, true);
+            echo "\">";
+            echo twig_escape_filter($this->env, $this->getAttribute($context["article"], "title", array()), "html", null, true);
+            echo "</a></li>
+                                <li role=\"separator\" class=\"divider\"></li>
+                            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['article'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 49
+        echo "                        </ul>
+                    </li>
                     <li class=\"dropdown\">
                         <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">OSIĄGNIĘCIA <span class=\"caret\"></span></a>
                         <ul class=\"dropdown-menu\">
                             ";
-        // line 46
+        // line 54
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["schoolYears"]) ? $context["schoolYears"] : $this->getContext($context, "schoolYears")));
         foreach ($context['_seq'] as $context["_key"] => $context["schoolYear"]) {
-            // line 47
+            // line 55
             echo "                            <li><a href=\"";
-            echo "/";
-            echo "#";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["schoolYear"], "schoolYear", array()), "html", null, true);
+            echo twig_escape_filter($this->env, ("/achievements/" . $this->getAttribute($context["schoolYear"], "id", array())), "html", null, true);
             echo "\">";
             echo twig_escape_filter($this->env, $this->getAttribute($context["schoolYear"], "schoolYear", array()), "html", null, true);
             echo "</a></li>
@@ -127,18 +144,18 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['schoolYear'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 50
+        // line 58
         echo "                        </ul>
                     </li>
                     <li class=\"dropdown\">
                         <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">GALERIA <span class=\"caret\"></span></a>
                         <ul class=\"dropdown-menu\">
                             ";
-        // line 55
+        // line 63
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["schoolYears"]) ? $context["schoolYears"] : $this->getContext($context, "schoolYears")));
         foreach ($context['_seq'] as $context["_key"] => $context["schoolYear"]) {
-            // line 56
+            // line 64
             echo "                                <li><a href=\"";
             echo twig_escape_filter($this->env, ("/gallery/" . $this->getAttribute($context["schoolYear"], "id", array())), "html", null, true);
             echo "\">";
@@ -150,7 +167,7 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['schoolYear'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 59
+        // line 67
         echo "                        </ul>
                     </li>
 
@@ -161,15 +178,15 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
     <div class=\"container-fluid\">
     <div class=\"row\">
     <img src=\"";
-        // line 68
+        // line 76
         echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("images/logo.jpg"), "html", null, true);
         echo "\" class=\"img-responsive\"/>
     </div>
     </div>
 ";
-        // line 71
+        // line 79
         $this->displayBlock('content', $context, $blocks);
-        // line 72
+        // line 80
         echo "    <footer>
         <div class=\"container\">
             <div class=\"row\">
@@ -182,26 +199,26 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
                         <li role=\"presentation\"><a href=\"#osiagniecia\">OSIĄGNIĘCIA</a></li>
                         <li role=\"presentation\"><a href=\"#galeria\">GALERIA</a></li>
                         ";
-        // line 83
+        // line 91
         if (((isset($context["user"]) ? $context["user"] : $this->getContext($context, "user")) == null)) {
-            // line 84
+            // line 92
             echo "                            <li><a href=\"";
             echo $this->env->getExtension('routing')->getPath("fos_user_security_login");
             echo "\"><span class=\"glyphicon glyphicon-log-in\"></span> Login</a></li>
                         ";
         } else {
-            // line 86
+            // line 94
             echo "                            <li><a href=\"";
             echo $this->env->getExtension('routing')->getPath("easyadmin");
             echo "\"><span class=\"glyphicon glyphicon-edit\"></span>administruj</a></li>
                             <li><a href=\"";
-            // line 87
+            // line 95
             echo $this->env->getExtension('routing')->getPath("fos_user_security_logout");
             echo "\"><span class=\"glyphicon glyphicon-edit\"></span>wyloguj</a></li>
 
                         ";
         }
-        // line 90
+        // line 98
         echo "                    </ul>
                 </div>
             </div><!--end row-->
@@ -216,18 +233,18 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
 
 ";
         
-        $__internal_e7e3dbbed28ec10eb540ed18982e374f389bcbfe8f6ed212a48a41dbfe4703f7->leave($__internal_e7e3dbbed28ec10eb540ed18982e374f389bcbfe8f6ed212a48a41dbfe4703f7_prof);
+        $__internal_ac503208d5411f1cfbdbe6909a2713951961def17ef8618ff789611fe0e7a358->leave($__internal_ac503208d5411f1cfbdbe6909a2713951961def17ef8618ff789611fe0e7a358_prof);
 
     }
 
-    // line 71
+    // line 79
     public function block_content($context, array $blocks = array())
     {
-        $__internal_73a76728f4477766cdd4124e3c922d777cac964c0e1530c8ede99a269c1beed5 = $this->env->getExtension("native_profiler");
-        $__internal_73a76728f4477766cdd4124e3c922d777cac964c0e1530c8ede99a269c1beed5->enter($__internal_73a76728f4477766cdd4124e3c922d777cac964c0e1530c8ede99a269c1beed5_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "content"));
+        $__internal_32118cc88810b74a2a9dc8bf1a726248cc04c1850f779d8622854c2a34385de8 = $this->env->getExtension("native_profiler");
+        $__internal_32118cc88810b74a2a9dc8bf1a726248cc04c1850f779d8622854c2a34385de8->enter($__internal_32118cc88810b74a2a9dc8bf1a726248cc04c1850f779d8622854c2a34385de8_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "content"));
 
         
-        $__internal_73a76728f4477766cdd4124e3c922d777cac964c0e1530c8ede99a269c1beed5->leave($__internal_73a76728f4477766cdd4124e3c922d777cac964c0e1530c8ede99a269c1beed5_prof);
+        $__internal_32118cc88810b74a2a9dc8bf1a726248cc04c1850f779d8622854c2a34385de8->leave($__internal_32118cc88810b74a2a9dc8bf1a726248cc04c1850f779d8622854c2a34385de8_prof);
 
     }
 
@@ -243,7 +260,7 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
 
     public function getDebugInfo()
     {
-        return array (  224 => 71,  205 => 90,  199 => 87,  194 => 86,  188 => 84,  186 => 83,  173 => 72,  171 => 71,  165 => 68,  154 => 59,  142 => 56,  138 => 55,  131 => 50,  117 => 47,  113 => 46,  106 => 42,  100 => 39,  95 => 37,  90 => 35,  85 => 33,  77 => 28,  72 => 26,  67 => 24,  60 => 20,  41 => 3,  35 => 2,  11 => 1,);
+        return array (  241 => 79,  222 => 98,  216 => 95,  211 => 94,  205 => 92,  203 => 91,  190 => 80,  188 => 79,  182 => 76,  171 => 67,  159 => 64,  155 => 63,  148 => 58,  136 => 55,  132 => 54,  125 => 49,  113 => 46,  109 => 45,  100 => 39,  95 => 37,  90 => 35,  85 => 33,  77 => 28,  72 => 26,  67 => 24,  60 => 20,  41 => 3,  35 => 2,  11 => 1,);
     }
 }
 /* {% extends 'base.html.twig' %}*/
@@ -287,12 +304,20 @@ class __TwigTemplate_d142bffa656b5ba5d72e1cf28b4581be331dbdd37dc8a99c919c952c27a
 /*                             <li><a href="{{'/' }}#pierwszy_dzien">PIERWSZY DZIEŃ W PRZEDSZKOLU</a></li>*/
 /*                         </ul>*/
 /*                     </li>*/
-/*                     <li><a href="{{'/' }}#publikacje">PUBLIKACJE</a></li>*/
+/*                     <li class="dropdown">*/
+/*                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">KĄCIK LOGOPEDYCZNY <span class="caret"></span></a>*/
+/*                         <ul class="dropdown-menu">*/
+/*                             {% for article in articles %}*/
+/*                                 <li><a href="{{'/logopedia/'~article.id}}">{{ article.title }}</a></li>*/
+/*                                 <li role="separator" class="divider"></li>*/
+/*                             {% endfor %}*/
+/*                         </ul>*/
+/*                     </li>*/
 /*                     <li class="dropdown">*/
 /*                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">OSIĄGNIĘCIA <span class="caret"></span></a>*/
 /*                         <ul class="dropdown-menu">*/
 /*                             {% for schoolYear in schoolYears %}*/
-/*                             <li><a href="{{'/' }}#{{ schoolYear.schoolYear }}">{{ schoolYear.schoolYear }}</a></li>*/
+/*                             <li><a href="{{'/achievements/'~schoolYear.id}}">{{ schoolYear.schoolYear }}</a></li>*/
 /*                             <li role="separator" class="divider"></li>*/
 /*                             {% endfor %}*/
 /*                         </ul>*/

@@ -180,13 +180,15 @@ easy_admin:
                     class: AppBundle\Entity\Article
                     form:
                       fields:
-                        - { property: 'description', label:'opis publikacji'}
-                        - { property: 'articleFile', label: 'plik', type: 'file' }
+                         - { property: 'title', label: 'tytuł artykułu' }
+                         - { property: 'article', label: 'treść artykułu', type: 'Ivory\CKEditorBundle\Form\Type\CKEditorType' }
+                         - { property: 'author', label: 'autor ogłoszenia' }
                     list:
                       title: 'Publikacje'
                       fields:
-                       - { property: 'description', label:'opis publikacji'}
-                       - { property: 'article', label:'plik', template: 'file', base_path: %app.path.article_files% }
+                         - { property: 'title', label: 'tytuł artykułu' }
+                         - { property: 'article', label: 'treść artykułu' }
+                         - { property: 'author', label: 'autor artykułu' }
                       actions:
                                                - { name: 'new', label: 'nowa publikacja' }
                                                - { name: 'edit', label: 'modyfikuj publikacje' }
@@ -207,3 +209,10 @@ vich_uploader:
         article_files:
             uri_prefix: %app.path.article_files%
             upload_destination: %kernel.root_dir%/../web/files/articles
+
+ivory_ck_editor:
+    default_config: "default"
+    configs:
+        default:
+            toolbar:             "full"
+            extraAllowedContent: "p"

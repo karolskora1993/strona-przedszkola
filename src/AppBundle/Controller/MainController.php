@@ -42,4 +42,36 @@ public function galleryAction($yearID)
     return $this->render("::gallery.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'articles'=>$articles, 'year'=>$year));
 }
 
+
+    /**
+     * @Route("/achievements/{yearID}")
+     */
+    public function achievementAction($yearID)
+    {
+        $user=$this->getUser();
+
+        $schoolYears=$this->getDoctrine()->getRepository('AppBundle:Year')->findAll();
+
+        $articles=$this->getDoctrine()->getRepository('AppBundle:Article')->findAll();
+
+        $year=$this->getDoctrine()->getRepository('AppBundle:Year')->find($yearID);
+
+        return $this->render("::achievement.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'articles'=>$articles, 'year'=>$year));
+    }
+
+    /**
+     * @Route("/logopedia/{id}")
+     */
+    public function LogopediaAction($id)
+    {
+        $user=$this->getUser();
+
+        $schoolYears=$this->getDoctrine()->getRepository('AppBundle:Year')->findAll();
+
+        $article=$this->getDoctrine()->getRepository('AppBundle:Article')->find($id);
+
+        $articles=$this->getDoctrine()->getRepository('AppBundle:Article')->findAll();
+
+        return $this->render("::logopedia.html.twig", array('user'=>$user, 'schoolYears'=>$schoolYears, 'articles'=>$articles, 'article'=>$article));
+    }
 }

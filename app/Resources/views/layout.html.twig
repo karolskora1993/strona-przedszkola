@@ -39,12 +39,20 @@
                             <li><a href="{{'/' }}#pierwszy_dzien">PIERWSZY DZIEŃ W PRZEDSZKOLU</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{'/' }}#publikacje">PUBLIKACJE</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">KĄCIK LOGOPEDYCZNY <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {% for article in articles %}
+                                <li><a href="{{'/logopedia/'~article.id}}">{{ article.title }}</a></li>
+                                <li role="separator" class="divider"></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">OSIĄGNIĘCIA <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             {% for schoolYear in schoolYears %}
-                            <li><a href="{{'/' }}#{{ schoolYear.schoolYear }}">{{ schoolYear.schoolYear }}</a></li>
+                            <li><a href="{{'/achievements/'~schoolYear.id}}">{{ schoolYear.schoolYear }}</a></li>
                             <li role="separator" class="divider"></li>
                             {% endfor %}
                         </ul>
