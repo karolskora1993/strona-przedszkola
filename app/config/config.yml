@@ -9,7 +9,6 @@ parameters:
     locale: en
     app.path.achievement_images: /images/achievements
     app.path.gallery_images: /images/galleries
-    app.path.article_files: /files/articles
 
 framework:
     #esi:             ~
@@ -42,29 +41,14 @@ twig:
     strict_variables: "%kernel.debug%"
 
 # Doctrine Configuration
-#doctrine:
-#    dbal:
-#        driver:   pdo_mysql
-#        host:     sql.karas1993.nazwa.pl
-#        port:     3306
-#        dbname:   karas1993
-#        user:     karas1993
-#        password: Kkoaw1492
-#        charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
 doctrine:
     dbal:
         driver:   pdo_mysql
-        host:     127.0.0.1
-        port:     8889
-        dbname:   przedszkole
-        user:     root
-        password: root
+        host:     sql.karas1993.nazwa.pl
+        port:     3306
+        dbname:   karas1993
+        user:     karas1993
+        password: Kkoaw1492
         charset:  UTF8
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
@@ -176,7 +160,7 @@ easy_admin:
                                                - { name: 'delete', label: 'usuń' }
 
       Article:
-                    label: 'publikacje'
+                    label: 'kącik logopedyczny'
                     class: AppBundle\Entity\Article
                     form:
                       fields:
@@ -206,13 +190,9 @@ vich_uploader:
         gallery_images:
                     uri_prefix:         %app.path.gallery_images%
                     upload_destination: %kernel.root_dir%/../web/images/galleries
-        article_files:
-            uri_prefix: %app.path.article_files%
-            upload_destination: %kernel.root_dir%/../web/files/articles
 
 ivory_ck_editor:
     default_config: "default"
     configs:
         default:
             toolbar:             "full"
-            extraAllowedContent: "p"

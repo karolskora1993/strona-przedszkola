@@ -39,7 +39,6 @@
     <parameter key="locale">en</parameter>
     <parameter key="app.path.achievement_images">/images/achievements</parameter>
     <parameter key="app.path.gallery_images">/images/galleries</parameter>
-    <parameter key="app.path.article_files">/files/articles</parameter>
     <parameter key="controller_resolver.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver</parameter>
     <parameter key="controller_name_converter.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser</parameter>
     <parameter key="response_listener.class">Symfony\Component\HttpKernel\EventListener\ResponseListener</parameter>
@@ -620,7 +619,7 @@
           </parameter>
           <parameter type="collection">
             <parameter key="entity">Article</parameter>
-            <parameter key="label">publikacje</parameter>
+            <parameter key="label">kącik logopedyczny</parameter>
             <parameter key="icon">fa-chevron-circle-right</parameter>
             <parameter key="children" type="collection"/>
             <parameter key="default">false</parameter>
@@ -3328,7 +3327,7 @@
           </parameter>
         </parameter>
         <parameter key="Article" type="collection">
-          <parameter key="label">publikacje</parameter>
+          <parameter key="label">kącik logopedyczny</parameter>
           <parameter key="class">AppBundle\Entity\Article</parameter>
           <parameter key="form" type="collection">
             <parameter key="fields" type="collection">
@@ -3987,16 +3986,6 @@
       <parameter key="gallery_images" type="collection">
         <parameter key="uri_prefix">/images/galleries</parameter>
         <parameter key="upload_destination">/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/../web/images/galleries</parameter>
-        <parameter key="namer">null</parameter>
-        <parameter key="directory_namer">null</parameter>
-        <parameter key="delete_on_remove">true</parameter>
-        <parameter key="delete_on_update">true</parameter>
-        <parameter key="inject_on_load">false</parameter>
-        <parameter key="db_driver">orm</parameter>
-      </parameter>
-      <parameter key="article_files" type="collection">
-        <parameter key="uri_prefix">/files/articles</parameter>
-        <parameter key="upload_destination">/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/../web/files/articles</parameter>
         <parameter key="namer">null</parameter>
         <parameter key="directory_namer">null</parameter>
         <parameter key="delete_on_remove">true</parameter>
@@ -5698,7 +5687,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>57cc69bb0ec0e0.43645037</argument>
+            <argument>57ccff43f066a5.97006749</argument>
           </service>
         </argument>
       </argument>
@@ -5987,7 +5976,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>57cc69bb0ec0e0.43645037</argument>
+            <argument>57ccff43f066a5.97006749</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -6380,11 +6369,11 @@
     <service id="doctrine.dbal.default_connection" class="Doctrine\DBAL\Connection">
       <argument type="collection">
         <argument key="driver">pdo_mysql</argument>
-        <argument key="host">127.0.0.1</argument>
-        <argument key="port">8889</argument>
-        <argument key="dbname">przedszkole</argument>
-        <argument key="user">root</argument>
-        <argument key="password">root</argument>
+        <argument key="host">sql.karas1993.nazwa.pl</argument>
+        <argument key="port">3306</argument>
+        <argument key="dbname">karas1993</argument>
+        <argument key="user">karas1993</argument>
+        <argument key="password">Kkoaw1492</argument>
         <argument key="charset">UTF8</argument>
         <argument key="driverOptions" type="collection"/>
         <argument key="defaultTableOptions" type="collection"/>
@@ -6418,19 +6407,6 @@
             <argument type="service">
               <service class="Vich\UploaderBundle\EventListener\Doctrine\CleanListener" public="false">
                 <tag name="doctrine.event_subscriber" priority="50"/>
-                <argument>achievement_images</argument>
-                <argument type="service">
-                  <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
-                </argument>
-                <argument type="service" id="vich_uploader.metadata_reader"/>
-                <argument type="service" id="vich_uploader.upload_handler"/>
-              </service>
-            </argument>
-          </call>
-          <call method="addEventSubscriber">
-            <argument type="service">
-              <service class="Vich\UploaderBundle\EventListener\Doctrine\CleanListener" public="false">
-                <tag name="doctrine.event_subscriber" priority="50"/>
                 <argument>gallery_images</argument>
                 <argument type="service">
                   <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
@@ -6444,32 +6420,6 @@
             <argument type="service">
               <service class="Vich\UploaderBundle\EventListener\Doctrine\CleanListener" public="false">
                 <tag name="doctrine.event_subscriber" priority="50"/>
-                <argument>article_files</argument>
-                <argument type="service">
-                  <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
-                </argument>
-                <argument type="service" id="vich_uploader.metadata_reader"/>
-                <argument type="service" id="vich_uploader.upload_handler"/>
-              </service>
-            </argument>
-          </call>
-          <call method="addEventSubscriber">
-            <argument type="service">
-              <service class="Vich\UploaderBundle\EventListener\Doctrine\RemoveListener" public="false">
-                <tag name="doctrine.event_subscriber" priority="0"/>
-                <argument>achievement_images</argument>
-                <argument type="service">
-                  <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
-                </argument>
-                <argument type="service" id="vich_uploader.metadata_reader"/>
-                <argument type="service" id="vich_uploader.upload_handler"/>
-              </service>
-            </argument>
-          </call>
-          <call method="addEventSubscriber">
-            <argument type="service">
-              <service class="Vich\UploaderBundle\EventListener\Doctrine\UploadListener" public="false">
-                <tag name="doctrine.event_subscriber" priority="0"/>
                 <argument>achievement_images</argument>
                 <argument type="service">
                   <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
@@ -6482,19 +6432,6 @@
           <call method="addEventSubscriber">
             <argument type="service">
               <service class="Vich\UploaderBundle\EventListener\Doctrine\RemoveListener" public="false">
-                <tag name="doctrine.event_subscriber" priority="0"/>
-                <argument>article_files</argument>
-                <argument type="service">
-                  <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
-                </argument>
-                <argument type="service" id="vich_uploader.metadata_reader"/>
-                <argument type="service" id="vich_uploader.upload_handler"/>
-              </service>
-            </argument>
-          </call>
-          <call method="addEventSubscriber">
-            <argument type="service">
-              <service class="Vich\UploaderBundle\EventListener\Doctrine\UploadListener" public="false">
                 <tag name="doctrine.event_subscriber" priority="0"/>
                 <argument>gallery_images</argument>
                 <argument type="service">
@@ -6517,7 +6454,7 @@
             <argument type="service">
               <service class="Vich\UploaderBundle\EventListener\Doctrine\RemoveListener" public="false">
                 <tag name="doctrine.event_subscriber" priority="0"/>
-                <argument>gallery_images</argument>
+                <argument>achievement_images</argument>
                 <argument type="service">
                   <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
                 </argument>
@@ -6530,7 +6467,20 @@
             <argument type="service">
               <service class="Vich\UploaderBundle\EventListener\Doctrine\UploadListener" public="false">
                 <tag name="doctrine.event_subscriber" priority="0"/>
-                <argument>article_files</argument>
+                <argument>achievement_images</argument>
+                <argument type="service">
+                  <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
+                </argument>
+                <argument type="service" id="vich_uploader.metadata_reader"/>
+                <argument type="service" id="vich_uploader.upload_handler"/>
+              </service>
+            </argument>
+          </call>
+          <call method="addEventSubscriber">
+            <argument type="service">
+              <service class="Vich\UploaderBundle\EventListener\Doctrine\UploadListener" public="false">
+                <tag name="doctrine.event_subscriber" priority="0"/>
+                <argument>gallery_images</argument>
                 <argument type="service">
                   <service class="Vich\UploaderBundle\Adapter\ORM\DoctrineORMAdapter" public="false"/>
                 </argument>
@@ -6868,7 +6818,7 @@
             </argument>
             <argument type="collection">
               <argument key="entity">Article</argument>
-              <argument key="label">publikacje</argument>
+              <argument key="label">kącik logopedyczny</argument>
               <argument key="icon">fa-chevron-circle-right</argument>
               <argument key="children" type="collection"/>
               <argument key="default">false</argument>
@@ -9576,7 +9526,7 @@
             </argument>
           </argument>
           <argument key="Article" type="collection">
-            <argument key="label">publikacje</argument>
+            <argument key="label">kącik logopedyczny</argument>
             <argument key="class">AppBundle\Entity\Article</argument>
             <argument key="form" type="collection">
               <argument key="fields" type="collection">
@@ -10383,7 +10333,6 @@
               <argument>About</argument>
             </argument>
           </argument>
-          <argument key="extraAllowedContent">p</argument>
         </argument>
       </call>
       <call method="setDefaultConfig">
@@ -10476,16 +10425,6 @@
         <argument key="gallery_images" type="collection">
           <argument key="uri_prefix">/images/galleries</argument>
           <argument key="upload_destination">/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/../web/images/galleries</argument>
-          <argument key="namer">null</argument>
-          <argument key="directory_namer">null</argument>
-          <argument key="delete_on_remove">true</argument>
-          <argument key="delete_on_update">true</argument>
-          <argument key="inject_on_load">false</argument>
-          <argument key="db_driver">orm</argument>
-        </argument>
-        <argument key="article_files" type="collection">
-          <argument key="uri_prefix">/files/articles</argument>
-          <argument key="upload_destination">/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/../web/files/articles</argument>
           <argument key="namer">null</argument>
           <argument key="directory_namer">null</argument>
           <argument key="delete_on_remove">true</argument>
