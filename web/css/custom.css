@@ -11,11 +11,9 @@
 }
 .row-blue{
     background-color: rgba(116, 190, 255, 0.10);
-    height: auto;
 }
 .row-green{
     background-color: rgba(0, 128, 0, 0.10);
-    height: auto;
 }
 video {
   width: 100%    !important;
@@ -25,7 +23,6 @@ video {
   -moz-background-size:cover;
   -o-background-size:cover;
   background-size:cover;
-}
 }
 footer{
     background-color: #337ab7;

@@ -151,7 +151,11 @@
   'IvoryCKEditorBundle:Form:ckeditor_widget.html.php' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/vendor/egeloen/ckeditor-bundle/Resources/views/Form/ckeditor_widget.html.php',
   'IvoryCKEditorBundle:Form:ckeditor_widget.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/vendor/egeloen/ckeditor-bundle/Resources/views/Form/ckeditor_widget.html.twig',
   'VichUploaderBundle:Form:fields.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/vendor/vich/uploader-bundle/Resources/views/Form/fields.html.twig',
+  '::achievement.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/Resources/views/achievement.html.twig',
   '::base.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/Resources/views/base.html.twig',
   ':easy_admin:file.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/Resources/views/easy_admin/file.html.twig',
+  '::gallery.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/Resources/views/gallery.html.twig',
+  '::index.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/Resources/views/index.html.twig',
   '::layout.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/Resources/views/layout.html.twig',
+  '::logopedia.html.twig' => '/Users/apple/Documents/programowanie/projekty/web/strona przedszkola/app/Resources/views/logopedia.html.twig',
 );

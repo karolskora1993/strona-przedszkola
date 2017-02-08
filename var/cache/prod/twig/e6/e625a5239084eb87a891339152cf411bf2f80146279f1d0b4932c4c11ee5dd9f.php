@@ -135,11 +135,11 @@ class __TwigTemplate_710f966c534f020f381260966efffa3555341e043acd78efad962350176
     }
 
     // line 1
-    public function getrender_menu_item($__item__ = null)
+    public function getrender_menu_item($__item__ = null, ...$__varargs__)
     {
         $context = $this->env->mergeGlobals(array(
             "item" => $__item__,
-            "varargs" => func_num_args() > 1 ? array_slice(func_get_args(), 1) : array(),
+            "varargs" => $__varargs__,
         ));
 
         $blocks = array();

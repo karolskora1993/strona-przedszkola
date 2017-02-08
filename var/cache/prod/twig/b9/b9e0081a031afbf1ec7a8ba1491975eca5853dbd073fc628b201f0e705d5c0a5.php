@@ -18,7 +18,7 @@ class __TwigTemplate_99c21f6c82e5e4bce89d449cafea86c548945eb8ad89bca52d150b2f63e
         // line 1
         echo "<a href=\"";
         echo twig_escape_filter($this->env, (($this->getAttribute((isset($context["field_options"]) ? $context["field_options"] : null), "base_path", array()) . "/") . (isset($context["value"]) ? $context["value"] : null)), "html", null, true);
-        echo "\">wyswietl plik (PDF)</a>";
+        echo "\">wyswietl plik (pdf)</a>";
     }
 
     public function getTemplateName()
@@ -36,4 +36,4 @@ class __TwigTemplate_99c21f6c82e5e4bce89d449cafea86c548945eb8ad89bca52d150b2f63e
         return array (  19 => 1,);
     }
 }
-/* <a href="{{ field_options.base_path ~ '/' ~ value }}">wyswietl plik (PDF)</a>*/
+/* <a href="{{ field_options.base_path ~ '/' ~ value }}">wyswietl plik (pdf)</a>*/

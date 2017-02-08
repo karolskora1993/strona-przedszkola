@@ -37,8 +37,9 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
     {
         // line 1
         echo "<!DOCTYPE html>
+aaaaa
 <html lang=\"";
-        // line 2
+        // line 3
         echo twig_escape_filter($this->env, _twig_default_filter(twig_first($this->env, twig_split_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["app"]) ? $context["app"] : null), "request", array()), "locale", array()), "_")), "en"), "html", null, true);
         echo "\">
     <head>
@@ -48,21 +49,21 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
         <meta name=\"generator\" content=\"EasyAdmin\" />
 
         <title>";
-        // line 9
+        // line 10
         $this->displayBlock('page_title', $context, $blocks);
         echo "</title>
 
         ";
-        // line 11
+        // line 12
         $this->displayBlock('head_stylesheets', $context, $blocks);
-        // line 18
+        // line 19
         echo "
         ";
-        // line 19
+        // line 20
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable($this->env->getExtension('easyadmin_extension')->getBackendConfiguration("design.assets.css"));
         foreach ($context['_seq'] as $context["_key"] => $context["css_asset"]) {
-            // line 20
+            // line 21
             echo "            <link rel=\"stylesheet\" href=\"";
             echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl($context["css_asset"]), "html", null, true);
             echo "\">
@@ -71,77 +72,77 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['css_asset'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 22
+        // line 23
         echo "
         ";
-        // line 23
+        // line 24
         $this->displayBlock('head_favicon', $context, $blocks);
-        // line 27
+        // line 28
         echo "
         <!--[if lt IE 9]>
             <script src=\"";
-        // line 29
+        // line 30
         echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/stylesheet/html5shiv.min.css"), "html", null, true);
         echo "\"</script>
             <script src=\"";
-        // line 30
+        // line 31
         echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/stylesheet/respond.min.css"), "html", null, true);
         echo "\"></script>
         <![endif]-->
 
         ";
-        // line 33
-        $this->displayBlock('head_javascript', $context, $blocks);
         // line 34
+        $this->displayBlock('head_javascript', $context, $blocks);
+        // line 35
         echo "    </head>
 
     ";
-        // line 36
+        // line 37
         $this->displayBlock('body', $context, $blocks);
         // line 145
         echo "</html>
 ";
     }
 
-    // line 9
+    // line 10
     public function block_page_title($context, array $blocks = array())
     {
         echo strip_tags($this->renderBlock("content_title", $context, $blocks));
     }
 
-    // line 11
+    // line 12
     public function block_head_stylesheets($context, array $blocks = array())
     {
-        // line 12
-        echo "            <link rel=\"stylesheet\" href=\"";
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/stylesheet/bootstrap.min.css"), "html", null, true);
-        echo "\">
-            <link rel=\"stylesheet\" href=\"";
         // line 13
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/stylesheet/font-awesome.min.css"), "html", null, true);
+        echo "            <link rel=\"stylesheet\" href=\"";
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("css/bootstrap.min.css"), "html", null, true);
         echo "\">
             <link rel=\"stylesheet\" href=\"";
         // line 14
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/stylesheet/adminlte.min.css"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("css/font-awesome.min.css"), "html", null, true);
         echo "\">
             <link rel=\"stylesheet\" href=\"";
         // line 15
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/stylesheet/featherlight.min.css"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("css/adminlte.min.css"), "html", null, true);
         echo "\">
             <link rel=\"stylesheet\" href=\"";
         // line 16
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("css/featherlight.min.css"), "html", null, true);
+        echo "\">
+            <link rel=\"stylesheet\" href=\"";
+        // line 17
         echo $this->env->getExtension('routing')->getPath("_easyadmin_render_css");
         echo "\">
         ";
     }
 
-    // line 23
+    // line 24
     public function block_head_favicon($context, array $blocks = array())
     {
-        // line 24
+        // line 25
         echo "            ";
         $context["favicon"] = $this->env->getExtension('easyadmin_extension')->getBackendConfiguration("design.assets.favicon");
-        // line 25
+        // line 26
         echo "            <link rel=\"icon\" type=\"";
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["favicon"]) ? $context["favicon"] : null), "mime_type", array()), "html", null, true);
         echo "\" href=\"";
@@ -150,15 +151,15 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
         ";
     }
 
-    // line 33
+    // line 34
     public function block_head_javascript($context, array $blocks = array())
     {
     }
 
-    // line 36
+    // line 37
     public function block_body($context, array $blocks = array())
     {
-        // line 37
+        // line 38
         echo "    <body id=\"";
         $this->displayBlock('body_id', $context, $blocks);
         echo "\" class=\"easyadmin sidebar-mini fixed ";
@@ -168,7 +169,7 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
         echo "\">
         <div class=\"wrapper\">
         ";
-        // line 39
+        // line 40
         $this->displayBlock('wrapper', $context, $blocks);
         // line 114
         echo "        </div>
@@ -197,7 +198,7 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
     ";
     }
 
-    // line 37
+    // line 38
     public function block_body_id($context, array $blocks = array())
     {
     }
@@ -206,18 +207,17 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
     {
     }
 
-    // line 39
+    // line 40
     public function block_wrapper($context, array $blocks = array())
     {
-        // line 40
+        // line 41
         echo "            <header class=\"main-header\">
                 <div id=\"header-logo\">
                     ";
-        // line 42
+        // line 43
         $this->displayBlock('header_logo', $context, $blocks);
-        // line 48
+        // line 49
         echo "                </div>
-
                 <nav class=\"navbar navbar-fixed-top\" role=\"navigation\">
                     <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">
                         <span class=\"sr-only\">";
@@ -254,10 +254,10 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
         ";
     }
 
-    // line 42
+    // line 43
     public function block_header_logo($context, array $blocks = array())
     {
-        // line 43
+        // line 44
         echo "                        <a class=\"logo ";
         echo (((twig_length_filter($this->env, $this->env->getExtension('easyadmin_extension')->getBackendConfiguration("site_name")) > 14)) ? ("logo-long") : (""));
         echo "\" title=\"";
@@ -266,11 +266,11 @@ class __TwigTemplate_20e41591f9a68017802b8693e5cf9b272674caeaa7b93c28af2914e9c59
         echo $this->env->getExtension('routing')->getPath("easyadmin");
         echo "\">
                             <span class=\"logo-mini\">";
-        // line 44
+        // line 45
         echo twig_escape_filter($this->env, twig_upper_filter($this->env, twig_first($this->env, strip_tags($this->env->getExtension('easyadmin_extension')->getBackendConfiguration("site_name")))), "html", null, true);
         echo "</span>
                             <span class=\"logo-lg\">";
-        // line 45
+        // line 46
         echo $this->env->getExtension('easyadmin_extension')->getBackendConfiguration("site_name");
         echo "</span>
                         </a>
@@ -407,11 +407,11 @@ array_key_exists("_entity_config", $context)) ? ($this->getAttribute($this->getA
     {
         // line 117
         echo "            <script src=\"";
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/javascript/jquery.min.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("js/bootstrap.min.js"), "html", null, true);
         echo "\"></script>
             <script src=\"";
         // line 118
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/javascript/bootstrap.min.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("js/jquery.min.js"), "html", null, true);
         echo "\"></script>
 
             ";
@@ -421,19 +421,19 @@ array_key_exists("_entity_config", $context)) ? ($this->getAttribute($this->getA
         echo "
             <script src=\"";
         // line 134
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/javascript/jquery.slimscroll.min.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("js/jquery.slimscroll.min.js"), "html", null, true);
         echo "\"></script>
             <script src=\"";
         // line 135
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/javascript/adminlte.min.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("js/adminlte.min.js"), "html", null, true);
         echo "\"></script>
             <script src=\"";
         // line 136
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/javascript/jquery.featherlight.min.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("js/jquery.featherlight.min.js"), "html", null, true);
         echo "\"></script>
             <script src=\"";
         // line 137
-        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("bundles/easyadmin/javascript/easyadmin.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('asset')->getAssetUrl("js/easyadmin.js"), "html", null, true);
         echo "\"></script>
         ";
     }
@@ -468,10 +468,11 @@ array_key_exists("_entity_config", $context)) ? ($this->getAttribute($this->getA
 
     public function getDebugInfo()
     {
-        return array (  445 => 121,  442 => 120,  436 => 137,  432 => 136,  428 => 135,  424 => 134,  421 => 133,  419 => 120,  414 => 118,  409 => 117,  406 => 116,  401 => 109,  396 => 101,  391 => 96,  384 => 102,  382 => 101,  374 => 96,  370 => 94,  367 => 93,  360 => 89,  357 => 88,  352 => 110,  350 => 109,  345 => 106,  343 => 93,  339 => 91,  336 => 88,  333 => 87,  328 => 80,  326 => 77,  324 => 76,  321 => 75,  316 => 82,  314 => 75,  311 => 74,  308 => 73,  304 => 65,  298 => 63,  292 => 61,  290 => 60,  284 => 58,  281 => 57,  274 => 45,  270 => 44,  261 => 43,  258 => 42,  253 => 112,  251 => 87,  246 => 84,  244 => 73,  235 => 66,  233 => 57,  225 => 52,  219 => 48,  217 => 42,  213 => 40,  210 => 39,  201 => 37,  196 => 143,  187 => 141,  183 => 140,  180 => 139,  178 => 116,  174 => 114,  172 => 39,  162 => 37,  159 => 36,  154 => 33,  145 => 25,  142 => 24,  139 => 23,  133 => 16,  129 => 15,  125 => 14,  121 => 13,  116 => 12,  113 => 11,  107 => 9,  102 => 145,  100 => 36,  96 => 34,  94 => 33,  88 => 30,  84 => 29,  80 => 27,  78 => 23,  75 => 22,  66 => 20,  62 => 19,  59 => 18,  57 => 11,  52 => 9,  42 => 2,  39 => 1,);
+        return array (  445 => 121,  442 => 120,  436 => 137,  432 => 136,  428 => 135,  424 => 134,  421 => 133,  419 => 120,  414 => 118,  409 => 117,  406 => 116,  401 => 109,  396 => 101,  391 => 96,  384 => 102,  382 => 101,  374 => 96,  370 => 94,  367 => 93,  360 => 89,  357 => 88,  352 => 110,  350 => 109,  345 => 106,  343 => 93,  339 => 91,  336 => 88,  333 => 87,  328 => 80,  326 => 77,  324 => 76,  321 => 75,  316 => 82,  314 => 75,  311 => 74,  308 => 73,  304 => 65,  298 => 63,  292 => 61,  290 => 60,  284 => 58,  281 => 57,  274 => 46,  270 => 45,  261 => 44,  258 => 43,  253 => 112,  251 => 87,  246 => 84,  244 => 73,  235 => 66,  233 => 57,  225 => 52,  220 => 49,  218 => 43,  214 => 41,  211 => 40,  202 => 38,  197 => 143,  188 => 141,  184 => 140,  181 => 139,  179 => 116,  175 => 114,  173 => 40,  163 => 38,  160 => 37,  155 => 34,  146 => 26,  143 => 25,  140 => 24,  134 => 17,  130 => 16,  126 => 15,  122 => 14,  117 => 13,  114 => 12,  108 => 10,  103 => 145,  101 => 37,  97 => 35,  95 => 34,  89 => 31,  85 => 30,  81 => 28,  79 => 24,  76 => 23,  67 => 21,  63 => 20,  60 => 19,  58 => 12,  53 => 10,  43 => 3,  39 => 1,);
     }
 }
 /* <!DOCTYPE html>*/
+/* aaaaa*/
 /* <html lang="{{ app.request.locale|split('_')|first|default('en') }}">*/
 /*     <head>*/
 /*         <meta charset="utf-8">*/
@@ -482,10 +483,10 @@ array_key_exists("_entity_config", $context)) ? ($this->getAttribute($this->getA
 /*         <title>{% block page_title %}{{ block('content_title')|striptags|raw }}{% endblock %}</title>*/
 /* */
 /*         {% block head_stylesheets %}*/
-/*             <link rel="stylesheet" href="{{ asset('bundles/easyadmin/stylesheet/bootstrap.min.css') }}">*/
-/*             <link rel="stylesheet" href="{{ asset('bundles/easyadmin/stylesheet/font-awesome.min.css') }}">*/
-/*             <link rel="stylesheet" href="{{ asset('bundles/easyadmin/stylesheet/adminlte.min.css') }}">*/
-/*             <link rel="stylesheet" href="{{ asset('bundles/easyadmin/stylesheet/featherlight.min.css') }}">*/
+/*             <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">*/
+/*             <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">*/
+/*             <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">*/
+/*             <link rel="stylesheet" href="{{ asset('css/featherlight.min.css') }}">*/
 /*             <link rel="stylesheet" href="{{ path('_easyadmin_render_css') }}">*/
 /*         {% endblock %}*/
 /* */
@@ -519,7 +520,6 @@ array_key_exists("_entity_config", $context)) ? ($this->getAttribute($this->getA
 /*                         </a>*/
 /*                     {% endblock header_logo %}*/
 /*                 </div>*/
-/* */
 /*                 <nav class="navbar navbar-fixed-top" role="navigation">*/
 /*                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">*/
 /*                         <span class="sr-only">{{ 'toggle_navigation'|trans(domain = 'EasyAdminBundle') }}</span>*/
@@ -587,8 +587,8 @@ array_key_exists("_entity_config", $context)) ? ($this->getAttribute($this->getA
 /*         </div>*/
 /* */
 /*         {% block body_javascript %}*/
-/*             <script src="{{ asset('bundles/easyadmin/javascript/jquery.min.js') }}"></script>*/
-/*             <script src="{{ asset('bundles/easyadmin/javascript/bootstrap.min.js') }}"></script>*/
+/*             <script src="{{ asset('js/bootstrap.min.js') }}"></script>*/
+/*             <script src="{{ asset('js/jquery.min.js') }}"></script>*/
 /* */
 /*             {% block adminlte_options %}*/
 /*                 <script type="text/javascript">*/
@@ -604,10 +604,10 @@ array_key_exists("_entity_config", $context)) ? ($this->getAttribute($this->getA
 /*                 </script>*/
 /*             {% endblock %}*/
 /* */
-/*             <script src="{{ asset('bundles/easyadmin/javascript/jquery.slimscroll.min.js') }}"></script>*/
-/*             <script src="{{ asset('bundles/easyadmin/javascript/adminlte.min.js') }}"></script>*/
-/*             <script src="{{ asset('bundles/easyadmin/javascript/jquery.featherlight.min.js') }}"></script>*/
-/*             <script src="{{ asset('bundles/easyadmin/javascript/easyadmin.js') }}"></script>*/
+/*             <script src="{{ asset('js/jquery.slimscroll.min.js') }}"></script>*/
+/*             <script src="{{ asset('js/adminlte.min.js') }}"></script>*/
+/*             <script src="{{ asset('js/jquery.featherlight.min.js') }}"></script>*/
+/*             <script src="{{ asset('js/easyadmin.js') }}"></script>*/
 /*         {% endblock body_javascript %}*/
 /* */
 /*         {% for js_asset in easyadmin_config('design.assets.js') %}*/
